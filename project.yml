@@ -1,0 +1,111 @@
+name: MongolKey
+
+options:
+  bundleIdPrefix: com.mongolkey
+  deploymentTarget:
+    iOS: "16.0"
+  createIntermediateGroups: true
+  groupSortPosition: top
+
+packages:
+  MongolEngine:
+    path: Packages/MongolEngine
+
+settings:
+  base:
+    MARKETING_VERSION: "1.0"
+    CURRENT_PROJECT_VERSION: "1"
+    SWIFT_VERSION: "5.0"
+    DEVELOPMENT_TEAM: ""
+    CODE_SIGN_STYLE: Automatic
+    TARGETED_DEVICE_FAMILY: "1,2"
+    ENABLE_USER_SCRIPT_SANDBOXING: YES
+    IPHONEOS_DEPLOYMENT_TARGET: "16.0"
+
+targets:
+
+  # ────────────────────────────── Container app ──────────────────────────────
+  MongolKey:
+    type: application
+    platform: iOS
+    sources:
+      - App/MongolKey
+      - Shared/Rendering
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.mongolkey.app
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
+        INFOPLIST_KEY_CFBundleDisplayName: MongolKey
+        INFOPLIST_KEY_UILaunchScreen_Generation: YES
+        INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents: YES
+        INFOPLIST_KEY_UISupportedInterfaceOrientations: "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight"
+    info:
+      path: App/MongolKey/Info.plist
+      properties:
+        CFBundleDisplayName: MongolKey
+        UILaunchScreen: {}
+        UIAppFonts:
+          - NotoSansMongolian-Regular.ttf
+    dependencies:
+      - package: MongolEngine
+      - target: MongolKeyboard
+    resources:
+      - path: Shared/Fonts/NotoSansMongolian-Regular.ttf
+        buildPhase: resources
+
+  # ─────────────────────────── Keyboard extension ────────────────────────────
+  MongolKeyboard:
+    type: app-extension
+    platform: iOS
+    sources:
+      - Keyboard
+      - Shared/Rendering
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.mongolkey.app.keyboard
+        INFOPLIST_KEY_CFBundleDisplayName: MongolKey
+    info:
+      path: Keyboard/Info.plist
+      properties:
+        CFBundleDisplayName: MongolKey
+        UIAppFonts:
+          - NotoSansMongolian-Regular.ttf
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.keyboard-service
+          NSExtensionPrincipalClass: $(PRODUCT_MODULE_NAME).KeyboardViewController
+          NSExtensionAttributes:
+            IsASCIICapable: true
+            PrefersRightToLeftLayoutDirection: false
+            PrimaryLanguage: mn
+            RequestsOpenAccess: false
+    dependencies:
+      - package: MongolEngine
+    resources:
+      - path: Shared/Fonts/NotoSansMongolian-Regular.ttf
+        buildPhase: resources
+
+  # ───────────────────────────── Engine unit tests ───────────────────────────
+  MongolEngineTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - Packages/MongolEngine/Tests/MongolEngineTests
+    dependencies:
+      - package: MongolEngine
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.mongolkey.engine.tests
+        GENERATE_INFOPLIST_FILE: YES
+
+schemes:
+  MongolKey:
+    build:
+      targets:
+        MongolKey: all
+        MongolKeyboard: all
+    run:
+      config: Debug
+    test:
+      targets:
+        - MongolEngineTests

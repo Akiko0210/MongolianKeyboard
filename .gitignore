@@ -1,0 +1,22 @@
+# Xcode / build
+build/
+DerivedData/
+*.xcuserstate
+xcuserdata/
+*.xcscmblueprint
+*.xccheckout
+
+# XcodeGen output — project.yml is the source of truth; regenerate with `xcodegen generate`
+MongolKey.xcodeproj/
+
+# Swift Package Manager
+.build/
+Packages/*/.build/
+.swiftpm/
+
+# macOS
+.DS_Store
+
+# Fastlane / misc
+*.mobileprovision
+*.p12
