@@ -19,6 +19,10 @@ import MongolEngine
 final class KeyboardViewController: UIInputViewController {
 
     private let engine: TransliterationEngine = MongolianTransliterator(scheme: .v1)
+    private let suggester = SuggestionEngine()
+    /// Candidates for the current buffer, in display order (kept in sync with
+    /// what the candidate bar shows so tap indexes always agree).
+    private var candidates: [Candidate] = []
     private var keyboardView: KeyboardView!
     private var heightConstraint: NSLayoutConstraint?
 
@@ -29,6 +33,10 @@ final class KeyboardViewController: UIInputViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         MongolFont.register(in: fontBundle)
+
+        // Parse the lexicon off the main thread so the first keystroke never
+        // waits for it (Lexicon.shared is a thread-safe lazy static).
+        DispatchQueue.global(qos: .userInitiated).async { _ = Lexicon.shared.count }
 
         let kb = KeyboardView(fontBundle: fontBundle)
         kb.delegate = self
@@ -76,13 +84,26 @@ final class KeyboardViewController: UIInputViewController {
     // MARK: Composition bridge
 
     private func refreshPreview() {
-        keyboardView.updatePreview(latin: engine.latinBuffer, mongolian: engine.mongolianOutput)
+        candidates = engine.hasComposition
+            ? suggester.candidates(forLatin: engine.latinBuffer, verbatim: engine.mongolianOutput)
+            : []
+        let defaultIndex = candidates.firstIndex { $0.source != .completion } ?? 0
+        keyboardView.updateCandidates(latin: engine.latinBuffer,
+                                      candidates: candidates,
+                                      highlightedIndex: defaultIndex)
     }
 
-    /// Commit the composing word (if any) into the host field.
+    /// Commit the composing word (if any) into the host field: the default
+    /// candidate — the best exact dictionary match, or the verbatim
+    /// transliteration when the word is not in the lexicon. Predictions
+    /// (completions) are never auto-committed.
     private func flushComposition() {
         guard engine.hasComposition else { return }
-        textDocumentProxy.insertText(engine.commit())
+        let text = SuggestionEngine.defaultCandidate(in: candidates)?.mongolian
+            ?? engine.mongolianOutput
+        engine.reset()
+        candidates = []
+        textDocumentProxy.insertText(text)
     }
 
     override func textWillChange(_ textInput: UITextInput?) {
@@ -138,5 +159,16 @@ extension KeyboardViewController: KeyboardViewDelegate {
         case .spacer:
             break
         }
+    }
+
+    /// A tapped candidate commits that word followed by a space (word-level
+    /// input, like tapping a pinyin candidate).
+    func keyboardView(_ view: KeyboardView, didSelectCandidateAt index: Int) {
+        guard candidates.indices.contains(index) else { return }
+        let text = candidates[index].mongolian
+        engine.reset()
+        candidates = []
+        textDocumentProxy.insertText(text + " ")
+        refreshPreview()
     }
 }

@@ -8,9 +8,11 @@
 //
 
 import UIKit
+import MongolEngine
 
 protocol KeyboardViewDelegate: AnyObject {
     func keyboardView(_ view: KeyboardView, didTap cap: KeyCap)
+    func keyboardView(_ view: KeyboardView, didSelectCandidateAt index: Int)
 }
 
 final class KeyboardView: UIView, KeyButtonDelegate {
@@ -39,6 +41,7 @@ final class KeyboardView: UIView, KeyButtonDelegate {
         self.previewBar = CandidatePreviewBar(fontBundle: fontBundle)
         super.init(frame: .zero)
         backgroundColor = .keyboardBackground
+        previewBar.delegate = self
         addSubview(previewBar)
         buildButtons(for: layer_)
     }
@@ -68,8 +71,8 @@ final class KeyboardView: UIView, KeyButtonDelegate {
 
     // MARK: Preview
 
-    func updatePreview(latin: String, mongolian: String) {
-        previewBar.update(latin: latin, mongolian: mongolian)
+    func updateCandidates(latin: String, candidates: [Candidate], highlightedIndex: Int) {
+        previewBar.update(latin: latin, candidates: candidates, highlightedIndex: highlightedIndex)
     }
 
     // MARK: Layout
@@ -140,5 +143,13 @@ final class KeyboardView: UIView, KeyButtonDelegate {
 
     func keyButtonDidTap(_ button: KeyButton) {
         delegate?.keyboardView(self, didTap: button.cap)
+    }
+}
+
+// MARK: - CandidatePreviewBarDelegate
+
+extension KeyboardView: CandidatePreviewBarDelegate {
+    func candidatePreviewBar(_ bar: CandidatePreviewBar, didSelectCandidateAt index: Int) {
+        delegate?.keyboardView(self, didSelectCandidateAt: index)
     }
 }

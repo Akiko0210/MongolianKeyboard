@@ -42,4 +42,10 @@ extension UIColor {
         light: UIColor(red: 0.88, green: 0.90, blue: 0.92, alpha: 1),
         dark:  UIColor(red: 0.11, green: 0.11, blue: 0.12, alpha: 1)
     )
+
+    /// Backdrop of the default candidate (the one Space will commit).
+    static let candidateHighlight = dynamic(
+        light: UIColor.tintColor.withAlphaComponent(0.14),
+        dark:  UIColor.tintColor.withAlphaComponent(0.28)
+    )
 }

@@ -16,7 +16,10 @@ let package = Package(
     targets: [
         .target(
             name: "MongolEngine",
-            path: "Sources/MongolEngine"
+            path: "Sources/MongolEngine",
+            resources: [
+                .copy("Resources/lexicon.tsv")
+            ]
         ),
         .testTarget(
             name: "MongolEngineTests",
