@@ -20,3 +20,4 @@ Packages/*/.build/
 # Fastlane / misc
 *.mobileprovision
 *.p12
+.lexicon-cache/

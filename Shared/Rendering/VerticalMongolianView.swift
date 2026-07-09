@@ -224,6 +224,15 @@ public final class VerticalMongolianView: UIView {
 
     // MARK: Sizing
 
+    /// The block size the current text needs when columns may be at most
+    /// `height` tall (long words wrap into extra columns to the right).
+    /// Lets containers (e.g. the keyboard's candidate cells) size themselves
+    /// to fit wrapped text, which `intrinsicContentSize` (single-column)
+    /// cannot express.
+    public func size(fittingHeight height: CGFloat) -> CGSize {
+        layout(availableHeight: height).size
+    }
+
     public override var intrinsicContentSize: CGSize {
         // Unconstrained height → a single column; gives the natural word size.
         let laidOut = layout(availableHeight: .greatestFiniteMagnitude)
