@@ -25,9 +25,14 @@ env:
 
 jobs:
   simulator:
-    name: Build, screenshot on ${{ github.event.inputs.device || 'iPhone 13 Pro' }}
-    runs-on: macos-26
+    name: ${{ matrix.runner }} · ${{ github.event.inputs.device || 'iPhone 13 Pro' }}
+    runs-on: ${{ matrix.runner }}
     timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        # macos-26 → Xcode 26 / iOS 26 simulator; macos-15 → Xcode 16.4 / iOS 18 simulator.
+        runner: [macos-26, macos-15]
     steps:
       - uses: actions/checkout@v4
 
@@ -58,7 +63,7 @@ jobs:
       - name: Upload simulator .app
         uses: actions/upload-artifact@v4
         with:
-          name: MongolKey-iOS-Simulator-app
+          name: MongolKey-iOS-Simulator-app-${{ matrix.runner }}
           path: build/dist/MongolKey.app.zip
           if-no-files-found: error
 
@@ -131,7 +136,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: screenshots-${{ env.SIM_DEVICE_NAME || 'simulator' }}
+          name: screenshots-${{ env.SIM_DEVICE_NAME || 'simulator' }}-${{ matrix.runner }}
           path: build/screenshots
           if-no-files-found: warn
 
@@ -139,14 +144,14 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: uitest-results
+          name: uitest-results-${{ matrix.runner }}
           path: |
             build/uitests-*.log
             build/UITests-*.xcresult
           if-no-files-found: ignore
 
       - name: Upload to Appetize.io (browser iPhone 13 Pro)
-        if: env.APPETIZE_API_TOKEN != ''
+        if: env.APPETIZE_API_TOKEN != '' && matrix.runner == 'macos-26'
         run: |
           set -euo pipefail
           URL="https://api.appetize.io/v1/apps"
