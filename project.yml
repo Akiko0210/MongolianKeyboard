@@ -47,6 +47,12 @@ targets:
         UILaunchScreen: {}
         UIAppFonts:
           - NotoSansMongolian-Regular.ttf
+        # mongolkey:// lets tooling (UI tests, `xcrun simctl openurl`) launch the
+        # app through the system instead of the test harness.
+        CFBundleURLTypes:
+          - CFBundleURLName: com.mongolkey.app
+            CFBundleURLSchemes:
+              - mongolkey
     dependencies:
       - package: MongolEngine
       - target: MongolKeyboard

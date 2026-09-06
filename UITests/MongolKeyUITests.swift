@@ -125,21 +125,36 @@ final class MongolKeyUITests: XCTestCase {
     // MARK: - Launching via SpringBoard
 
     private func launchFromHomeScreen() -> Bool {
-        let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
         XCUIDevice.shared.press(.home)
         pause(1.0)
+
+        // 1. The app registers the mongolkey:// scheme; opening it launches the
+        //    app through the system, not the test harness.
+        if #available(iOS 16.4, *), let url = URL(string: "mongolkey://") {
+            XCUIDevice.shared.system.open(url)
+            if app.wait(for: .runningForeground, timeout: 15) {
+                log("launched via mongolkey:// URL scheme")
+                return true
+            }
+            log("URL scheme launch did not bring the app to the foreground")
+        }
+
+        // 2. Tap a home-screen icon that is actually on screen.
+        let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
         springboard.activate()
-        var icon = springboard.icons["MongolKey"]
-        for _ in 0..<3 where !icon.waitForExistence(timeout: 3) {
+        for page in 0..<3 {
+            let visible = springboard.icons.matching(identifier: "MongolKey").allElementsBoundByIndex
+                .first { $0.frame.width > 1 && $0.isHittable }
+            if let icon = visible {
+                log("tapping home-screen icon on page \(page) at \(icon.frame)")
+                icon.tap()
+                return app.wait(for: .runningForeground, timeout: 15)
+            }
             springboard.swipeLeft()
-            icon = springboard.icons["MongolKey"]
+            pause(0.8)
         }
-        guard icon.exists else {
-            log("no MongolKey icon on the home screen; icons: \(springboard.icons.allElementsBoundByIndex.prefix(20).map { $0.label })")
-            return false
-        }
-        icon.tap()
-        return app.wait(for: .runningForeground, timeout: 15)
+        log("no hittable MongolKey icon; icons: \(springboard.icons.allElementsBoundByIndex.prefix(20).map { "\($0.label)@\($0.frame)" })")
+        return false
     }
 
     // MARK: - Settings automation
