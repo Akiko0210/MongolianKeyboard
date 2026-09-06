@@ -277,7 +277,7 @@ final class MongolKeyUITests: XCTestCase {
 
     private func snap(_ name: String) {
         shotIndex += 1
-        let fileName = String(format: "%@-%02d-%@", shotPrefix, shotIndex, name)
+        let fileName = "\(shotPrefix)-\(shotIndex < 10 ? "0" : "")\(shotIndex)-\(name)"
         let screenshot = XCUIScreen.main.screenshot()
 
         let attachment = XCTAttachment(screenshot: screenshot)
@@ -317,18 +317,18 @@ enum KeyGeometry {
     private typealias Key = (name: String, width: Width)
 
     private static func units(_ letters: String) -> [Key] {
-        letters.map { Key(name: String($0), width: .unit) }
+        letters.map { (name: String($0), width: Width.unit) }
     }
 
     private static let letterRows: [[Key]] = {
-        var row3: [Key] = [Key(name: "spacer", width: .fill)]
+        var row3: [Key] = [(name: "spacer", width: .fill)]
         row3 += units("zxcvbnm")
-        row3.append(Key(name: "delete", width: .fill))
+        row3.append((name: "delete", width: .fill))
         let row4: [Key] = [
-            Key(name: "numbers", width: .multiple(1.4)),
-            Key(name: "next keyboard", width: .multiple(1.2)),
-            Key(name: "space", width: .fill),
-            Key(name: "return", width: .multiple(2.0)),
+            (name: "numbers", width: .multiple(1.4)),
+            (name: "next keyboard", width: .multiple(1.2)),
+            (name: "space", width: .fill),
+            (name: "return", width: .multiple(2.0)),
         ]
         return [units("qwertyuiop"), units("asdfghjkl"), row3, row4]
     }()
