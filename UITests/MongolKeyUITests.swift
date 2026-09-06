@@ -159,9 +159,14 @@ final class MongolKeyUITests: XCTestCase {
         }
         pause(1.0)
         snap("settings-mongolkey-added")
-        let ok = settings.staticTexts["MongolKey"].waitForExistence(timeout: 5)
+        // Back on the Keyboards list: it should now show both the "Add New
+        // Keyboard…" row and a "MongolKey" row.
+        let backOnList = row(in: settings, startingWith: "Add New Keyboard").waitForExistence(timeout: 5)
+        let listed = settings.staticTexts["MongolKey"].exists
+        let labels = settings.staticTexts.allElementsBoundByIndex.prefix(30).map { $0.label }
+        log("Settings after add: backOnKeyboardsList=\(backOnList) mongolKeyListed=\(listed) texts=\(labels)")
         settings.terminate()
-        return ok
+        return backOnList && listed
     }
 
     private func row(in host: XCUIApplication, startingWith text: String) -> XCUIElement {
@@ -207,6 +212,29 @@ final class MongolKeyUITests: XCTestCase {
         }
     }
 
+    /// Anything on screen whose label mentions MongolKey (the keyboard picker's
+    /// row label is not guaranteed to be exactly "MongolKey").
+    private func pickerItem() -> XCUIElement? {
+        let pred = NSPredicate(format: "label CONTAINS[c] 'mongol'")
+        let queries: [XCUIElementQuery] = [
+            app.menuItems.matching(pred), app.buttons.matching(pred), app.cells.matching(pred),
+            app.staticTexts.matching(pred), app.otherElements.matching(pred),
+            app.descendants(matching: .any).matching(pred),
+        ]
+        for q in queries where q.count > 0 { return q.firstMatch }
+        return nil
+    }
+
+    /// Log the visible picker/menu: every labelled element mentioning a keyboard.
+    private func dumpPicker() {
+        let interesting = app.debugDescription.split(separator: "\n").filter { line in
+            let l = line.lowercased()
+            return l.contains("mongol") || l.contains("emoji") || l.contains("english")
+                || l.contains("menu") || l.contains("keyboard")
+        }
+        log("[picker] \(interesting.count) matching lines:\n" + interesting.prefix(60).joined(separator: "\n"))
+    }
+
     private func mkElements() -> XCUIElementQuery {
         app.descendants(matching: .any).matching(NSPredicate(format: "identifier BEGINSWITH 'mk.'"))
     }
@@ -238,19 +266,25 @@ final class MongolKeyUITests: XCTestCase {
         log("globe key: '\(globe.label)'#\(globe.identifier) frame=\(globe.frame)")
 
         // Long-press shows the keyboard picker; choose MongolKey if listed.
-        globe.press(forDuration: 1.2)
-        pause(0.6)
+        globe.press(forDuration: 1.5)
+        pause(0.8)
         snap("keyboard-picker")
-        let item = app.descendants(matching: .any)
-            .matching(NSPredicate(format: "label ==[c] 'MongolKey'")).firstMatch
-        if item.waitForExistence(timeout: 3), item.isHittable {
-            log("picker offered MongolKey — tapping")
-            item.tap()
+        dumpPicker()
+        if let item = pickerItem() {
+            log("picker offered '\(item.label)' (\(item.elementType.rawValue)) hittable=\(item.isHittable) frame=\(item.frame) — tapping")
+            if item.isHittable {
+                item.tap()
+            } else {
+                item.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).tap()
+            }
         } else {
-            log("picker did not list MongolKey — tapping globe")
-            globe.tap()
+            log("picker did not list MongolKey — dismissing and tapping globe")
+            app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.3)).tap()
+            pause(0.5)
+            if let g = globeKey() { g.tap() }
         }
-        pause(1.2)
+        pause(1.5)
+        snap("after-picker")
         if mongolKeyVisible() { return true }
         dumpKeyboardState("after-first-switch")
 
