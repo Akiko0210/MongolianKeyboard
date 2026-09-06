@@ -43,6 +43,9 @@ does not let scripts perform:
    Keyboard… ▸ MongolKey**.
 2. Back in MongolKey ▸ **Try It**, tap the "Type here with MongolKey…" field,
    hold **🌐** and pick **MongolKey**, then type `mongol`, `sain`, `khaan`.
+   On **iOS 26** the globe is no longer inside the keyboard: it sits in the
+   system bar *below* the keyboard, bottom-left, next to the microphone.
+   Hold it there and slide to "MongolKey".
 
 Tip: if the simulator's on-screen keyboard never appears, uncheck
 **I/O ▸ Keyboard ▸ Connect Hardware Keyboard** in the Simulator menu.
@@ -113,19 +116,34 @@ MacinCloud or MacStadium, then follow section 1 there.
 
 ## 3. Reading the screenshots
 
-Artifact `screenshots-iPhone 13 Pro` contains, in order:
+Artifact `screenshots-iPhone 13 Pro-macos-26` contains, under `pass1/`:
 
 - `app-01-setup` … `app-05-romanizer-typing` — the four tabs, then the live
   romanizer being typed into with the system keyboard.
 - `keyboard-*-settings-*` — the Settings flow that enables MongolKey.
-- `keyboard-*-field-focused`, `switched-to-mongolkey`, `composing-mongol`,
-  `committed-mongol`, `composing-sain`, `numbers-layer`, `final` — the extension
-  itself: candidate bar with vertical candidates, committed text, number layer.
+- `keyboard-*-keyboard-picker` — the 🌐 input switcher listing MongolKey.
+- `keyboard-*-switched-to-mongolkey`, `composing-mongol`, `committed-mongol`,
+  `composing-sain`, `numbers-layer`, `final` — the extension itself: the
+  candidate bar with vertical candidates, the committed word in the field, the
+  number layer.
 - `zz-simulator-final` — a raw capture of the simulator after the tests.
 
-If a `settings-missing-*` screenshot appears, iOS moved something in Settings
-and `UITests/MongolKeyUITests.swift` ▸ `enableKeyboardInSettings()` needs its
-row names updated; the app screenshots are unaffected.
+The run's log also contains downscaled copies of the key screenshots as
+base64 (between `@@IMG` / `@@END` markers) so they can be inspected without
+downloading the artifact.
+
+The test asserts that the tester field ends up containing Mongolian-script
+characters, so a red `test2_KeyboardExtension` means the keyboard really did
+not produce output. If a `settings-missing-*` screenshot appears, iOS moved
+something in Settings and `UITests/MongolKeyUITests.swift` ▸
+`enableKeyboardFromGeneral()` needs its row names updated.
+
+Things learned the hard way, all handled by the test now: iOS 26 moved the
+globe key out of the keyboard into the bar below it; the input switcher is a
+press-and-slide menu (a plain tap on a row does not always select it); iOS
+shows a one-time QuickPath tip with a Continue button over the first system
+keyboard; and a fully unsigned build (`CODE_SIGNING_ALLOWED=NO`) must be
+avoided in favour of ad-hoc signing (`CODE_SIGN_IDENTITY=-`).
 
 ## 4. What the automated run does not cover
 
