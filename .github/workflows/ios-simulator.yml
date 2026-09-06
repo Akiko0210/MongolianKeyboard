@@ -70,33 +70,62 @@ jobs:
       - name: UI tests + screenshots on the simulator
         id: uitests
         continue-on-error: true
-        env:
-          TEST_RUNNER_MK_SCREENSHOT_DIR: ${{ github.workspace }}/build/screenshots
         run: |
-          mkdir -p build/screenshots
           set -o pipefail
-          xcodebuild test -project MongolKey.xcodeproj -scheme MongolKey \
-            -destination "id=$SIM_UDID" -derivedDataPath build/DerivedData \
-            -only-testing:MongolKeyUITests -resultBundlePath build/UITests.xcresult \
-            CODE_SIGN_IDENTITY=- CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=YES \
-            2>&1 | tee build/uitests.log | grep -E "MK:|Test (Case|Suite)|error|failed|passed|\*\*" || true
+          run_tests() {  # $1 = pass label, remaining args = xcodebuild test selectors
+            local label="$1"; shift
+            mkdir -p "build/screenshots/$label"
+            TEST_RUNNER_MK_SCREENSHOT_DIR="$PWD/build/screenshots/$label" \
+            xcodebuild test -project MongolKey.xcodeproj -scheme MongolKey \
+              -destination "id=$SIM_UDID" -derivedDataPath build/DerivedData \
+              "$@" -resultBundlePath "build/UITests-$label.xcresult" \
+              CODE_SIGN_IDENTITY=- CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=YES \
+              2>&1 | tee "build/uitests-$label.log" | grep -E "MK:|Test (Case|Suite)|error|failed|passed|\*\*" || true
+            return "${PIPESTATUS[0]}"
+          }
+          echo "=== pass 1: app screens, enable the keyboard, first keyboard attempt ==="
+          run_tests pass1 -only-testing:MongolKeyUITests || true
+          echo "=== reboot the simulator: third-party keyboards are sometimes only offered after a reboot ==="
+          xcrun simctl shutdown "$SIM_UDID" || true
+          xcrun simctl boot "$SIM_UDID"
+          xcrun simctl bootstatus "$SIM_UDID" -b
+          echo "=== pass 2: keyboard test after the reboot ==="
+          run_tests pass2 -only-testing:MongolKeyUITests/MongolKeyUITests/test2_KeyboardExtension
 
       - name: Extract screenshots from the result bundle (fallback)
         if: always()
         run: |
-          # Attachments are also written directly by the tests; this catches the
-          # case where the runner could not write to the workspace.
-          if [ -d build/UITests.xcresult ] && [ -z "$(ls -A build/screenshots 2>/dev/null)" ]; then
-            xcrun xcresulttool export attachments --path build/UITests.xcresult \
-              --output-path build/screenshots 2>/dev/null || true
-          fi
+          for r in build/UITests-*.xcresult; do
+            [ -d "$r" ] || continue
+            label=$(basename "$r" .xcresult | sed 's/UITests-//')
+            if [ -z "$(ls -A "build/screenshots/$label" 2>/dev/null)" ]; then
+              xcrun xcresulttool export attachments --path "$r" --output-path "build/screenshots/$label" 2>/dev/null || true
+            fi
+          done
           # Always add one raw capture of whatever the simulator shows now.
           xcrun simctl io "$SIM_UDID" screenshot build/screenshots/zz-simulator-final.png || true
-          ls -la build/screenshots || true
+          ls -laR build/screenshots || true
           echo "--- keyboard extensions registered with pluginkit in the simulator ---"
           xcrun simctl spawn "$SIM_UDID" pluginkit -m -v -p com.apple.keyboard-service || true
           echo "--- enabled keyboards (AppleKeyboards) ---"
           xcrun simctl spawn "$SIM_UDID" defaults read -g AppleKeyboards || true
+
+      - name: Screenshot previews in the log (base64, downscaled)
+        if: always()
+        run: |
+          shopt -s nullglob
+          for f in build/screenshots/pass1/*settings-app-keyboards*.png \
+                   build/screenshots/pass2/*field-focused*.png \
+                   build/screenshots/pass2/*keyboard-picker*.png \
+                   build/screenshots/pass2/*after-picker*.png \
+                   build/screenshots/pass2/*switched*.png \
+                   build/screenshots/pass2/*composing-mongol*.png \
+                   build/screenshots/zz-simulator-final.png; do
+            sips -Z 420 "$f" --out build/preview.png >/dev/null 2>&1 || continue
+            echo "@@IMG $f"
+            base64 -b 120 -i build/preview.png
+            echo "@@END"
+          done
 
       - name: Upload screenshots
         if: always()
@@ -112,8 +141,8 @@ jobs:
         with:
           name: uitest-results
           path: |
-            build/uitests.log
-            build/UITests.xcresult
+            build/uitests-*.log
+            build/UITests-*.xcresult
           if-no-files-found: ignore
 
       - name: Upload to Appetize.io (browser iPhone 13 Pro)
