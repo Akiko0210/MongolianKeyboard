@@ -88,14 +88,7 @@ jobs:
               2>&1 | tee "build/uitests-$label.log" | grep -E "MK:|Test (Case|Suite)|error|failed|passed|\*\*" || true
             return "${PIPESTATUS[0]}"
           }
-          echo "=== pass 1: app screens, enable the keyboard, first keyboard attempt ==="
-          run_tests pass1 -only-testing:MongolKeyUITests || true
-          echo "=== reboot the simulator: third-party keyboards are sometimes only offered after a reboot ==="
-          xcrun simctl shutdown "$SIM_UDID" || true
-          xcrun simctl boot "$SIM_UDID"
-          xcrun simctl bootstatus "$SIM_UDID" -b
-          echo "=== pass 2: keyboard test after the reboot ==="
-          run_tests pass2 -only-testing:MongolKeyUITests/MongolKeyUITests/test2_KeyboardExtension
+          run_tests pass1 -only-testing:MongolKeyUITests
 
       - name: Extract screenshots from the result bundle (fallback)
         if: always()
@@ -119,12 +112,15 @@ jobs:
         if: always()
         run: |
           shopt -s nullglob
-          for f in build/screenshots/pass1/*settings-app-keyboards*.png \
-                   build/screenshots/pass2/*field-focused*.png \
-                   build/screenshots/pass2/*keyboard-picker*.png \
-                   build/screenshots/pass2/*after-picker*.png \
-                   build/screenshots/pass2/*switched*.png \
-                   build/screenshots/pass2/*composing-mongol*.png \
+          for f in build/screenshots/pass1/*settings-keyboards*.png \
+                   build/screenshots/pass1/*field-focused*.png \
+                   build/screenshots/pass1/*keyboard-picker*.png \
+                   build/screenshots/pass1/*after-picker*.png \
+                   build/screenshots/pass1/*after-globe-tap-0*.png \
+                   build/screenshots/pass1/*switched*.png \
+                   build/screenshots/pass1/*composing-mongol*.png \
+                   build/screenshots/pass1/*committed-mongol*.png \
+                   build/screenshots/pass1/*numbers-layer*.png \
                    build/screenshots/zz-simulator-final.png; do
             sips -Z 420 "$f" --out build/preview.png >/dev/null 2>&1 || continue
             echo "@@IMG $f"

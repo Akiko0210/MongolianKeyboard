@@ -162,9 +162,9 @@ final class MongolKeyUITests: XCTestCase {
     /// Adds MongolKey under Settings ▸ General ▸ Keyboard ▸ Keyboards.
     /// Returns true when "MongolKey" is listed as an enabled keyboard.
     private func enableKeyboardInSettings() -> Bool {
-        if enableKeyboardFromAppSettingsPage() { return true }
-        log("app-page route failed; trying General ▸ Keyboard ▸ Keyboards")
-        return enableKeyboardFromGeneral()
+        if enableKeyboardFromGeneral() { return true }
+        log("General route failed; trying the app's own Settings page")
+        return enableKeyboardFromAppSettingsPage()
     }
 
     /// Route 1: the app's own Settings page (Settings ▸ Apps ▸ MongolKey) has a
@@ -294,7 +294,13 @@ final class MongolKeyUITests: XCTestCase {
     }
 
     private func mongolKeyVisible() -> Bool {
-        key("space").exists && key("m").exists
+        if key("space").exists && key("m").exists { return true }
+        if app.descendants(matching: .any)["mk.keyboard"].exists { return true }
+        // The candidate bar's placeholder (em dash distinguishes it from the app's own copy).
+        let hint = NSPredicate(format: "label BEGINSWITH 'Type romanized Mongolian —'")
+        if app.staticTexts.matching(hint).firstMatch.exists { return true }
+        // Lower-case letter keys only exist on MongolKey (the system keyboard uses upper case).
+        return app.keys["q"].exists && !app.keys["Q"].exists
     }
 
     private func dumpKeyboardState(_ tag: String) {
@@ -312,7 +318,7 @@ final class MongolKeyUITests: XCTestCase {
     /// Anything on screen whose label mentions MongolKey (the keyboard picker's
     /// row label is not guaranteed to be exactly "MongolKey").
     private func pickerItem() -> XCUIElement? {
-        let pred = NSPredicate(format: "label CONTAINS[c] 'mongol'")
+        let pred = NSPredicate(format: "label CONTAINS[c] 'mongol' AND label.length < 24")
         let queries: [XCUIElementQuery] = [
             app.menuItems.matching(pred), app.buttons.matching(pred), app.cells.matching(pred),
             app.staticTexts.matching(pred), app.otherElements.matching(pred),
@@ -336,60 +342,64 @@ final class MongolKeyUITests: XCTestCase {
         app.descendants(matching: .any).matching(NSPredicate(format: "identifier BEGINSWITH 'mk.'"))
     }
 
-    /// The system keyboard's globe key, whatever iOS calls it this year.
+    /// The globe key. On iOS 26 it is not part of the keyboard element at all:
+    /// it sits in the system bar below the keyboard (bottom-left, next to the
+    /// microphone). Older iOS puts it inside the keyboard as "Next keyboard".
     private func globeKey() -> XCUIElement? {
-        let candidates: [XCUIElement] = [
-            app.keyboards.buttons["Next keyboard"],
-            app.keyboards.keys["Next keyboard"],
-            app.keyboards.buttons["Globe"],
-            app.keyboards.buttons["Emoji"],
-            app.keyboards.buttons.matching(NSPredicate(
-                format: "label CONTAINS[c] 'keyboard' OR label CONTAINS[c] 'globe' OR identifier CONTAINS[c] 'globe'")).firstMatch,
-            app.buttons.matching(NSPredicate(
-                format: "label CONTAINS[c] 'next keyboard' OR identifier CONTAINS[c] 'globe'")).firstMatch,
-        ]
-        for c in candidates where c.exists { return c }
+        let screenHeight = app.frame.height
+        let bottomBand = app.buttons.allElementsBoundByIndex.filter { $0.frame.minY > screenHeight - 90 && $0.frame.height > 1 }
+        log("buttons in the bottom band: " + bottomBand.map { "'\($0.label)'#\($0.identifier)@\(Int($0.frame.minX)),\(Int($0.frame.minY))" }.joined(separator: " "))
+        if let g = bottomBand.first(where: {
+            $0.label.localizedCaseInsensitiveContains("keyboard") || $0.label.localizedCaseInsensitiveContains("globe")
+                || $0.identifier.localizedCaseInsensitiveContains("globe") || $0.identifier.localizedCaseInsensitiveContains("keyboard")
+        }) { return g }
+        if let leftmost = bottomBand.min(by: { $0.frame.minX < $1.frame.minX }), leftmost.frame.minX < 80 { return leftmost }
+
+        let inKeyboard = [app.keyboards.buttons["Next keyboard"], app.keyboards.keys["Next keyboard"]]
+        if let g = inKeyboard.first(where: { $0.exists }) { return g }
         return nil
+    }
+
+    /// Screen point of the globe when no element is exposed (bottom-left of the
+    /// system bar on iOS 26).
+    private func globeFallbackPoint() -> XCUICoordinate {
+        app.coordinate(withNormalizedOffset: .zero)
+            .withOffset(CGVector(dx: 30, dy: app.frame.height - 28))
     }
 
     private func switchToMongolKey() -> Bool {
         if mongolKeyVisible() { return true }
         dumpKeyboardState("before-switch")
 
-        guard let globe = globeKey() else {
-            log("no globe key found on the system keyboard")
-            return false
+        let globe = globeKey()
+        if let globe {
+            log("globe key: '\(globe.label)'#\(globe.identifier) frame=\(globe.frame)")
+        } else {
+            log("no globe element exposed; will tap the bottom-left of the system bar")
         }
-        log("globe key: '\(globe.label)'#\(globe.identifier) frame=\(globe.frame)")
 
         // Long-press shows the keyboard picker; choose MongolKey if listed.
-        globe.press(forDuration: 1.5)
+        if let globe { globe.press(forDuration: 1.5) } else { globeFallbackPoint().press(forDuration: 1.5) }
         pause(0.8)
         snap("keyboard-picker")
         dumpPicker()
         if let item = pickerItem() {
-            log("picker offered '\(item.label)' (\(item.elementType.rawValue)) hittable=\(item.isHittable) frame=\(item.frame) — tapping")
-            if item.isHittable {
-                item.tap()
-            } else {
-                item.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).tap()
-            }
+            log("picker offered '\(item.label)' hittable=\(item.isHittable) frame=\(item.frame) — tapping")
+            if item.isHittable { item.tap() } else { item.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).tap() }
         } else {
-            log("picker did not list MongolKey — dismissing and tapping globe")
-            app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.3)).tap()
-            pause(0.5)
-            if let g = globeKey() { g.tap() }
+            log("picker did not list MongolKey — dismissing")
+            app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.25)).tap()
         }
         pause(1.5)
         snap("after-picker")
         if mongolKeyVisible() { return true }
-        dumpKeyboardState("after-first-switch")
+        dumpKeyboardState("after-picker")
 
-        // Otherwise cycle through the installed keyboards.
+        // Otherwise a plain tap on the globe cycles through the enabled keyboards.
         for i in 0..<3 {
-            guard let next = globeKey() else { break }
-            next.tap()
-            pause(1.2)
+            if let g = globeKey() { g.tap() } else { globeFallbackPoint().tap() }
+            pause(1.5)
+            snap("after-globe-tap-\(i)")
             if mongolKeyVisible() { return true }
             dumpKeyboardState("after-cycle-\(i)")
         }
