@@ -318,13 +318,18 @@ final class MongolKeyUITests: XCTestCase {
     /// Anything on screen whose label mentions MongolKey (the keyboard picker's
     /// row label is not guaranteed to be exactly "MongolKey").
     private func pickerItem() -> XCUIElement? {
-        let pred = NSPredicate(format: "label CONTAINS[c] 'mongol' AND label.length < 24")
+        let pred = NSPredicate(format: "label CONTAINS[c] 'mongol'")
         let queries: [XCUIElementQuery] = [
             app.menuItems.matching(pred), app.buttons.matching(pred), app.cells.matching(pred),
             app.staticTexts.matching(pred), app.otherElements.matching(pred),
             app.descendants(matching: .any).matching(pred),
         ]
-        for q in queries where q.count > 0 { return q.firstMatch }
+        for q in queries {
+            // Short labels only: the app's own copy ("Type romanized Mongolian…") also matches.
+            if let item = q.allElementsBoundByIndex.first(where: { $0.label.count < 24 && $0.frame.height > 1 }) {
+                return item
+            }
+        }
         return nil
     }
 
