@@ -72,7 +72,15 @@ final class MongolKeyUITests: XCTestCase {
         let enabled = enableKeyboardInSettings()
         log("keyboard enabled in Settings: \(enabled)")
 
-        app.launch()
+        // Launch from the home screen rather than through the test harness:
+        // an app launched by XCTest may not be offered third-party keyboards.
+        app.terminate()
+        if launchFromHomeScreen() {
+            log("launched MongolKey from the home screen")
+        } else {
+            log("home-screen launch failed; falling back to XCTest launch")
+            app.launch()
+        }
         XCTAssertTrue(app.tabBars.buttons["Try It"].waitForExistence(timeout: 15))
         app.tabBars.buttons["Try It"].tap()
 
@@ -112,6 +120,26 @@ final class MongolKeyUITests: XCTestCase {
         let hasMongolian = value.unicodeScalars.contains { (0x1820...0x18AA).contains($0.value) }
         XCTAssertTrue(hasMongolian, "expected Mongolian script in the tester field, got: '\(value)'")
         snap("final")
+    }
+
+    // MARK: - Launching via SpringBoard
+
+    private func launchFromHomeScreen() -> Bool {
+        let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
+        XCUIDevice.shared.press(.home)
+        pause(1.0)
+        springboard.activate()
+        var icon = springboard.icons["MongolKey"]
+        for _ in 0..<3 where !icon.waitForExistence(timeout: 3) {
+            springboard.swipeLeft()
+            icon = springboard.icons["MongolKey"]
+        }
+        guard icon.exists else {
+            log("no MongolKey icon on the home screen; icons: \(springboard.icons.allElementsBoundByIndex.prefix(20).map { $0.label })")
+            return false
+        }
+        icon.tap()
+        return app.wait(for: .runningForeground, timeout: 15)
     }
 
     // MARK: - Settings automation
