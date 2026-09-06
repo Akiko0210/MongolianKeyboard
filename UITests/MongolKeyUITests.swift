@@ -195,38 +195,73 @@ final class MongolKeyUITests: XCTestCase {
         key("space").exists && key("m").exists
     }
 
+    private func dumpKeyboardState(_ tag: String) {
+        let kb = app.keyboards.firstMatch
+        log("[\(tag)] keyboards=\(app.keyboards.count) frame=\(kb.exists ? "\(kb.frame)" : "none") mk.* elements=\(mkElements().count)")
+        let buttons = app.keyboards.buttons.allElementsBoundByIndex
+        log("[\(tag)] keyboard buttons: " + buttons.prefix(40).map { "'\($0.label)'#\($0.identifier)" }.joined(separator: " "))
+        let keys = app.keyboards.keys.allElementsBoundByIndex
+        log("[\(tag)] keyboard keys (\(keys.count)): " + keys.prefix(60).map { $0.label }.joined(separator: ","))
+        if kb.exists {
+            log("[\(tag)] hierarchy:\n" + String(kb.debugDescription.prefix(6000)))
+        }
+    }
+
+    private func mkElements() -> XCUIElementQuery {
+        app.descendants(matching: .any).matching(NSPredicate(format: "identifier BEGINSWITH 'mk.'"))
+    }
+
+    /// The system keyboard's globe key, whatever iOS calls it this year.
+    private func globeKey() -> XCUIElement? {
+        let candidates: [XCUIElement] = [
+            app.keyboards.buttons["Next keyboard"],
+            app.keyboards.keys["Next keyboard"],
+            app.keyboards.buttons["Globe"],
+            app.keyboards.buttons["Emoji"],
+            app.keyboards.buttons.matching(NSPredicate(
+                format: "label CONTAINS[c] 'keyboard' OR label CONTAINS[c] 'globe' OR identifier CONTAINS[c] 'globe'")).firstMatch,
+            app.buttons.matching(NSPredicate(
+                format: "label CONTAINS[c] 'next keyboard' OR identifier CONTAINS[c] 'globe'")).firstMatch,
+        ]
+        for c in candidates where c.exists { return c }
+        return nil
+    }
+
     private func switchToMongolKey() -> Bool {
         if mongolKeyVisible() { return true }
+        dumpKeyboardState("before-switch")
 
-        let globe = app.keyboards.buttons["Next keyboard"].firstMatch
-        if globe.waitForExistence(timeout: 5) {
-            // Long-press shows the keyboard picker; choose MongolKey if listed.
-            globe.press(forDuration: 1.2)
-            pause(0.5)
-            snap("keyboard-picker")
-            let item = app.descendants(matching: .any)
-                .matching(NSPredicate(format: "label ==[c] 'MongolKey'")).firstMatch
-            if item.waitForExistence(timeout: 3), item.isHittable {
-                item.tap()
-            } else {
-                globe.tap()
-            }
-            pause(1.0)
-            if mongolKeyVisible() { return true }
-
-            // Otherwise cycle through the installed keyboards.
-            for _ in 0..<3 {
-                let next = app.keyboards.buttons["Next keyboard"].firstMatch
-                guard next.exists else { break }
-                next.tap()
-                pause(1.0)
-                if mongolKeyVisible() { return true }
-            }
-        } else {
-            log("system globe key not found; keyboards=\(app.keyboards.count)")
+        guard let globe = globeKey() else {
+            log("no globe key found on the system keyboard")
+            return false
         }
+        log("globe key: '\(globe.label)'#\(globe.identifier) frame=\(globe.frame)")
 
-        log("keyboard hierarchy:\n\(app.keyboards.firstMatch.debugDescription.prefix(3000))")
+        // Long-press shows the keyboard picker; choose MongolKey if listed.
+        globe.press(forDuration: 1.2)
+        pause(0.6)
+        snap("keyboard-picker")
+        let item = app.descendants(matching: .any)
+            .matching(NSPredicate(format: "label ==[c] 'MongolKey'")).firstMatch
+        if item.waitForExistence(timeout: 3), item.isHittable {
+            log("picker offered MongolKey — tapping")
+            item.tap()
+        } else {
+            log("picker did not list MongolKey — tapping globe")
+            globe.tap()
+        }
+        pause(1.2)
+        if mongolKeyVisible() { return true }
+        dumpKeyboardState("after-first-switch")
+
+        // Otherwise cycle through the installed keyboards.
+        for i in 0..<3 {
+            guard let next = globeKey() else { break }
+            next.tap()
+            pause(1.2)
+            if mongolKeyVisible() { return true }
+            dumpKeyboardState("after-cycle-\(i)")
+        }
         return mongolKeyVisible()
     }
 
@@ -271,8 +306,11 @@ final class MongolKeyUITests: XCTestCase {
         RunLoop.current.run(until: Date(timeIntervalSinceNow: seconds))
     }
 
+    /// Every line is prefixed so the CI log filter keeps multi-line dumps.
     private func log(_ message: String) {
-        print("MK: \(message)")
+        for line in message.split(separator: "\n", omittingEmptySubsequences: true) {
+            print("MK: \(line)")
+        }
     }
 
     private func snap(_ name: String) {
@@ -333,6 +371,21 @@ enum KeyGeometry {
         return [units("qwertyuiop"), units("asdfghjkl"), row3, row4]
     }()
 
+    private static let numberRows: [[Key]] = {
+        var row3: [Key] = [(name: "spacer", width: .fill)]
+        row3 += ["᠂", "᠃", ".", ",", "?", "!", "'"].map { (name: $0, width: Width.unit) }
+        row3.append((name: "delete", width: .fill))
+        let row4: [Key] = [
+            (name: "letters", width: .multiple(1.4)),
+            (name: "next keyboard", width: .multiple(1.2)),
+            (name: "space", width: .fill),
+            (name: "return", width: .multiple(2.0)),
+        ]
+        return [units("1234567890"),
+                ["-", "/", ":", ";", "(", ")", "₮", "&", "@", "\""].map { (name: $0, width: Width.unit) },
+                row3, row4]
+    }()
+
     static func center(of name: String, keyboardFrame: CGRect) -> CGPoint? {
         let keysTop = keyboardFrame.minY + previewHeight + interSectionGap
         let keysAreaHeight = keyboardFrame.height - previewHeight - interSectionGap - bottomInset
@@ -341,7 +394,8 @@ enum KeyGeometry {
         let available = keyboardFrame.width - 2 * sideInset
         let unit = (available - 9 * keyGap) / 10
 
-        for (rowIndex, row) in letterRows.enumerated() {
+        let rows = letterRows.contains { $0.contains { $0.name == name } } ? letterRows : numberRows
+        for (rowIndex, row) in rows.enumerated() {
             guard row.contains(where: { $0.name == name }) else { continue }
             var fixed: CGFloat = 0
             var fillCount = 0
