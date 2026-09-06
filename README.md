@@ -198,7 +198,7 @@ xcrun simctl list devices available
 SIM=<device-id-from-step-2>          # e.g. 6A42F695-8352-44D3-B5E0-33A2FCC7CEF4
 xcodebuild -project MongolKey.xcodeproj -scheme MongolKey \
   -sdk iphonesimulator -destination "id=$SIM" \
-  -configuration Debug CODE_SIGNING_ALLOWED=NO build
+  -configuration Debug CODE_SIGN_IDENTITY=- build   # ad-hoc sign; a fully unsigned extension is never offered as a keyboard
 
 # 4. Boot the simulator and open the Simulator.app window
 xcrun simctl boot $SIM

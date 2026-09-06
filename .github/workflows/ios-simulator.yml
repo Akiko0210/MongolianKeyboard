@@ -78,7 +78,8 @@ jobs:
           xcodebuild test -project MongolKey.xcodeproj -scheme MongolKey \
             -destination "id=$SIM_UDID" -derivedDataPath build/DerivedData \
             -only-testing:MongolKeyUITests -resultBundlePath build/UITests.xcresult \
-            CODE_SIGNING_ALLOWED=NO 2>&1 | tee build/uitests.log | grep -E "MK:|Test (Case|Suite)|error|failed|passed|\*\*" || true
+            CODE_SIGN_IDENTITY=- CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=YES \
+            2>&1 | tee build/uitests.log | grep -E "MK:|Test (Case|Suite)|error|failed|passed|\*\*" || true
 
       - name: Extract screenshots from the result bundle (fallback)
         if: always()

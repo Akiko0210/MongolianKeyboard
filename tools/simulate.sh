@@ -132,6 +132,10 @@ if [[ "$SKIP_GENERATE" == 0 ]]; then
   xcodegen generate
 fi
 
+# Ad-hoc sign (identity "-") rather than CODE_SIGNING_ALLOWED=NO: an app
+# extension that is not signed at all is listed by Settings but never offered
+# as a keyboard, so the 🌐 key never shows MongolKey.
+SIGN_FLAGS=(CODE_SIGN_IDENTITY=- CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=YES)
 ARCH_FLAGS=()
 if [[ "$UNIVERSAL" == 1 ]]; then
   ARCH_FLAGS=(ARCHS="arm64 x86_64" ONLY_ACTIVE_ARCH=NO)
@@ -143,7 +147,7 @@ BUILD_LOG="$ROOT/build/xcodebuild.log"
 if ! xcodebuild -project MongolKey.xcodeproj -scheme MongolKey \
   -sdk iphonesimulator -destination "generic/platform=iOS Simulator" \
   -configuration "$CONFIGURATION" -derivedDataPath "$DERIVED" \
-  CODE_SIGNING_ALLOWED=NO "${ARCH_FLAGS[@]}" build >"$BUILD_LOG" 2>&1; then
+  "${SIGN_FLAGS[@]}" "${ARCH_FLAGS[@]}" build >"$BUILD_LOG" 2>&1; then
   echo "error: xcodebuild failed — full log: $BUILD_LOG" >&2
   grep -E "error:|\*\* BUILD" "$BUILD_LOG" | sort -u | head -n 40 >&2
   exit 65
