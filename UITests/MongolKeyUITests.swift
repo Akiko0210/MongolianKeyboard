@@ -162,6 +162,60 @@ final class MongolKeyUITests: XCTestCase {
     /// Adds MongolKey under Settings ▸ General ▸ Keyboard ▸ Keyboards.
     /// Returns true when "MongolKey" is listed as an enabled keyboard.
     private func enableKeyboardInSettings() -> Bool {
+        if enableKeyboardFromAppSettingsPage() { return true }
+        log("app-page route failed; trying General ▸ Keyboard ▸ Keyboards")
+        return enableKeyboardFromGeneral()
+    }
+
+    /// Route 1: the app's own Settings page (Settings ▸ Apps ▸ MongolKey) has a
+    /// "Keyboards" row with an on/off switch for the extension. The app's
+    /// Setup tab opens that page directly, so no navigation guessing is needed.
+    private func enableKeyboardFromAppSettingsPage() -> Bool {
+        app.launch()
+        let open = app.buttons["Open Settings"].firstMatch
+        guard open.waitForExistence(timeout: 10) else {
+            log("no 'Open Settings' button in the app")
+            return false
+        }
+        open.tap()
+
+        let settings = XCUIApplication(bundleIdentifier: "com.apple.Preferences")
+        guard settings.wait(for: .runningForeground, timeout: 10) else {
+            log("Settings did not come to the foreground")
+            return false
+        }
+        pause(1.0)
+        snap("settings-app-page")
+
+        guard tapRow(in: settings, startingWith: "Keyboards") else {
+            log("no Keyboards row on the app page; texts=\(settings.staticTexts.allElementsBoundByIndex.prefix(20).map { $0.label })")
+            snap("settings-app-page-missing-keyboards")
+            return false
+        }
+        pause(0.8)
+        snap("settings-app-keyboards")
+
+        let toggle = settings.switches.matching(NSPredicate(format: "label CONTAINS[c] 'mongol'")).firstMatch
+        let anySwitch = toggle.exists ? toggle : settings.switches.firstMatch
+        guard anySwitch.waitForExistence(timeout: 5) else {
+            log("no switch on the Keyboards page; texts=\(settings.staticTexts.allElementsBoundByIndex.prefix(20).map { $0.label })")
+            return false
+        }
+        let before = (anySwitch.value as? String) ?? "?"
+        log("MongolKey switch '\(anySwitch.label)' value before: \(before)")
+        if before != "1" {
+            anySwitch.tap()
+            pause(0.8)
+        }
+        let after = (anySwitch.value as? String) ?? "?"
+        log("MongolKey switch value after: \(after)")
+        snap("settings-app-keyboards-toggled")
+        settings.terminate()
+        return after == "1"
+    }
+
+    /// Route 2: Settings ▸ General ▸ Keyboard ▸ Keyboards ▸ Add New Keyboard…
+    private func enableKeyboardFromGeneral() -> Bool {
         let settings = XCUIApplication(bundleIdentifier: "com.apple.Preferences")
         settings.launch()
         pause(1.0)
