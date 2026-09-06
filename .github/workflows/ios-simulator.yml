@@ -1,0 +1,148 @@
+# Builds MongolKey for the iOS Simulator on a GitHub-hosted Mac, runs it on an
+# iPhone 13 Pro-sized simulator, and captures screenshots — so the app can be
+# checked from any laptop (Windows/Linux included). See docs/TESTING.md.
+name: iOS Simulator
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      device:
+        description: "Simulator device type (xcrun simctl list devicetypes)"
+        default: "iPhone 13 Pro"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ios-simulator-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  APPETIZE_API_TOKEN: ${{ secrets.APPETIZE_API_TOKEN }}
+  APPETIZE_PUBLIC_KEY: ${{ vars.APPETIZE_PUBLIC_KEY }}
+
+jobs:
+  simulator:
+    name: Build, screenshot on ${{ github.event.inputs.device || 'iPhone 13 Pro' }}
+    runs-on: macos-26
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Xcode version
+        run: |
+          xcodebuild -version
+          xcrun simctl list runtimes | grep iOS || true
+
+      - name: Install XcodeGen
+        run: brew install xcodegen
+
+      - name: Engine unit tests (SwiftPM, macOS host)
+        working-directory: Packages/MongolEngine
+        run: swift test 2>&1 | tail -n 30
+
+      - name: Build universal simulator app (arm64 + x86_64)
+        run: tools/simulate.sh --build-only --universal
+
+      - name: Zip .app for download / Appetize
+        run: |
+          mkdir -p build/dist
+          ditto -c -k --keepParent "$APP_PATH" build/dist/MongolKey.app.zip
+          ls -la build/dist
+
+      - name: Upload simulator .app
+        uses: actions/upload-artifact@v4
+        with:
+          name: MongolKey-iOS-Simulator-app
+          path: build/dist/MongolKey.app.zip
+          if-no-files-found: error
+
+      - name: Create and boot simulator
+        env:
+          DEVICE_NAME: ${{ github.event.inputs.device || 'iPhone 13 Pro' }}
+        run: tools/simulate.sh --prepare-sim
+
+      - name: UI tests + screenshots on the simulator
+        id: uitests
+        continue-on-error: true
+        env:
+          TEST_RUNNER_MK_SCREENSHOT_DIR: ${{ github.workspace }}/build/screenshots
+        run: |
+          mkdir -p build/screenshots
+          set -o pipefail
+          xcodebuild test -project MongolKey.xcodeproj -scheme MongolKey \
+            -destination "id=$SIM_UDID" -derivedDataPath build/DerivedData \
+            -only-testing:MongolKeyUITests -resultBundlePath build/UITests.xcresult \
+            CODE_SIGNING_ALLOWED=NO 2>&1 | tee build/uitests.log | grep -E "MK:|Test (Case|Suite)|error|failed|passed|\*\*" || true
+
+      - name: Extract screenshots from the result bundle (fallback)
+        if: always()
+        run: |
+          # Attachments are also written directly by the tests; this catches the
+          # case where the runner could not write to the workspace.
+          if [ -d build/UITests.xcresult ] && [ -z "$(ls -A build/screenshots 2>/dev/null)" ]; then
+            xcrun xcresulttool export attachments --path build/UITests.xcresult \
+              --output-path build/screenshots 2>/dev/null || true
+          fi
+          # Always add one raw capture of whatever the simulator shows now.
+          xcrun simctl io "$SIM_UDID" screenshot build/screenshots/zz-simulator-final.png || true
+          ls -la build/screenshots || true
+
+      - name: Upload screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: screenshots-${{ env.SIM_DEVICE_NAME || 'simulator' }}
+          path: build/screenshots
+          if-no-files-found: warn
+
+      - name: Upload UI test log and result bundle
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: uitest-results
+          path: |
+            build/uitests.log
+            build/UITests.xcresult
+          if-no-files-found: ignore
+
+      - name: Upload to Appetize.io (browser iPhone 13 Pro)
+        if: env.APPETIZE_API_TOKEN != ''
+        run: |
+          set -euo pipefail
+          URL="https://api.appetize.io/v1/apps"
+          if [ -n "${APPETIZE_PUBLIC_KEY:-}" ]; then URL="$URL/$APPETIZE_PUBLIC_KEY"; fi
+          RESPONSE=$(curl -sS -f -u "$APPETIZE_API_TOKEN:" -X POST "$URL" \
+            -F "file=@build/dist/MongolKey.app.zip" \
+            -F "platform=ios" \
+            -F "note=${GITHUB_REF_NAME} @ ${GITHUB_SHA::7}")
+          KEY=$(printf '%s' "$RESPONSE" | python3 -c 'import json,sys; print(json.load(sys.stdin)["publicKey"])')
+          APP_URL="https://appetize.io/app/$KEY?device=iphone13pro&osVersion=18.2&scale=75&autoplay=true"
+          echo "Appetize: $APP_URL"
+          {
+            echo "## Test in the browser (Appetize.io)"
+            echo
+            echo "[Open MongolKey on a virtual iPhone 13 Pro]($APP_URL)"
+            echo
+            echo "Enable the keyboard inside the session: Settings ▸ General ▸ Keyboard ▸ Keyboards ▸ Add New Keyboard… ▸ MongolKey."
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Summary
+        if: always()
+        run: |
+          {
+            echo "## iOS Simulator run"
+            echo
+            echo "- Device: **${SIM_DEVICE_NAME:-?}** (runtime ${SIM_RUNTIME##*.})"
+            echo "- UI tests: **${{ steps.uitests.outcome }}**"
+            echo "- Screenshots and the simulator .app are in this run's **Artifacts** (bottom of the run page)."
+            if [ -z "${APPETIZE_API_TOKEN:-}" ]; then
+              echo "- Appetize upload skipped: add an \`APPETIZE_API_TOKEN\` repository secret to get a browser-playable iPhone 13 Pro link here."
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Shut down simulator
+        if: always()
+        run: xcrun simctl shutdown "$SIM_UDID" || true

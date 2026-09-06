@@ -167,6 +167,14 @@ Then in Xcode:
 You only need to repeat step 4 once per fresh install of the app — iOS remembers
 the enabled keyboard until the app is deleted or the simulator is erased.
 
+### One-command simulator run / testing without a Mac
+
+`tools/simulate.sh` does the whole recipe below on an **iPhone 13 Pro**-sized
+simulator in one go, and the **iOS Simulator** GitHub Actions workflow builds
+the app and screenshots every screen (keyboard included) on each push, with an
+optional Appetize.io link to try it interactively in a browser from Windows or
+Linux. See [docs/TESTING.md](docs/TESTING.md).
+
 ### Command line
 
 ```sh

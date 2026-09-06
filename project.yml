@@ -98,14 +98,32 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: com.mongolkey.engine.tests
         GENERATE_INFOPLIST_FILE: YES
 
+  # ────────────────────────────── UI tests (simulator) ───────────────────────
+  # Drives the container app on a simulator and saves screenshots; used by
+  # .github/workflows/ios-simulator.yml and `tools/simulate.sh`. See docs/TESTING.md.
+  MongolKeyUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources:
+      - UITests
+    dependencies:
+      - target: MongolKey
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.mongolkey.app.uitests
+        GENERATE_INFOPLIST_FILE: YES
+        TEST_TARGET_NAME: MongolKey
+
 schemes:
   MongolKey:
     build:
       targets:
         MongolKey: all
         MongolKeyboard: all
+        MongolKeyUITests: [test]
     run:
       config: Debug
     test:
       targets:
         - MongolEngineTests
+        - MongolKeyUITests

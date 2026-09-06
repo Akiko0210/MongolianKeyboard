@@ -66,11 +66,39 @@ final class KeyButton: UIControl {
         ])
 
         applyResting()
+        configureAccessibility()
 
         addTarget(self, action: #selector(touchDown), for: .touchDown)
         addTarget(self, action: #selector(touchUpInside), for: .touchUpInside)
         addTarget(self, action: #selector(touchCancelled),
                   for: [.touchUpOutside, .touchCancel, .touchDragExit])
+    }
+
+    /// Expose every key to VoiceOver and to UI tests (`UITests/`) with a stable
+    /// identifier: `mk.key.<name>`, e.g. `mk.key.m`, `mk.key.space`, `mk.key.delete`.
+    private func configureAccessibility() {
+        guard cap.action != .spacer else {
+            isAccessibilityElement = false
+            return
+        }
+        isAccessibilityElement = true
+        accessibilityTraits = [.keyboardKey]
+        accessibilityLabel = KeyButton.accessibilityName(for: cap)
+        accessibilityIdentifier = "mk.key." + KeyButton.accessibilityName(for: cap)
+    }
+
+    static func accessibilityName(for cap: KeyCap) -> String {
+        switch cap.action {
+        case .letter(let s):      return s
+        case .symbol(let s):      return s
+        case .backspace:          return "delete"
+        case .space:              return "space"
+        case .newline:            return "return"
+        case .switchToNumbers:    return "numbers"
+        case .switchToLetters:    return "letters"
+        case .nextKeyboard:       return "next keyboard"
+        case .spacer:             return "spacer"
+        }
     }
 
     private func titleFont() -> UIFont {

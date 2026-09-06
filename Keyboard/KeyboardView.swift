@@ -41,6 +41,8 @@ final class KeyboardView: UIView, KeyButtonDelegate {
         self.previewBar = CandidatePreviewBar(fontBundle: fontBundle)
         super.init(frame: .zero)
         backgroundColor = .keyboardBackground
+        accessibilityIdentifier = "mk.keyboard"
+        previewBar.accessibilityIdentifier = "mk.candidateBar"
         previewBar.delegate = self
         addSubview(previewBar)
         buildButtons(for: layer_)
