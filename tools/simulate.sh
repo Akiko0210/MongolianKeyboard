@@ -126,10 +126,17 @@ if [[ "$UNIVERSAL" == 1 ]]; then
 fi
 
 echo "building MongolKey (+ keyboard extension) for the simulator…" >&2
-xcodebuild -project MongolKey.xcodeproj -scheme MongolKey \
+mkdir -p "$ROOT/build"
+BUILD_LOG="$ROOT/build/xcodebuild.log"
+if ! xcodebuild -project MongolKey.xcodeproj -scheme MongolKey \
   -sdk iphonesimulator -destination "generic/platform=iOS Simulator" \
   -configuration "$CONFIGURATION" -derivedDataPath "$DERIVED" \
-  CODE_SIGNING_ALLOWED=NO "${ARCH_FLAGS[@]}" build | tail -n 25
+  CODE_SIGNING_ALLOWED=NO "${ARCH_FLAGS[@]}" build >"$BUILD_LOG" 2>&1; then
+  echo "error: xcodebuild failed — full log: $BUILD_LOG" >&2
+  grep -E "error:|\*\* BUILD" "$BUILD_LOG" | sort -u | head -n 40 >&2
+  exit 65
+fi
+grep -E "\*\* BUILD" "$BUILD_LOG" >&2 || true
 
 APP="$DERIVED/Build/Products/$CONFIGURATION-iphonesimulator/MongolKey.app"
 [[ -d "$APP" ]] || { echo "error: build product not found at $APP" >&2; exit 1; }

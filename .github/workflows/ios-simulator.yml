@@ -41,7 +41,10 @@ jobs:
 
       - name: Engine unit tests (SwiftPM, macOS host)
         working-directory: Packages/MongolEngine
-        run: swift test 2>&1 | tail -n 30
+        run: |
+          set -o pipefail
+          swift test 2>&1 | tee ../../build-swift-test.log | grep -E "error:|Test Suite|Executed|passed|failed" || true
+          test "${PIPESTATUS[0]}" -eq 0
 
       - name: Build universal simulator app (arm64 + x86_64)
         run: tools/simulate.sh --build-only --universal

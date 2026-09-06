@@ -55,7 +55,9 @@ public struct Lexicon {
     public init(bundle: Bundle) {
         guard let url = bundle.url(forResource: "lexicon", withExtension: "tsv"),
               let raw = try? String(contentsOf: url, encoding: .utf8) else {
-            self.entries = []
+            // Must delegate here too: an initializer cannot both assign
+            // `let` properties directly and call `self.init` (Swift 6 rejects it).
+            self.init(entries: [])
             return
         }
         var parsed: [Entry] = []
