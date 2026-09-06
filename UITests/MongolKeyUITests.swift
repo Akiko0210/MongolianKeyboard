@@ -96,6 +96,7 @@ final class MongolKeyUITests: XCTestCase {
         }
 
         let switched = switchToMongolKey()
+        dismissSystemTips()
         snap("switched-to-mongolkey")
         log("MongolKey visible after switching: \(switched)")
 
@@ -310,6 +311,10 @@ final class MongolKeyUITests: XCTestCase {
         log("[\(tag)] keyboard buttons: " + buttons.prefix(40).map { "'\($0.label)'#\($0.identifier)" }.joined(separator: " "))
         let keys = app.keyboards.keys.allElementsBoundByIndex
         log("[\(tag)] keyboard keys (\(keys.count)): " + keys.prefix(60).map { $0.label }.joined(separator: ","))
+        let h = app.frame.height
+        let area = app.descendants(matching: .any).allElementsBoundByIndex
+            .filter { $0.frame.minY > h - 400 && $0.frame.minY < h - 60 && $0.frame.height > 1 && (!$0.label.isEmpty || !$0.identifier.isEmpty) }
+        log("[\(tag)] elements in keyboard area (\(area.count)): " + area.prefix(50).map { "\($0.elementType.rawValue):'\($0.label)'#\($0.identifier)@\(Int($0.frame.minX)),\(Int($0.frame.minY))" }.joined(separator: " "))
         if kb.exists {
             log("[\(tag)] hierarchy:\n" + String(kb.debugDescription.prefix(6000)))
         }
@@ -391,11 +396,21 @@ final class MongolKeyUITests: XCTestCase {
         if let item = pickerItem() {
             log("picker offered '\(item.label)' hittable=\(item.isHittable) frame=\(item.frame) — tapping")
             if item.isHittable { item.tap() } else { item.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).tap() }
+            pause(2.0)
+            dismissSystemTips()
+            if let still = pickerItem(), still.exists {
+                // The input switcher is a press-and-slide menu: hold the globe, slide to the row, release.
+                log("picker still open after tap — using press-and-drag")
+                if let globe { globe.press(forDuration: 1.2, thenDragTo: still) }
+                else { globeFallbackPoint().press(forDuration: 1.2, thenDragTo: still.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))) }
+                pause(2.0)
+                dismissSystemTips()
+            }
         } else {
             log("picker did not list MongolKey — dismissing")
             app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.25)).tap()
         }
-        pause(1.5)
+        pause(1.0)
         snap("after-picker")
         if mongolKeyVisible() { return true }
         dumpKeyboardState("after-picker")
@@ -404,11 +419,23 @@ final class MongolKeyUITests: XCTestCase {
         for i in 0..<3 {
             if let g = globeKey() { g.tap() } else { globeFallbackPoint().tap() }
             pause(1.5)
+            dismissSystemTips()
             snap("after-globe-tap-\(i)")
             if mongolKeyVisible() { return true }
             dumpKeyboardState("after-cycle-\(i)")
         }
         return mongolKeyVisible()
+    }
+
+    /// iOS shows one-time keyboard tips (e.g. the QuickPath "slide to type"
+    /// card) with a Continue button that covers the keyboard until dismissed.
+    private func dismissSystemTips() {
+        let cont = app.buttons["Continue"].firstMatch
+        if cont.exists, cont.isHittable {
+            log("dismissing system keyboard tip: '\(cont.label)'")
+            cont.tap()
+            pause(1.0)
+        }
     }
 
     private func typeOnMongolKey(_ word: String) {
