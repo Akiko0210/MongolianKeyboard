@@ -93,6 +93,10 @@ jobs:
           # Always add one raw capture of whatever the simulator shows now.
           xcrun simctl io "$SIM_UDID" screenshot build/screenshots/zz-simulator-final.png || true
           ls -la build/screenshots || true
+          echo "--- keyboard extensions registered with pluginkit in the simulator ---"
+          xcrun simctl spawn "$SIM_UDID" pluginkit -m -v -p com.apple.keyboard-service || true
+          echo "--- enabled keyboards (AppleKeyboards) ---"
+          xcrun simctl spawn "$SIM_UDID" defaults read -g AppleKeyboards || true
 
       - name: Upload screenshots
         if: always()
