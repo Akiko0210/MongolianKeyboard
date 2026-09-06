@@ -41,6 +41,11 @@ BUNDLE_ID="com.mongolkey.app"
 
 need() { command -v "$1" >/dev/null 2>&1 || { echo "error: '$1' not found. $2" >&2; exit 1; }; }
 need xcrun   "Install Xcode from the App Store, then run: sudo xcode-select -s /Applications/Xcode.app"
+if ! xcode-select -p 2>/dev/null | grep -q "Xcode.*\.app"; then
+  echo "error: the active developer directory is not a full Xcode install ($(xcode-select -p 2>/dev/null))." >&2
+  echo "       Install Xcode from the App Store, then: sudo xcode-select -s /Applications/Xcode.app" >&2
+  exit 1
+fi
 need python3 "python3 ships with the Xcode Command Line Tools."
 
 # ---------------------------------------------------------------- simulator --
@@ -116,7 +121,14 @@ fi
 
 # -------------------------------------------------------------------- build --
 if [[ "$SKIP_GENERATE" == 0 ]]; then
-  need xcodegen "Install with: brew install xcodegen"
+  if ! command -v xcodegen >/dev/null 2>&1; then
+    if command -v brew >/dev/null 2>&1; then
+      echo "xcodegen not found — installing with Homebrew…" >&2
+      brew install xcodegen
+    else
+      need xcodegen "Install Homebrew (https://brew.sh), then: brew install xcodegen"
+    fi
+  fi
   xcodegen generate
 fi
 

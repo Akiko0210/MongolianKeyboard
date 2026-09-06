@@ -17,7 +17,7 @@ permissions:
 
 concurrency:
   group: ios-simulator-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 env:
   APPETIZE_API_TOKEN: ${{ secrets.APPETIZE_API_TOKEN }}
