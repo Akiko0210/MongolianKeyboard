@@ -16,6 +16,13 @@ struct TryItView: View {
 
     @State private var romanInput: String = "mongol"
     @State private var keyboardInput: String = ""
+    /// The typeface, remembered across launches (the keyboard extension has
+    /// its own copy of this setting and its own font key).
+    @AppStorage(MongolFont.defaultsKey) private var faceRaw: String = MongolFont.current.rawValue
+    private var face: MongolFont.Face {
+        get { MongolFont.Face(rawValue: faceRaw) ?? MongolFont.current }
+        nonmutating set { faceRaw = newValue.rawValue; MongolFont.current = newValue }
+    }
     @FocusState private var keyboardFieldFocused: Bool
 
     private let transliterator = PhraseTransliterator(scheme: .v1)
@@ -28,6 +35,7 @@ struct TryItView: View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: 24) {
+                    facePicker
                     romanizerCard
                     keyboardTesterCard
                 }
@@ -36,6 +44,27 @@ struct TryItView: View {
             .navigationTitle("Try It")
             .scrollDismissesKeyboard(.interactively)
         }
+    }
+
+    // MARK: Face picker
+
+    private var facePicker: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("Typeface")
+                .font(.headline)
+            Picker("Typeface", selection: Binding(get: { face }, set: { face = $0 })) {
+                ForEach(MongolFont.Face.allCases, id: \.self) { face in
+                    Text(face.displayName).tag(face)
+                }
+            }
+            .pickerStyle(.segmented)
+            Text(face.familyName)
+                .font(.footnote)
+                .foregroundStyle(.secondary)
+        }
+        .padding()
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(RoundedRectangle(cornerRadius: 16).fill(Color(.secondarySystemBackground)))
     }
 
     // MARK: Live romanizer (engine-powered, no keyboard needed)
@@ -74,7 +103,7 @@ struct TryItView: View {
             TextField("Type here with MongolKey…", text: $keyboardInput, axis: .vertical)
                 .textFieldStyle(.roundedBorder)
                 .focused($keyboardFieldFocused)
-                .font(.custom(MongolFont.postScriptName, size: 22))
+                .font(.custom(face.postScriptName, size: 22))
 
             verticalOutput(text: keyboardInput)
 
@@ -104,7 +133,7 @@ struct TryItView: View {
                     .font(.footnote)
                     .foregroundStyle(.tertiary)
             } else if text.unicodeScalars.contains(where: { (0x1800...0x18AF).contains($0.value) }) {
-                VerticalMongolianText(text: text, fontSize: 34)
+                VerticalMongolianText(text: text, fontSize: 34, face: face)
                     .padding(.vertical, 12)
                     .clipped()
             } else {

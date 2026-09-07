@@ -85,6 +85,10 @@ final class KeyButton: UIControl {
         accessibilityTraits = [.keyboardKey]
         accessibilityLabel = KeyButton.accessibilityName(for: cap)
         accessibilityIdentifier = "mk.key." + KeyButton.accessibilityName(for: cap)
+        if cap.action == .switchFont {
+            accessibilityValue = MongolFont.current.displayName
+            accessibilityHint = "Switches the keyboard's Mongolian typeface"
+        }
     }
 
     static func accessibilityName(for cap: KeyCap) -> String {
@@ -97,6 +101,7 @@ final class KeyButton: UIControl {
         case .switchToNumbers:    return "numbers"
         case .switchToLetters:    return "letters"
         case .nextKeyboard:       return "next keyboard"
+        case .switchFont:         return "font"
         case .spacer:             return "spacer"
         }
     }

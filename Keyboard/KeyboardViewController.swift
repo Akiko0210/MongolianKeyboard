@@ -36,7 +36,8 @@ final class KeyboardViewController: UIInputViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        MongolFont.register(in: fontBundle)
+        MongolFont.registerAll(in: fontBundle)
+        MongolFont.restore()   // the typeface chosen last time with the font key
 
         // Parse the data tables off the main thread so the first keystroke
         // never waits for them (the shared instances are thread-safe lazy
@@ -58,6 +59,10 @@ final class KeyboardViewController: UIInputViewController {
             kb.bottomAnchor.constraint(equalTo: view.bottomAnchor),
         ])
         keyboardView = kb
+        // iOS 26 (and every Face ID iPhone) shows the input switcher in the
+        // bar below the keyboard, so a 🌐 key of our own would just be dead
+        // space; the font key takes that spot instead.
+        keyboardView.showsGlobeKey = needsInputModeSwitchKey
         keyboardView.setLayer(.letters)
     }
 
@@ -177,6 +182,15 @@ extension KeyboardViewController: KeyboardViewDelegate {
         case .nextKeyboard:
             flushComposition()
             advanceToNextInputMode()
+
+        case .switchFont:
+            // Cycle Dashitseden ⇄ Noto Sans for everything the keyboard draws
+            // (the committed text is plain Unicode; host apps pick their own
+            // font). Rebuilding the keys redraws the font key's ᠠ in the new
+            // face, refreshing the bar redraws the candidates.
+            MongolFont.current = MongolFont.next(after: MongolFont.current)
+            keyboardView.reloadKeys()
+            refreshPreview()
 
         case .spacer:
             break

@@ -124,7 +124,8 @@ Artifact `screenshots-iPhone 13 Pro-macos-26` contains, under `pass1/`:
 - `keyboard-*-keyboard-picker` — the 🌐 input switcher listing MongolKey.
 - `keyboard-*-switched-to-mongolkey`, `composing-mongol`, `committed-mongol`,
   `composing-aavdaa`, `composing-nohoy`, `composing-sain`, `typed-all-words`,
-  `predictions`, `prediction-tapped`, `numbers-layer`, `final` — the
+  `predictions`, `prediction-tapped`, `face-dashitseden`, `face-noto-sans`,
+  `numbers-layer`, `final` — the
   extension itself: the candidate bar with vertical candidates (including
   the informal spelling `nohoy` finding нохой), the committed words in the
   field, the next-word predictions offered after `sain` and the result of

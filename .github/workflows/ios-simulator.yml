@@ -57,6 +57,15 @@ jobs:
           echo "swift test exit status: $status"
           exit $status
 
+      - name: CoreText shaping probe (both faces, with rendered previews)
+        run: |
+          swift tools/ShapeProbe.swift Shared/Fonts build/shape-probe
+          for f in build/shape-probe/*.png; do
+            echo "@@IMG $f"
+            base64 -b 100 "$f"
+            echo "@@END"
+          done
+
       - name: Build universal simulator app (arm64 + x86_64)
         run: tools/simulate.sh --build-only --universal
 

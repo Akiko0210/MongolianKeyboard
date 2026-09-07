@@ -56,6 +56,16 @@ public final class VerticalMongolianView: UIView {
 
     private let fontBundle: Bundle
 
+    /// Which bundled Mongolian face to render with. Defaults to
+    /// `MongolFont.current`; set per-view to compare faces side by side.
+    public var face: MongolFont.Face = MongolFont.current {
+        didSet {
+            guard face != oldValue else { return }
+            invalidateIntrinsicContentSize()
+            setNeedsDisplay()
+        }
+    }
+
     public init(bundle: Bundle) {
         self.fontBundle = bundle
         super.init(frame: .zero)
@@ -78,7 +88,7 @@ public final class VerticalMongolianView: UIView {
         backgroundColor = .clear
         isOpaque = false
         contentMode = .redraw
-        MongolFont.register(in: fontBundle)
+        MongolFont.registerAll(in: fontBundle)
     }
 
     // MARK: Shaping
@@ -95,7 +105,7 @@ public final class VerticalMongolianView: UIView {
     /// result is rotated into columns at draw time.
     private func shapedGlyphs() -> [ShapedGlyph] {
         guard !text.isEmpty else { return [] }
-        let font = MongolFont.ctFont(ofSize: fontSize, in: fontBundle)
+        let font = MongolFont.ctFont(ofSize: fontSize, face: face, in: fontBundle)
         let attributed = NSAttributedString(string: text, attributes: [
             NSAttributedString.Key(kCTFontAttributeName as String): font,
         ])
@@ -200,7 +210,7 @@ public final class VerticalMongolianView: UIView {
         // centerline once rotated: ascenders land to the right of the pen
         // position, descenders to the left, so shift left by half the
         // ascent-descent difference to balance that.
-        let font = MongolFont.ctFont(ofSize: fontSize, in: fontBundle)
+        let font = MongolFont.ctFont(ofSize: fontSize, face: face, in: fontBundle)
         let centeringShift = (CTFontGetAscent(font) - CTFontGetDescent(font)) / 2
 
         for placement in laidOut.placements {

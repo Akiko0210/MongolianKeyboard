@@ -140,6 +140,28 @@ final class MongolKeyUITests: XCTestCase {
             snap("prediction-tapped")
         }
 
+        // Font key (bottom-left, where the redundant 🌐 used to be): cycles
+        // the keyboard's typeface. Type a word first so the candidate bar
+        // shows the difference, and check the key reports the new face.
+        let fontKey = key("font")
+        if fontKey.exists {
+            let before = (fontKey.value as? String) ?? ""
+            typeOnMongolKey("baina")
+            pause(0.5)
+            snap("face-\(before.lowercased().replacingOccurrences(of: " ", with: "-"))")
+            fontKey.tap()
+            pause(0.8)
+            let after = (key("font").value as? String) ?? ""
+            log("font key: \(before) → \(after)")
+            snap("face-\(after.lowercased().replacingOccurrences(of: " ", with: "-"))")
+            XCTAssertNotEqual(before, after, "tapping the font key should switch the typeface")
+            XCTAssertFalse(after.isEmpty)
+            tapMongolKey("space")
+            pause(0.4)
+        } else {
+            log("font key not exposed as an element; skipping the typeface check")
+        }
+
         // Numbers layer, then back.
         tapMongolKey("numbers")
         pause(0.5)
@@ -572,9 +594,11 @@ enum KeyGeometry {
         var row3: [Key] = [(name: "spacer", width: .fill)]
         row3 += units("zxcvbnm")
         row3.append((name: "delete", width: .fill))
+        // iOS 26 phones get no 🌐 key (the system bar has one); the font
+        // key sits in its place.
         let row4: [Key] = [
             (name: "numbers", width: .multiple(1.4)),
-            (name: "next keyboard", width: .multiple(1.2)),
+            (name: "font", width: .multiple(1.2)),
             (name: "space", width: .fill),
             (name: "return", width: .multiple(2.0)),
         ]
@@ -587,7 +611,7 @@ enum KeyGeometry {
         row3.append((name: "delete", width: .fill))
         let row4: [Key] = [
             (name: "letters", width: .multiple(1.4)),
-            (name: "next keyboard", width: .multiple(1.2)),
+            (name: "font", width: .multiple(1.2)),
             (name: "space", width: .fill),
             (name: "return", width: .multiple(2.0)),
         ]

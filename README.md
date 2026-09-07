@@ -150,6 +150,37 @@ app bundle, so the keyboard still needs **no network and no Full Access**.
 
 ---
 
+## Typefaces
+
+Two Mongolian faces ship in both the app and the keyboard
+(`Shared/Fonts/`, licences in `Shared/Fonts/LICENSES.md`):
+
+| Face | Look | Licence |
+| ---- | ---- | ------- |
+| **Classical Mongolian Dashitseden** (Bolorsoft, T. Jamyansuren) | calligraphic brush face, what readers of Mongol bichig expect (bolor-toli.com renders with it) | Bolorsoft free font: free to distribute and use, not to modify |
+| **Noto Sans Mongolian** (Google) | clean sans face | SIL OFL 1.1 |
+
+- **Keyboard:** the **ᠠ key** at the bottom left (where the 🌐 key used to be —
+  iOS 26 and every Face ID iPhone provide the input switcher in the bar
+  below the keyboard, so the keyboard only shows its own 🌐 when
+  `needsInputModeSwitchKey` says it must) cycles the typeface. The key
+  draws its ᠠ in the current face, so it always shows which one is active;
+  the candidate bar redraws immediately. The choice is remembered.
+- **App:** Try It ▸ Typeface switches the app's own views; remembered too.
+- The keyboard and the app are separate processes with separate settings
+  (sharing one would need an App Group), so each remembers its own choice.
+- The text you send is plain Unicode: **the receiving app renders it with
+  its own font**. The typeface choice affects what the keyboard and this
+  app draw, not what WhatsApp or Messages show.
+
+`MongolFont.swift` registers both faces at launch and falls back to the other
+face (then the system font) if a file is missing — a missing font can never
+crash the app or the keyboard. `tools/ShapeProbe.swift` (run by CI) prints
+how CoreText shapes test words with each face and renders them, which is
+how their handling of the vowel separator U+180E is verified.
+
+---
+
 ## Architecture
 
 Three components, matching `PROJECT_DESCRIPTION.md §7`:

@@ -23,6 +23,8 @@ enum KeyAction: Equatable {
     case switchToNumbers
     case switchToLetters
     case nextKeyboard
+    /// Cycle the keyboard's Mongolian typeface (Dashitseden ⇄ Noto Sans).
+    case switchFont
     /// Non-interactive layout filler (keeps a row centered).
     case spacer
 }
@@ -66,10 +68,13 @@ enum KeyboardLayer {
     case letters
     case numbers
 
-    var rows: [[KeyCap]] {
+    /// - Parameter showsGlobe: whether to include a 🌐 key. iPhones with the
+    ///   system input-switcher bar below the keyboard (iOS 26 and every
+    ///   Face ID phone) do not need one; `needsInputModeSwitchKey` says.
+    func rows(showsGlobe: Bool) -> [[KeyCap]] {
         switch self {
-        case .letters:  return KeyCap.letterRows
-        case .numbers:  return KeyCap.numberRows
+        case .letters:  return KeyCap.letterRows(showsGlobe: showsGlobe)
+        case .numbers:  return KeyCap.numberRows(showsGlobe: showsGlobe)
         }
     }
 }
@@ -78,18 +83,21 @@ extension KeyCap {
 
     // MARK: Letters layer (QWERTY)
 
-    static let letterRows: [[KeyCap]] = [
-        ["q", "w", "e", "r", "t", "y", "u", "i", "o", "p"].map(KeyCap.letter),
-        ["a", "s", "d", "f", "g", "h", "j", "k", "l"].map(KeyCap.letter),
-        [KeyCap.spacer]
-            + ["z", "x", "c", "v", "b", "n", "m"].map(KeyCap.letter)
-            + [KeyCap(label: "⌫", action: .backspace, width: .fill, style: .secondary)],
-        bottomRow(layerSwitchLabel: "123", layerSwitchAction: .switchToNumbers),
-    ]
+    static func letterRows(showsGlobe: Bool) -> [[KeyCap]] {
+        [
+            ["q", "w", "e", "r", "t", "y", "u", "i", "o", "p"].map(KeyCap.letter),
+            ["a", "s", "d", "f", "g", "h", "j", "k", "l"].map(KeyCap.letter),
+            [KeyCap.spacer]
+                + ["z", "x", "c", "v", "b", "n", "m"].map(KeyCap.letter)
+                + [KeyCap(label: "⌫", action: .backspace, width: .fill, style: .secondary)],
+            bottomRow(layerSwitchLabel: "123", layerSwitchAction: .switchToNumbers, showsGlobe: showsGlobe),
+        ]
+    }
 
     // MARK: Numbers & punctuation layer
 
-    static let numberRows: [[KeyCap]] = [
+    static func numberRows(showsGlobe: Bool) -> [[KeyCap]] {
+        [
         ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"].map { KeyCap.symbol($0) },
         ["-", "/", ":", ";", "(", ")", "₮", "&", "@", "\""].map { KeyCap.symbol($0) },
         [KeyCap.spacer,
@@ -101,21 +109,34 @@ extension KeyCap {
          KeyCap.symbol("!"),
          KeyCap.symbol("'"),
          KeyCap(label: "⌫", action: .backspace, width: .fill, style: .secondary)],
-        bottomRow(layerSwitchLabel: "ABC", layerSwitchAction: .switchToLetters),
-    ]
+        bottomRow(layerSwitchLabel: "ABC", layerSwitchAction: .switchToLetters, showsGlobe: showsGlobe),
+        ]
+    }
 
     // MARK: Shared bottom row
 
+    /// The font key: a Mongolian ᠠ drawn in the current typeface, so the key
+    /// itself shows which face is active; tapping cycles to the next one.
+    static let fontKey = KeyCap(label: "ᠠ", action: .switchFont,
+                                width: .multiple(1.2), style: .secondary, mongolianLabel: true)
+
     private static func bottomRow(layerSwitchLabel: String,
-                                  layerSwitchAction: KeyAction) -> [KeyCap] {
-        [
+                                  layerSwitchAction: KeyAction,
+                                  showsGlobe: Bool) -> [KeyCap] {
+        var row = [
             KeyCap(label: layerSwitchLabel, action: layerSwitchAction,
                    width: .multiple(1.4), style: .secondary),
-            KeyCap(label: "🌐", action: .nextKeyboard,
-                   width: .multiple(1.2), style: .secondary),
+        ]
+        if showsGlobe {
+            row.append(KeyCap(label: "🌐", action: .nextKeyboard,
+                              width: .multiple(1.2), style: .secondary))
+        }
+        row += [
+            fontKey,
             KeyCap(label: "space", action: .space, width: .fill, style: .primary),
             KeyCap(label: "return", action: .newline,
                    width: .multiple(2.0), style: .secondary),
         ]
+        return row
     }
 }

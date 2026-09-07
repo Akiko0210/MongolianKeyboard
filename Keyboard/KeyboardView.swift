@@ -25,6 +25,12 @@ final class KeyboardView: UIView, KeyButtonDelegate {
     private(set) var layer_: KeyboardLayer = .letters
     private var rowsButtons: [[KeyButton]] = []
 
+    /// Whether the bottom row carries a 🌐 key (only when the system does
+    /// not provide the input switcher itself). Set by the controller.
+    var showsGlobeKey = true {
+        didSet { if showsGlobeKey != oldValue { reloadKeys() } }
+    }
+
     // Layout metrics (points). Tuned to resemble the system keyboard.
     private let keyGap: CGFloat = 6
     private let rowGap: CGFloat = 11
@@ -59,9 +65,16 @@ final class KeyboardView: UIView, KeyButtonDelegate {
         setNeedsLayout()
     }
 
+    /// Rebuild the keys (after the typeface changed: the font key's ᠠ is
+    /// drawn in the current face).
+    func reloadKeys() {
+        buildButtons(for: layer_)
+        setNeedsLayout()
+    }
+
     private func buildButtons(for layer: KeyboardLayer) {
         rowsButtons.flatMap { $0 }.forEach { $0.removeFromSuperview() }
-        rowsButtons = layer.rows.map { row in
+        rowsButtons = layer.rows(showsGlobe: showsGlobeKey).map { row in
             row.map { cap -> KeyButton in
                 let button = KeyButton(cap: cap, fontBundle: fontBundle)
                 button.delegate = self
