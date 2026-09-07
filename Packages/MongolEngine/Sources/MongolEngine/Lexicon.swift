@@ -55,7 +55,7 @@ public struct Lexicon {
     public init(bundle: Bundle) {
         guard let url = bundle.url(forResource: "lexicon", withExtension: "tsv"),
               let raw = try? String(contentsOf: url, encoding: .utf8) else {
-            self.entries = []
+            self.init(entries: [])
             return
         }
         var parsed: [Entry] = []
