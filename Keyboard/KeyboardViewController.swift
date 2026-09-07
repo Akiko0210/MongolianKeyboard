@@ -32,7 +32,7 @@ final class KeyboardViewController: UIInputViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        MongolFont.register(in: fontBundle)
+        MongolFont.registerAll(in: fontBundle)
 
         // Parse the lexicon off the main thread so the first keystroke never
         // waits for it (Lexicon.shared is a thread-safe lazy static).

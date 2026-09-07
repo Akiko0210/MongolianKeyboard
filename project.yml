@@ -31,6 +31,10 @@ targets:
     sources:
       - App/MongolKey
       - Shared/Rendering
+      - path: Shared/Fonts/NotoSansMongolian-Regular.ttf
+        buildPhase: resources
+      - path: Shared/Fonts/ClassicalMongolianDashitseden.ttf
+        buildPhase: resources
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.mongolkey.app
@@ -47,12 +51,10 @@ targets:
         UILaunchScreen: {}
         UIAppFonts:
           - NotoSansMongolian-Regular.ttf
+          - ClassicalMongolianDashitseden.ttf
     dependencies:
       - package: MongolEngine
       - target: MongolKeyboard
-    resources:
-      - path: Shared/Fonts/NotoSansMongolian-Regular.ttf
-        buildPhase: resources
 
   # ─────────────────────────── Keyboard extension ────────────────────────────
   MongolKeyboard:
@@ -61,6 +63,10 @@ targets:
     sources:
       - Keyboard
       - Shared/Rendering
+      - path: Shared/Fonts/NotoSansMongolian-Regular.ttf
+        buildPhase: resources
+      - path: Shared/Fonts/ClassicalMongolianDashitseden.ttf
+        buildPhase: resources
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.mongolkey.app.keyboard
@@ -71,6 +77,7 @@ targets:
         CFBundleDisplayName: MongolKey
         UIAppFonts:
           - NotoSansMongolian-Regular.ttf
+          - ClassicalMongolianDashitseden.ttf
         NSExtension:
           NSExtensionPointIdentifier: com.apple.keyboard-service
           NSExtensionPrincipalClass: $(PRODUCT_MODULE_NAME).KeyboardViewController
@@ -81,9 +88,6 @@ targets:
             RequestsOpenAccess: false
     dependencies:
       - package: MongolEngine
-    resources:
-      - path: Shared/Fonts/NotoSansMongolian-Regular.ttf
-        buildPhase: resources
 
   # ───────────────────────────── Engine unit tests ───────────────────────────
   MongolEngineTests:

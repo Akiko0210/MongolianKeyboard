@@ -15,7 +15,7 @@ struct MongolKeyApp: App {
     init() {
         // Register the bundled Mongolian font so SwiftUI `Font.custom` and the
         // Core Text views can find it.
-        MongolFont.register(in: .main)
+        MongolFont.registerAll(in: .main)
     }
 
     var body: some Scene {

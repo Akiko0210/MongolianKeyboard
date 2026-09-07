@@ -23,6 +23,7 @@
 	<key>UIAppFonts</key>
 	<array>
 		<string>NotoSansMongolian-Regular.ttf</string>
+		<string>ClassicalMongolianDashitseden.ttf</string>
 	</array>
 	<key>UILaunchScreen</key>
 	<dict/>

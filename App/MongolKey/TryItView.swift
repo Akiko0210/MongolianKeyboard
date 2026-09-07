@@ -16,6 +16,7 @@ struct TryItView: View {
 
     @State private var romanInput: String = "mongol"
     @State private var keyboardInput: String = ""
+    @State private var face: MongolFont.Face = MongolFont.current
     @FocusState private var keyboardFieldFocused: Bool
 
     private let transliterator = PhraseTransliterator(scheme: .v1)
@@ -28,6 +29,7 @@ struct TryItView: View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: 24) {
+                    facePicker
                     romanizerCard
                     keyboardTesterCard
                 }
@@ -36,6 +38,27 @@ struct TryItView: View {
             .navigationTitle("Try It")
             .scrollDismissesKeyboard(.interactively)
         }
+    }
+
+    // MARK: Face picker
+
+    private var facePicker: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("Typeface")
+                .font(.headline)
+            Picker("Typeface", selection: $face) {
+                ForEach(MongolFont.Face.allCases, id: \.self) { face in
+                    Text(face.displayName).tag(face)
+                }
+            }
+            .pickerStyle(.segmented)
+            Text(face.familyName)
+                .font(.footnote)
+                .foregroundStyle(.secondary)
+        }
+        .padding()
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(RoundedRectangle(cornerRadius: 16).fill(Color(.secondarySystemBackground)))
     }
 
     // MARK: Live romanizer (engine-powered, no keyboard needed)
@@ -74,7 +97,7 @@ struct TryItView: View {
             TextField("Type here with MongolKey…", text: $keyboardInput, axis: .vertical)
                 .textFieldStyle(.roundedBorder)
                 .focused($keyboardFieldFocused)
-                .font(.custom(MongolFont.postScriptName, size: 22))
+                .font(.custom(face.postScriptName, size: 22))
 
             verticalOutput(text: keyboardInput)
 
@@ -104,7 +127,7 @@ struct TryItView: View {
                     .font(.footnote)
                     .foregroundStyle(.tertiary)
             } else {
-                VerticalMongolianText(text: text, fontSize: 34)
+                VerticalMongolianText(text: text, fontSize: 34, face: face)
                     .padding(.vertical, 12)
                     .clipped()
             }
