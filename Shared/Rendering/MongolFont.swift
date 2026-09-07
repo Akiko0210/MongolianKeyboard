@@ -63,10 +63,23 @@ public enum MongolFont {
 
     /// The face everything renders with unless one is passed explicitly.
     ///
-    /// The app and the keyboard extension are separate processes, so setting
-    /// this in one does not affect the other. Sharing a user's choice across
-    /// both would need an App Group; today each process just uses the default.
-    public static var current: Face = .dashitseden
+    /// Defaults to `.dashitseden` — the calligraphic face readers of Mongol
+    /// bichig expect — and persists a user's choice so it survives relaunch.
+    ///
+    /// The app and the keyboard extension are separate processes with separate
+    /// `UserDefaults`, so a choice made in the app does not reach the keyboard.
+    /// Sharing it would need an App Group; until then each process falls back
+    /// to the same default, so both show Dashitseden unless changed locally.
+    public static var current: Face {
+        get {
+            guard let raw = UserDefaults.standard.string(forKey: defaultsKey),
+                  let face = Face(rawValue: raw) else { return .dashitseden }
+            return face
+        }
+        set { UserDefaults.standard.set(newValue.rawValue, forKey: defaultsKey) }
+    }
+
+    private static let defaultsKey = "MongolFont.current"
 
     // Back-compat shims for call sites that predate multi-face support.
     public static var postScriptName: String { current.postScriptName }

@@ -52,6 +52,11 @@ struct TryItView: View {
                 }
             }
             .pickerStyle(.segmented)
+            .onChange(of: face) { newFace in
+                // Persist so the choice survives relaunch instead of silently
+                // reverting to the default.
+                MongolFont.current = newFace
+            }
             Text(face.familyName)
                 .font(.footnote)
                 .foregroundStyle(.secondary)
