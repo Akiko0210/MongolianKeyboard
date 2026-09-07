@@ -104,6 +104,28 @@ jobs:
           }
           run_tests pass1 -only-testing:MongolKeyUITests
 
+      - name: Plain launch, the way tools/simulate.sh does it (install, simctl launch, still alive?)
+        if: always()
+        run: |
+          set +e
+          xcrun simctl install "$SIM_UDID" "$APP_PATH"
+          xcrun simctl terminate "$SIM_UDID" com.mongolkey.app >/dev/null 2>&1
+          xcrun simctl launch "$SIM_UDID" com.mongolkey.app
+          sleep 4
+          running="$(xcrun simctl spawn "$SIM_UDID" launchctl list 2>/dev/null)"
+          echo "--- launchctl entries mentioning mongol ---"
+          grep -i mongol <<<"$running" || echo "(none)"
+          echo "--- crash reports ---"
+          ls -la ~/Library/Logs/DiagnosticReports/ 2>/dev/null | grep -i mongol || echo "(none)"
+          tools/crashlog.sh || true
+          xcrun simctl io "$SIM_UDID" screenshot build/screenshots/zz-plain-launch.png || true
+          if grep -q com.mongolkey.app <<<"$running"; then
+            echo "app is running 4 s after a plain simctl launch"
+          else
+            echo "::error::MongolKey is not running 4 s after a plain simctl launch"
+            exit 1
+          fi
+
       - name: Extract screenshots from the result bundle (fallback)
         if: always()
         run: |
@@ -142,6 +164,7 @@ jobs:
                    build/screenshots/probe/*baina*.png \
                    build/screenshots/probe/*baga*.png \
                    build/screenshots/probe/*abu-du-ban*.png \
+                   build/screenshots/zz-plain-launch.png \
                    build/screenshots/zz-simulator-final.png; do
             sips -Z 420 "$f" --out build/preview.png >/dev/null 2>&1 || continue
             echo "@@IMG $f"

@@ -167,19 +167,27 @@ if [[ -n "${GITHUB_ENV:-}" ]]; then echo "APP_PATH=$APP" >> "$GITHUB_ENV"; fi
 prepare_simulator
 xcrun simctl install "$SIM_UDID" "$APP"
 [[ "$OPEN_SIMULATOR" == 1 ]] && open -a Simulator --args -CurrentDeviceUDID "$SIM_UDID"
+xcrun simctl terminate "$SIM_UDID" "$BUNDLE_ID" >/dev/null 2>&1 || true
+LAUNCH_STAMP="$(date +%s)"
 xcrun simctl launch "$SIM_UDID" "$BUNDLE_ID" >/dev/null
 # A launch crash shows up as the app vanishing right away: check it is still
-# running a few seconds later, and point at the crash report if not.
+# running a few seconds later, and show the crash report if not.
+# (Collect the process list into a variable first: `list | grep -q` under
+# `pipefail` fails spuriously when grep closes the pipe early.)
 sleep 4
-if ! xcrun simctl spawn "$SIM_UDID" launchctl list 2>/dev/null | grep -q "$BUNDLE_ID"; then
-  echo "warning: $BUNDLE_ID is not running 4 s after launch — it probably crashed." >&2
-  echo "         Run tools/crashlog.sh to see the crash report." >&2
-fi
-
-cat >&2 <<MSG
+running_apps="$(xcrun simctl spawn "$SIM_UDID" launchctl list 2>/dev/null || true)"
+if grep -q "$BUNDLE_ID" <<<"$running_apps"; then
+  cat >&2 <<MSG
 
 MongolKey is running on "$SIM_DEVICE_NAME".
 Enable the keyboard once per install (cannot be scripted):
   Settings ▸ General ▸ Keyboard ▸ Keyboards ▸ Add New Keyboard… ▸ MongolKey
 then in the app's Try It tab hold 🌐 and pick MongolKey.
+If the app or the keyboard crashes later, run: tools/crashlog.sh
 MSG
+else
+  echo "error: $BUNDLE_ID is not running 4 s after launch — it crashed. Newest crash report:" >&2
+  echo >&2
+  "$ROOT/tools/crashlog.sh" --since "$LAUNCH_STAMP" >&2 || true
+  exit 70
+fi
