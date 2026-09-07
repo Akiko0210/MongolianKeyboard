@@ -105,7 +105,7 @@ jobs:
           run_tests pass1 -only-testing:MongolKeyUITests
 
       - name: Plain launch, the way tools/simulate.sh does it (install, simctl launch, still alive?)
-        if: always()
+        if: always() && env.APP_PATH != '' && env.SIM_UDID != ''
         run: |
           set +e
           xcrun simctl install "$SIM_UDID" "$APP_PATH"
