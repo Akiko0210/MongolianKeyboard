@@ -168,6 +168,13 @@ prepare_simulator
 xcrun simctl install "$SIM_UDID" "$APP"
 [[ "$OPEN_SIMULATOR" == 1 ]] && open -a Simulator --args -CurrentDeviceUDID "$SIM_UDID"
 xcrun simctl launch "$SIM_UDID" "$BUNDLE_ID" >/dev/null
+# A launch crash shows up as the app vanishing right away: check it is still
+# running a few seconds later, and point at the crash report if not.
+sleep 4
+if ! xcrun simctl spawn "$SIM_UDID" launchctl list 2>/dev/null | grep -q "$BUNDLE_ID"; then
+  echo "warning: $BUNDLE_ID is not running 4 s after launch — it probably crashed." >&2
+  echo "         Run tools/crashlog.sh to see the crash report." >&2
+fi
 
 cat >&2 <<MSG
 

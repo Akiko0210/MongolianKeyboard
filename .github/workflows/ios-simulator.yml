@@ -62,7 +62,7 @@ jobs:
           swift tools/ShapeProbe.swift Shared/Fonts build/shape-probe
           for f in build/shape-probe/*.png; do
             echo "@@IMG $f"
-            base64 -b 100 "$f"
+            base64 -b 100 -i "$f"
             echo "@@END"
           done
 
