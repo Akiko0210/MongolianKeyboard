@@ -322,7 +322,9 @@ done once by hand through the Settings app on the simulator or device.
   run `tools/crashlog.sh` (`--all` lists every report). A keyboard that
   vanishes without a report was killed by iOS for memory (keyboard extensions
   get ~50 MB); CI's "Plain launch" step runs the same install + `simctl launch`
-  path on every push.
+  path on every push. After several rebuilds on the same simulator, try
+  `tools/simulate.sh --fresh` (uninstalls first, so no stale copy of the
+  keyboard extension stays registered; re-enable the keyboard in Settings).
 
 ---
 

@@ -7,6 +7,7 @@
 #   tools/simulate.sh --device "iPhone 17" # any device type from `xcrun simctl list devicetypes`
 #   tools/simulate.sh --build-only --universal   # CI: arm64+x86_64 .app for Appetize.io
 #   tools/simulate.sh --prepare-sim        # CI: create+boot the simulator, print its UDID
+#   tools/simulate.sh --fresh              # uninstall the app first (stale install / keyboard cache)
 #
 set -euo pipefail
 
@@ -19,6 +20,7 @@ BUILD_ONLY=0
 PREPARE_SIM_ONLY=0
 OPEN_SIMULATOR=1
 SKIP_GENERATE=0
+FRESH=0
 CONFIGURATION=Debug
 
 while [[ $# -gt 0 ]]; do
@@ -29,7 +31,8 @@ while [[ $# -gt 0 ]]; do
     --prepare-sim)   PREPARE_SIM_ONLY=1; shift ;;
     --no-open)       OPEN_SIMULATOR=0; shift ;;
     --skip-generate) SKIP_GENERATE=1; shift ;;
-    -h|--help)       sed -n '2,12p' "$0"; exit 0 ;;
+    --fresh)         FRESH=1; shift ;;
+    -h|--help)       sed -n '2,13p' "$0"; exit 0 ;;
     *) echo "unknown option: $1" >&2; exit 2 ;;
   esac
 done
@@ -165,6 +168,12 @@ if [[ -n "${GITHUB_ENV:-}" ]]; then echo "APP_PATH=$APP" >> "$GITHUB_ENV"; fi
 
 # ------------------------------------------------------------- install+run --
 prepare_simulator
+if [[ "$FRESH" == 1 ]]; then
+  # An app updated in place keeps the old keyboard extension registered until
+  # the system notices; a clean install avoids that (re-enable the keyboard
+  # in Settings afterwards).
+  xcrun simctl uninstall "$SIM_UDID" "$BUNDLE_ID" >/dev/null 2>&1 || true
+fi
 xcrun simctl install "$SIM_UDID" "$APP"
 [[ "$OPEN_SIMULATOR" == 1 ]] && open -a Simulator --args -CurrentDeviceUDID "$SIM_UDID"
 xcrun simctl terminate "$SIM_UDID" "$BUNDLE_ID" >/dev/null 2>&1 || true
