@@ -33,10 +33,11 @@ Verified by unit tests and by running the app + keyboard in the iOS Simulator
   vertically, a numbers/punctuation layer (incl. Mongolian `᠂` `᠃`), globe key,
   backspace with tap-and-hold repeat, key popups.
 - **Vertical rendering** — `Core Text` vertical layout (`vertical-lr`) with
-  correct OpenType shaping via bundled Noto Sans Mongolian.
+  correct OpenType shaping. Two faces ship: Classical Mongolian Dashitseden
+  (calligraphic, the default) and Noto Sans Mongolian (see “Typefaces”).
 - **Container app** — onboarding, a live romanizer (works without enabling the
-  keyboard), a keyboard tester with a vertical mirror, the full reference table
-  (generated from the engine), and the privacy screen.
+  keyboard), a keyboard tester with a vertical mirror, a typeface picker, the
+  full reference table (generated from the engine), and the privacy screen.
 - **No Full Access** — no network, no pasteboard, no shared storage.
 
 ---
@@ -91,6 +92,55 @@ to verbatim transliteration, a wrong suggestion would teach wrong spelling.
 
 Everything stays on-device: the lexicon is a build-time resource inside the
 app bundle, so the keyboard still needs **no network and no Full Access**.
+
+---
+
+## Typefaces
+
+Two Mongolian faces are bundled, and every surface renders with whichever is
+selected — the Setup hero, the live romanizer, the Reference table, and the
+keyboard's candidate bar.
+
+| Face | Default | Character | Licence |
+| --- | --- | --- | --- |
+| **Classical Mongolian Dashitseden** | ✅ | Calligraphic brush face — the one [bolor-toli.com](https://bolor-toli.com) renders Mongol bichig with | Bolorsoft free font: free redistribution and commercial use |
+| **Noto Sans Mongolian** | | Clean sans face, broader script coverage | SIL Open Font License 1.1 |
+
+Full licence text for both, verbatim, is in
+[`Shared/Fonts/LICENSES.md`](Shared/Fonts/LICENSES.md).
+
+### Switching face
+
+In the app: **Try It ▸ Typeface**. The choice is stored in `UserDefaults` and
+survives relaunch.
+
+In code, everything routes through `MongolFont`:
+
+```swift
+MongolFont.current = .dashitseden        // process-wide default, persisted
+MongolFont.uiFont(ofSize: 24, in: bundle)              // uses `current`
+MongolFont.ctFont(ofSize: 34, face: .notoSans, in: bundle)  // override per call
+```
+
+`VerticalMongolianView` and its SwiftUI wrapper `VerticalMongolianText` also
+take a `face:`, so two faces can be shown side by side. To add a third face,
+add a case to `MongolFont.Face`, drop the `.ttf` into `Shared/Fonts/`, list it
+under both targets in `project.yml`, and run `xcodegen generate`.
+
+### Caveats
+
+- **The keyboard does not follow the app's choice.** The extension is a
+  separate process with its own `UserDefaults`. Both share the same default, so
+  both show Dashitseden until one is changed locally. Syncing the choice needs
+  an App Group.
+- **Host apps style their own text.** Once a word is committed into Notes or
+  Safari, that app picks the font; a keyboard extension cannot override it.
+- **U+180E renders as a box under Dashitseden.** 1,246 of 27,957 lexicon
+  entries (4.5%) contain `MONGOLIAN VOWEL SEPARATOR` — e.g. `бага` `ᠪᠠᠭ᠎᠊ᠠ`.
+  The code point is in the font's `cmap`, but the 2008 font predates Unicode
+  6.3 reclassifying it from a space to a format character, so Core Text
+  resolves it to a visible glyph. Noto renders these cleanly. Details and a
+  suggested fix are in `Shared/Fonts/LICENSES.md`.
 
 ---
 
@@ -255,6 +305,7 @@ done once by hand through the Settings app on the simulator or device.
 | Regenerate / update the word lexicon                           | `python3 tools/generate_lexicon.py` (writes `Packages/MongolEngine/Sources/MongolEngine/Resources/lexicon.tsv`)                                                                                                                                                                                                                                 |
 | Change the candidate-bar look or tap behavior                  | `Keyboard/CandidatePreviewBar.swift`                                                                                                                                                                                                                                                                                                            |
 | Change vertical Mongolian rendering                            | `Shared/Rendering/VerticalMongolianView.swift` — **read the file header before touching this.** It deliberately shapes text horizontally (for correct cursive letter joining) and rotates the shaped glyphs 90° clockwise at draw time, rather than using Core Text's native vertical-forms attribute, which was found to break letter joining. |
+| Change or add a Mongolian typeface                              | `Shared/Rendering/MongolFont.swift` (add a `Face` case) → drop the `.ttf` in `Shared/Fonts/` → list it under **both** targets in `project.yml` → `xcodegen generate`. Record its licence in `Shared/Fonts/LICENSES.md`.                                          |
 | Change app screens (onboarding / try-it / reference / privacy) | `App/MongolKey/*View.swift` (SwiftUI)                                                                                                                                                                                                                                                                                                           |
 | Change bundle IDs, deployment target, or add a target          | `project.yml`, then `xcodegen generate`                                                                                                                                                                                                                                                                                                         |
 
@@ -312,13 +363,26 @@ Suggestion-specific limitations:
 - The lexicon is word-level: suffixes written separately in mongol bichig
   are only found when the dataset contains the full inflected form.
 
+Typeface-specific limitations:
+
+- Entries containing U+180E MVS (1,246 of 27,957, 4.5%) draw a missing-glyph
+  box under Dashitseden; Noto Sans renders them cleanly. See “Typefaces”.
+- The typeface chosen in the app does not reach the keyboard extension — the
+  two processes have separate `UserDefaults`. Both default to Dashitseden.
+
 ---
 
 ## Privacy
 
 No data collected. No Full Access. See [PRIVACY.md](PRIVACY.md).
 
-## Font license
+## Font licenses
 
-Noto Sans Mongolian is licensed under the SIL Open Font License 1.1. See
-[`Shared/Fonts/OFL.txt`](Shared/Fonts/OFL.txt).
+- **Noto Sans Mongolian** — SIL Open Font License 1.1, see
+  [`Shared/Fonts/OFL.txt`](Shared/Fonts/OFL.txt).
+- **Classical Mongolian Dashitseden** — v5.91, designed by T. Jamyansuren,
+  © 2008 Bolorsoft LLC. Its embedded licence permits free redistribution and
+  commercial use; Bolorsoft's own licence URL currently 404s, so the font's
+  `name`-table text is reproduced verbatim in
+  [`Shared/Fonts/LICENSES.md`](Shared/Fonts/LICENSES.md) along with the
+  trademark notice.
