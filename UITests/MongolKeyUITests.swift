@@ -122,7 +122,7 @@ final class MongolKeyUITests: XCTestCase {
         XCTAssertTrue(hasMongolian, "expected Mongolian script in the tester field, got: '\(value)'")
         XCTAssertTrue(value.contains("ᠮᠣᠩᠭᠣᠯ"), "mongol should commit the dictionary spelling")
         XCTAssertTrue(value.contains("ᠰᠠᠶᠢᠨ"), "sain should commit the dictionary spelling")
-        XCTAssertTrue(value.contains("ᠠᠪᠤ\u{202F}ᠳᠠᠭᠠᠨ"), "aavdaa should commit stem + detached dative-reflexive suffix")
+        XCTAssertTrue(value.contains("ᠠᠪᠤ\u{202F}ᠳᠤ\u{202F}ᠪᠠᠨ"), "aavdaa should commit ᠠᠪᠤ ᠳᠤ ᠪᠠᠨ (corpus spelling)")
         snap("final")
     }
 
@@ -397,17 +397,17 @@ final class MongolKeyUITests: XCTestCase {
         snap("keyboard-picker")
         dumpPicker()
         if let item = pickerItem() {
-            log("picker offered '\(item.label)' hittable=\(item.isHittable) frame=\(item.frame) — tapping")
-            if item.isHittable { item.tap() } else { item.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).tap() }
-            pause(2.0)
-            dismissSystemTips()
-            if let still = pickerItem(), still.exists {
-                // The input switcher is a press-and-slide menu: hold the globe, slide to the row, release.
-                log("picker still open after tap — using press-and-drag")
-                if let globe { globe.press(forDuration: 1.2, thenDragTo: still) }
-                else { globeFallbackPoint().press(forDuration: 1.2, thenDragTo: still.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))) }
-                pause(2.0)
-                dismissSystemTips()
+            // The menu animates; an element captured from allElementsBoundByIndex
+            // can go stale before the tap. Re-resolve by label, else tap its frame.
+            let label = item.label
+            let frame = item.frame
+            log("picker offered '\(label)' frame=\(frame) — tapping")
+            let fresh = app.descendants(matching: .any).matching(NSPredicate(format: "label == %@", label)).firstMatch
+            if fresh.waitForExistence(timeout: 2), fresh.isHittable {
+                fresh.tap()
+            } else {
+                app.coordinate(withNormalizedOffset: .zero)
+                    .withOffset(CGVector(dx: frame.midX, dy: frame.midY)).tap()
             }
         } else {
             log("picker did not list MongolKey — dismissing")

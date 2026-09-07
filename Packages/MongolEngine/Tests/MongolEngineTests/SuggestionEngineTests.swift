@@ -201,8 +201,8 @@ final class SuggestionEngineTests: XCTestCase {
     func testCompletionsPredictFrequentWords() {
         let c = candidates("bai")
         let completions = c.filter { $0.source == .completion }
-        XCTAssertEqual(completions.first?.mongolian, "ᠪᠠᠶᠢᠨ\u{180E}\u{180A}ᠠ",
-                       "байна is by far the most frequent bai- word")
+        XCTAssertEqual(completions.first?.mongolian, "ᠪᠠᠶᠢᠨ\u{180E}ᠠ",
+                       "байна is by far the most frequent bai- word; final a is <MVS, a> with no nirugu")
     }
 
     func testDefaultCandidateNeverACompletion() {
