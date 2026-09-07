@@ -25,7 +25,7 @@ final class MongolKeyUITests: XCTestCase {
     private let app = XCUIApplication()
     private var shotIndex = 0
     private var shotPrefix = "shot"
-    private static let sampleWords = ["mongol", "sain"]
+    private static let sampleWords = ["mongol", "sain", "aavdaa"]
 
     override func setUp() {
         super.setUp()
@@ -120,6 +120,9 @@ final class MongolKeyUITests: XCTestCase {
         log("tester field value: \(value.unicodeScalars.map { String(format: "U+%04X", $0.value) }.joined(separator: " "))")
         let hasMongolian = value.unicodeScalars.contains { (0x1820...0x18AA).contains($0.value) }
         XCTAssertTrue(hasMongolian, "expected Mongolian script in the tester field, got: '\(value)'")
+        XCTAssertTrue(value.contains("ᠮᠣᠩᠭᠣᠯ"), "mongol should commit the dictionary spelling")
+        XCTAssertTrue(value.contains("ᠰᠠᠶᠢᠨ"), "sain should commit the dictionary spelling")
+        XCTAssertTrue(value.contains("ᠠᠪᠤ\u{202F}ᠳᠠᠭᠠᠨ"), "aavdaa should commit stem + detached dative-reflexive suffix")
         snap("final")
     }
 

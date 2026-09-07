@@ -45,8 +45,16 @@ public struct Lexicon {
     /// background queue at launch so typing never waits for it.
     public static let shared = Lexicon(bundle: .module)
 
+    /// (loose key, index into `entries`), sorted by loose key — the fallback
+    /// index that lets `odor` find өдөр (key `udur`). Built once; ~28k pairs.
+    private let looseIndex: [(key: String, index: Int)]
+
     public init(entries: [Entry]) {
-        self.entries = entries.sorted { $0.key < $1.key }
+        let sorted = entries.sorted { $0.key < $1.key }
+        self.entries = sorted
+        self.looseIndex = sorted.enumerated()
+            .map { (key: LatinKey.loose($1.key), index: $0) }
+            .sorted { $0.key < $1.key }
     }
 
     /// Load from `lexicon.tsv` in `bundle`. A missing or unreadable resource
@@ -100,6 +108,27 @@ public struct Lexicon {
             if entries[i].key != prefix {
                 result.append(entries[i])
             }
+            i += 1
+        }
+        return result
+    }
+
+    /// Words whose *loose* key (o and u merged) equals that of `key`, excluding
+    /// exact matches. The fallback for spelling habits the primary key cannot
+    /// absorb without creating homographs.
+    public func looseMatches(forKey key: String) -> [Entry] {
+        guard !key.isEmpty else { return [] }
+        let target = LatinKey.loose(key)
+        var lo = 0, hi = looseIndex.count
+        while lo < hi {
+            let mid = (lo + hi) / 2
+            if looseIndex[mid].key < target { lo = mid + 1 } else { hi = mid }
+        }
+        var result: [Entry] = []
+        var i = lo
+        while i < looseIndex.count && looseIndex[i].key == target {
+            let entry = entries[looseIndex[i].index]
+            if entry.key != key { result.append(entry) }
             i += 1
         }
         return result

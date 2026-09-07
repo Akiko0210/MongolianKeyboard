@@ -14,7 +14,7 @@ struct OnboardingView: View {
         (2, "Go to General ▸ Keyboard ▸ Keyboards."),
         (3, "Tap “Add New Keyboard…”."),
         (4, "Choose “MongolKey” from the list."),
-        (5, "When typing anywhere, tap 🌐 to switch to MongolKey."),
+        (5, "When typing anywhere, hold 🌐 (bottom-left, below the keyboard) and choose MongolKey."),
     ]
 
     var body: some View {

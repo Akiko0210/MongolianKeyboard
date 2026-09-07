@@ -67,7 +67,7 @@ struct TryItView: View {
         VStack(alignment: .leading, spacing: 12) {
             Text("Keyboard tester")
                 .font(.headline)
-            Text("Tap the field, switch to MongolKey with 🌐, and type. The box below mirrors your text in correct vertical layout.")
+            Text("Tap the field, hold 🌐 (bottom-left, below the keyboard) and choose MongolKey, then type. The box below mirrors your text in correct vertical layout.")
                 .font(.footnote)
                 .foregroundStyle(.secondary)
 
@@ -103,10 +103,23 @@ struct TryItView: View {
                 Text("Vertical Mongolian appears here")
                     .font(.footnote)
                     .foregroundStyle(.tertiary)
-            } else {
+            } else if text.unicodeScalars.contains(where: { (0x1800...0x18AF).contains($0.value) }) {
                 VerticalMongolianText(text: text, fontSize: 34)
                     .padding(.vertical, 12)
                     .clipped()
+            } else {
+                // Cyrillic or Latin came from another keyboard: vertical layout
+                // only applies to Mongolian script, so say so instead of
+                // rotating the wrong alphabet.
+                VStack(spacing: 8) {
+                    Text(text)
+                        .font(.title3)
+                    Text("This is not Mongolian script. Hold 🌐 below the keyboard and pick MongolKey.")
+                        .font(.footnote)
+                        .foregroundStyle(.secondary)
+                        .multilineTextAlignment(.center)
+                }
+                .padding()
             }
         }
         .frame(height: 200)

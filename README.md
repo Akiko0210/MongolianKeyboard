@@ -67,9 +67,22 @@ candidate bar offers the words you probably mean.
 best exact match, else the verbatim buffer. **Tapping** any candidate commits
 that word plus a space.
 
+4. **Inflected words** — the dictionary is word-level, but sentences are full
+   of case suffixes. When the buffer is `<dictionary stem> + <suffix>`
+   (`aavdaa`, `mongolyn`, `gert`, `usand`, `nohoinuud`…) the keyboard spells
+   the suffix by the classical rules — vowel harmony, `ᠶᠢᠨ` after a vowel,
+   bare `ᠤ/ᠦ` after `ᠨ`, `ᠲᠤ/ᠲᠦ` after b g d s r, the restored "hidden n" in
+   модонд/усны — and writes it detached with a narrow no-break space:
+   `aavdaa` → ᠠᠪᠤ ᠳᠠᠭᠠᠨ, captioned *аавдаа*. See
+   `Packages/MongolEngine/Sources/MongolEngine/SuffixEngine.swift`; the
+   suffix table there is the first thing a native-speaker reviewer should
+   check.
+5. **Loose spelling** — only when nothing above matched: ө typed as `o`
+   (`odor` → ᠡᠳᠦᠷ) is found through a secondary o/u-merged index.
+
 Spelling-variant tolerance is deterministic, not fuzzy: `khaan`, `haan`,
 `xaan` and `qaan` all find ᠬᠠᠭᠠᠨ; `tsag` and `cag` both find ᠴᠠᠭ;
-`oedoer` and `udur` both find ᠡᠳᠦᠷ. Both the lexicon keys and the typed
+`oedoer` and `udur` both find ᠡᠳᠦᠷ; `sayn` finds сайн. Both the lexicon keys and the typed
 buffer are folded with the same rules (`LatinKey.fold`), each verified
 collision-free against the dataset.
 
@@ -317,10 +330,18 @@ Suggestion-specific limitations:
 - A few very common words (e.g. бид) were dropped because their
   traditional-script column in the source dataset was defective — they fall
   back to verbatim transliteration until a curated patch list is added.
-- The lexicon is word-level: suffixes written separately in mongol bichig
-  are only found when the dataset contains the full inflected form.
+- The suffix engine handles one suffix per word. Stacked suffixes
+  (аавынхаа), vowel-dropping stems (улс → улсад) and the irregular pronouns
+  (би → надад) fall back to verbatim transliteration.
+- Word suggestions are per word; there is no next-word prediction yet
+  (it needs a traditional-script corpus, which the open datasets lack).
 
 ---
+
+## Shipping it
+
+See [docs/RELEASE.md](docs/RELEASE.md) for the Apple Developer Program,
+TestFlight and App Store steps that let anyone install the keyboard.
 
 ## Privacy
 

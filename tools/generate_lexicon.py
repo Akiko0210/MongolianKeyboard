@@ -101,6 +101,8 @@ def fold_key(latin: str) -> str:
     s = s.replace("w", "v")
     # standalone c → ts, but keep the ch digraph
     s = re.sub(r"c(?!h)", "ts", s)
+    # y not followed by a vowel is й/ы/ь, which the dataset writes as i
+    s = re.sub(r"y(?![aeiou])", "i", s)
     return s
 
 

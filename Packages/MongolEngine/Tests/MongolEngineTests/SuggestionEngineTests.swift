@@ -45,6 +45,18 @@ final class LatinKeyTests: XCTestCase {
         XCTAssertEqual(LatinKey.fold("budeghen"), "budeghen")
     }
 
+    func testFoldsYBeforeConsonantToI() {
+        XCTAssertEqual(LatinKey.fold("sayn"), "sain")
+        XCTAssertEqual(LatinKey.fold("nohoy"), "nohoi")
+        XCTAssertEqual(LatinKey.fold("aavyn"), "aavin")
+        XCTAssertEqual(LatinKey.fold("yamar"), "yamar", "y before a vowel is я/ё/ю and must stay")
+        XCTAssertEqual(LatinKey.fold("yos"), "yos")
+    }
+
+    func testLooseKeyMergesOAndU() {
+        XCTAssertEqual(LatinKey.loose("odor"), "udur")
+    }
+
     func testFoldIsIdempotent() {
         for s in ["khaan", "tsetserleg", "cag", "oedoer", "wan", "mongol"] {
             let once = LatinKey.fold(s)
@@ -150,6 +162,40 @@ final class SuggestionEngineTests: XCTestCase {
         let c = candidates("zzz")
         XCTAssertEqual(c.first?.source, .verbatim)
         XCTAssertEqual(c.first?.mongolian, verbatim("zzz"))
+    }
+
+    func testInflectedWordIsDefaultWhenNoExactMatch() {
+        let c = candidates("aavdaa")
+        XCTAssertEqual(c.first?.source, .inflected)
+        XCTAssertEqual(c.first?.mongolian, "ᠠᠪᠤ\u{202F}ᠳᠠᠭᠠᠨ")
+        XCTAssertEqual(c.first?.cyrillic, "аавдаа")
+        XCTAssertEqual(SuggestionEngine.defaultCandidate(in: c)?.source, .inflected)
+    }
+
+    func testLooseSpellingFindsTheWordWhenNothingElseDoes() {
+        // ө typed as o: "odor" has no exact key, so өдөр (key udur) is offered.
+        let c = candidates("odor")
+        XCTAssertEqual(c.first?.source, .fuzzy)
+        XCTAssertEqual(c.first?.mongolian, "ᠡᠳᠦᠷ")
+    }
+
+    func testLooseSpellingNotUsedWhenExactExists() {
+        XCTAssertFalse(candidates("udur").contains { $0.source == .fuzzy })
+    }
+
+    func testTopKMatchesFullSort() {
+        let entries = Lexicon.shared.completions(forKeyPrefix: "ba")
+        let sorted = Array(entries.sorted(by: { a, b in
+            if a.frequency != b.frequency { return a.frequency > b.frequency }
+            if a.key.count != b.key.count { return a.key.count < b.key.count }
+            return a.key < b.key
+        }).prefix(5))
+        let top = SuggestionEngine.top(5, of: entries, by: { a, b in
+            if a.frequency != b.frequency { return a.frequency > b.frequency }
+            if a.key.count != b.key.count { return a.key.count < b.key.count }
+            return a.key < b.key
+        })
+        XCTAssertEqual(top, sorted)
     }
 
     func testCompletionsPredictFrequentWords() {
