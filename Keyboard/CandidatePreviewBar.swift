@@ -9,10 +9,11 @@
 //  user is typing, each rendered vertically with its Cyrillic form as a
 //  caption so the user can confirm they are picking the right word.
 //
-//  Cell order mirrors SuggestionEngine: exact dictionary matches, then the
-//  verbatim letter-by-letter transliteration (captioned with the raw Latin),
-//  then predictions. The default candidate (what Space will commit) is
-//  highlighted.
+//  Cell order mirrors SuggestionEngine: dictionary matches, then the
+//  rule-spelled and verbatim candidates (captioned with the raw Latin),
+//  then completions. The default candidate (what Space will commit) is
+//  highlighted. With an empty buffer the bar shows next-word predictions
+//  for the word just committed (no default, nothing highlighted).
 //
 
 import UIKit
@@ -72,8 +73,8 @@ final class CandidatePreviewBar: UIView {
         let composing = !latin.isEmpty
         latinLabel.text = latin
         latinLabel.isHidden = !composing
-        scrollView.isHidden = !composing
-        hintLabel.isHidden = composing
+        scrollView.isHidden = candidates.isEmpty
+        hintLabel.isHidden = composing || !candidates.isEmpty
 
         cells.forEach { $0.removeFromSuperview() }
         cells = candidates.enumerated().map { index, candidate in
@@ -140,10 +141,17 @@ private final class CandidateCell: UIControl {
         verticalView.text = candidate.mongolian
         verticalView.alignment = .center
         verticalView.textColor = candidate.source == .completion ? .secondaryLabel : .label
+        // Expose each cell to accessibility / UI tests as a button named
+        // after its source (mk.candidate.lexicon, mk.candidate.prediction …).
+        isAccessibilityElement = true
+        accessibilityTraits = .button
+        accessibilityIdentifier = "mk.candidate.\(candidate.source)"
+        accessibilityLabel = candidate.cyrillic ?? candidate.latin
+        accessibilityValue = candidate.mongolian
         verticalView.isUserInteractionEnabled = false
         addSubview(verticalView)
 
-        captionLabel.text = candidate.source == .verbatim ? candidate.latin : candidate.cyrillic
+        captionLabel.text = candidate.cyrillic ?? candidate.latin
         captionLabel.font = .systemFont(ofSize: 10)
         captionLabel.textColor = .tertiaryLabel
         captionLabel.textAlignment = .center

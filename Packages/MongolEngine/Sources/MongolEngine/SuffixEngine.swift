@@ -184,13 +184,13 @@ public struct SuffixEngine {
             let stemKey = String(key.dropLast(suffix.typed.count))
             guard stemKey.count >= 2, !irregularStems.contains(stemKey) else { continue }
 
-            for stem in lexicon.exactMatches(forKey: stemKey) {
+            for (stem, cyrillicStem) in Self.stems(forKey: stemKey, lexicon: lexicon) {
                 let gender = Self.gender(ofCyrillic: stem.cyrillic)
                 if let required = suffix.gender, required != gender { continue }
                 if suffix.vowelStemOnly, !Self.endsInVowel(stem.traditional) { continue }
                 guard let text = Self.nominal(suffix.parts, stem: stem.traditional, gender: gender) else { continue }
                 guard seen.insert(text).inserted else { continue }
-                let caption = stem.cyrillic + (gender == .masculine ? suffix.masculine : suffix.feminine)
+                let caption = cyrillicStem + (gender == .masculine ? suffix.masculine : suffix.feminine)
                 results.append((Inflection(stem: stem, mongolian: text, cyrillic: caption),
                                 stemKey.count, stem.frequency))
             }
@@ -209,6 +209,73 @@ public struct SuffixEngine {
         // identical in the bar while spelling different words: keep the best.
         var captions = Set<String>()
         return results.map { $0.0 }.filter { captions.insert($0.cyrillic).inserted }.prefix(limit).map { $0 }
+    }
+
+    /// A suffixed reading of a key whose stem the dictionary lacks: the stem
+    /// is spelled by `spell` (the learned orthography rules) and the suffix
+    /// attached by the same corpus-verified rules as for dictionary stems.
+    /// Nil when the key ends in no known suffix or the stem cannot be spelled.
+    public static func ruleBased(forKey key: String, spell: (String) -> String?) -> String? {
+        guard key.count >= 4 else { return nil }
+        for suffix in suffixes where key.hasSuffix(suffix.typed) {
+            let stemKey = String(key.dropLast(suffix.typed.count))
+            guard stemKey.count >= 3, let stem = spell(stemKey) else { continue }
+            let gender = Self.gender(ofLatinKey: stemKey)
+            if let required = suffix.gender, required != gender { continue }
+            if suffix.vowelStemOnly, !Self.endsInVowel(stem) { continue }
+            if let text = Self.nominal(suffix.parts, stem: stem, gender: gender) { return text }
+        }
+        return nil
+    }
+
+    /// Vowel harmony as far as typed Latin reveals it: `a`/`o` only occur in
+    /// masculine words. A key with neither (u may be у, ө or ү) is treated as
+    /// feminine, the more common class among such words.
+    static func gender(ofLatinKey key: String) -> Gender {
+        key.contains("a") || key.contains("o") ? .masculine : .feminine
+    }
+
+    /// Dictionary stems for a typed stem key, each with the Cyrillic stem as
+    /// it appears before the suffix.
+    ///
+    /// Cyrillic drops a short vowel before a vowel-initial suffix
+    /// (бодол → бодлын, гурав → гурван) while the script keeps it
+    /// (ᠪᠣᠳᠣᠯ ᠤᠨ, ᠭᠤᠷᠪᠠᠨ — verified in the corpus). So when the typed stem is
+    /// unknown and ends in two consonants, the vowel is restored before the
+    /// last one and the dictionary consulted again.
+    static func stems(forKey stemKey: String, lexicon: Lexicon) -> [(Lexicon.Entry, String)] {
+        let exact = lexicon.exactMatches(forKey: stemKey)
+        if !exact.isEmpty { return exact.map { ($0, $0.cyrillic) } }
+
+        let chars = Array(stemKey)
+        guard chars.count >= 3 else { return [] }
+        let last = chars[chars.count - 1]
+        let beforeLast = chars[chars.count - 2]
+        guard !Self.isLatinVowel(last), !Self.isLatinVowel(beforeLast) else { return [] }
+        // ch, sh, ts are one consonant: never split a digraph.
+        guard !["ch", "sh", "ts"].contains(String([beforeLast, last])) else { return [] }
+
+        var found: [(Lexicon.Entry, String)] = []
+        for vowel in ["a", "e", "o", "u", "i"] {
+            let restored = String(chars.dropLast()) + vowel + String(last)
+            for entry in lexicon.exactMatches(forKey: restored) {
+                found.append((entry, Self.elided(entry.cyrillic)))
+            }
+        }
+        return found
+    }
+
+    static func isLatinVowel(_ ch: Character) -> Bool { "aeiou".contains(ch) }
+
+    /// The Cyrillic stem with its last short vowel dropped (бодол → бодл),
+    /// i.e. how it is written before a vowel-initial suffix.
+    static func elided(_ cyrillic: String) -> String {
+        var chars = Array(cyrillic)
+        guard chars.count >= 3 else { return cyrillic }
+        let vowel = chars[chars.count - 2]
+        guard "аэиоөуүы".contains(vowel), !"аэиоөуүыйь".contains(chars[chars.count - 1]) else { return cyrillic }
+        chars.remove(at: chars.count - 2)
+        return String(chars)
     }
 
     // MARK: - Vowel harmony and letter classes

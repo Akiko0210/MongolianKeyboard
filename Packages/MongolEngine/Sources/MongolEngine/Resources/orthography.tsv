@@ -1,0 +1,5904 @@
+C	ᠴᠢ
+S	ᠰ
+T	ᠴ
+a	ᠠ
+b	ᠪ
+d	ᠳ
+e	ᠡ
+f	ᠹ
+g	ᠭ
+h	ᠬᠤ
+i	ᠢ
+j	ᠵ
+k	ᠺ
+l	ᠯ
+m	ᠮ
+n	ᠨ
+o	ᠣ
+p	ᠫ
+r	ᠷ
+s	ᠰ
+t	ᠲ
+u	
+v	ᠪ
+y	ᠶ
+z	ᠵ
+C|S	ᠴ
+C|T	ᠴ
+C|^	ᠴ
+C|d	ᠴ
+C|i	ᠴ
+C|p	ᠴ
+C|t	ᠴ
+C|u	ᠴ
+C|y	ᠴᠧ
+C|z	ᠴ
+S|$	ᠰᠢ
+S|^	ᠱ
+S|a	ᠰᠢ
+S|d	ᠰᠢ
+S|e	ᠰᠢᠶ
+S|k	ᠱ
+S|l	ᠰᠢ
+S|m	ᠰᠢ
+S|o	ᠱ
+S|r	ᠰᠢ
+S|s	ᠰᠢᠭ
+S|t	ᠰᠢ
+S|u	ᠰᠢᠭ
+S|y	ᠱᠧ
+T|$	ᠴᠠ
+T|C	ᠴᠠ
+T|T	ᠼ
+T|d	ᠴᠠ
+T|g	ᠴᠠ
+T|k	ᠼ
+T|s	ᠴᠠᠭ
+T|t	ᠴᠠ
+T|y	ᠼᠧ
+a|C	
+a|i	ᠠᠶ
+d|s	ᠳᠠᠭ
+d|y	ᠳᠧ
+e|a	
+e|k	
+e|o	
+e|u	
+e|y	
+f|y	ᠹᠧ
+h|C	ᠬᠠ
+h|S	ᠬᠡ
+h|T	ᠬᠠ
+h|^	ᠬ
+h|b	ᠬᠡ
+h|d	ᠬᠠ
+h|e	ᠬᠦ
+h|f	ᠬᠦ
+h|g	ᠬᠠ
+h|h	ᠬ
+h|i	ᠬ
+h|j	ᠬᠡ
+h|k	ᠬ
+h|l	ᠬ
+h|n	ᠬ
+h|p	ᠬ
+h|r	ᠬ
+h|s	ᠬᠠᠭ
+h|t	ᠬᠠ
+h|u	ᠬᠦ
+h|v	ᠬ
+h|y	ᠬ
+h|z	ᠬ
+i|y	
+j|$	ᠵᠤ
+j|S	ᠵᠢ
+j|a	ᠵᠤ
+j|d	ᠵᠢ
+j|e	ᠵᠦ
+j|g	ᠵᠢ
+j|j	ᠵᠢ
+j|l	ᠵᠢ
+j|m	ᠵᠢ
+j|r	ᠵᠢ
+j|s	ᠵᠢᠭ
+j|t	ᠵᠢ
+j|y	ᠵᠧ
+k|C	ᠭ
+k|j	ᠭ
+k|n	ᠬ
+k|y	ᠺᠧ
+l|n	ᠯᠤ
+l|y	ᠯᠧ
+m|g	ᠮᠠ
+m|y	ᠮᠧ
+n|S	ᠩ
+n|g	ᠩ
+n|h	ᠩ
+n|k	ᠩ
+n|l	ᠨ᠎
+n|p	ᠩ
+n|r	ᠨ᠎
+n|s	ᠩ
+o|$	
+o|h	
+o|i	ᠣᠶ
+o|o	
+p|h	
+p|y	ᠫᠧ
+r|y	ᠷᠧ
+s|y	ᠰᠧ
+t|$	ᠲᠤ
+t|b	ᠲᠤ
+t|d	ᠲᠠ
+t|g	ᠳ
+t|h	ᠲᠤ
+t|k	ᠲ᠋
+t|l	ᠲᠠ
+t|p	ᠲ᠋ᠧ
+t|y	ᠲ᠋ᠧ
+u|S	ᠤ
+u|T	ᠤ
+u|^	ᠤ
+u|a	ᠤᠸ
+u|b	ᠤ
+u|e	ᠥᠭᠡ
+u|g	ᠤ
+u|i	ᠤ
+u|j	ᠦ
+u|k	ᠦ
+u|m	ᠤ
+u|o	ᠤ
+u|p	ᠦ
+u|t	ᠤ
+u|y	ᠤ
+u|z	ᠤ
+v|$	ᠪᠠ
+v|^	ᠸ
+v|b	ᠪᠤ
+v|g	ᠪᠠ
+v|k	ᠸ
+v|n	ᠪᠡ
+v|y	ᠸᠧ
+y|C	
+y|S	
+y|T	
+y|b	ᠢ
+y|d	
+y|e	
+y|f	
+y|g	ᠢ
+y|h	ᠢ
+y|i	ᠶ᠎
+y|j	
+y|k	
+y|l	
+y|n	ᠢ
+y|p	
+y|r	
+y|s	
+y|t	
+y|v	
+y|z	
+z|$	ᠵᠠ
+z|C	ᠵᠠ
+z|S	ᠵᠡ
+z|d	ᠵᠠ
+z|g	ᠵᠠ
+z|i	ᠽ
+z|j	ᠵᠡ
+z|n	ᠵᠠ
+z|r	ᠵᠠ
+z|s	ᠵᠡᠭ
+z|t	ᠵᠠ
+z|v	ᠵᠠ
+z|y	ᠽᠧ
+C|$|u	ᠴᠢ
+C|T|u	ᠴᠢᠭ
+C|^|a	ᠴᠢ
+C|^|m	ᠴᠢ
+C|^|y	ᠴᠢ
+C|a|a	ᠴᠢᠶ
+C|a|s	ᠴᠢᠭ
+C|a|t	ᠴᠢ
+C|a|u	ᠴᠢᠭ
+C|d|a	ᠴᠢᠶ᠎
+C|d|f	ᠴᠢ
+C|e|m	
+C|g|u	ᠴᠢ
+C|i|$	ᠴᠢ
+C|i|a	ᠴᠢᠭ᠎
+C|i|d	ᠴᠢ
+C|i|e	ᠴᠢᠶ
+C|i|g	ᠴᠢ
+C|i|h	ᠴᠢ
+C|i|l	ᠴᠢ
+C|i|n	ᠴᠢ
+C|i|r	ᠴᠡ
+C|i|s	ᠴᠢᠭ
+C|i|v	ᠴᠢᠬ
+C|k|f	ᠴ
+C|l|a	ᠴᠢᠭ
+C|l|d	ᠴᠢ
+C|l|e	ᠴᠢᠭ
+C|l|o	ᠴᠢᠭᠠ
+C|l|u	ᠴᠢ
+C|n|d	ᠴᠢ
+C|o|d	ᠴᠢ
+C|o|o	ᠴᠢᠭᠠ
+C|o|s	ᠴᠢᠭ
+C|o|t	ᠴᠢ
+C|o|u	ᠴᠢᠭ
+C|o|y	
+C|r|a	ᠴᠢᠭ
+C|r|e	
+C|r|s	ᠴᠢᠭ
+C|r|u	ᠴᠢ
+C|s|u	ᠴᠢ
+C|t|$	ᠴᠢ
+C|t|f	ᠴᠢ
+C|t|l	ᠴᠢ
+C|t|m	ᠴᠢᠭ
+C|t|u	ᠴᠢᠭ
+C|u|$	ᠴᠢ
+C|u|d	ᠴᠢ
+C|u|f	ᠴᠢᠭ
+C|u|g	ᠴᠢ
+C|u|l	ᠴᠢ
+C|u|m	ᠴᠢᠭ
+C|u|n	ᠴᠢ
+C|u|r	ᠴᠠ
+C|u|t	ᠴᠦ
+C|v|a	ᠴᠢᠶ
+C|v|d	ᠴᠢ
+C|v|e	ᠴᠢᠶ
+C|v|o	ᠴᠢᠶ᠎ᠠ
+C|v|s	ᠴᠢᠭ
+C|v|t	ᠴᠢ
+C|v|u	ᠴᠢᠭ
+C|y|m	
+S|C|u	ᠰ
+S|S|$	ᠰ
+S|S|f	ᠱ
+S|S|u	ᠰ
+S|^|d	ᠰᠬ
+S|^|e	ᠰᠢᠭ
+S|^|f	ᠰ
+S|^|i	ᠰ
+S|^|u	ᠱ
+S|a|a	ᠰᠢᠶ
+S|a|g	ᠰ
+S|a|i	ᠰ
+S|a|y	ᠰᠢ
+S|d|i	ᠰ
+S|d|u	ᠰ
+S|e|e	ᠰᠬ
+S|e|i	ᠰᠬ
+S|g|C	ᠰᠢ
+S|g|a	ᠰᠢᠭ
+S|g|m	ᠰ
+S|g|o	ᠰᠢᠭᠠ
+S|h|f	ᠰᠢᠶ
+S|h|m	ᠰ
+S|i|a	ᠰᠢᠶ
+S|i|h	ᠰᠢ
+S|i|m	ᠰ
+S|i|n	ᠰᠢ
+S|i|o	ᠰᠢᠶᠠ
+S|i|u	ᠰ
+S|j|u	ᠰ
+S|l|a	ᠰᠢᠶ
+S|l|i	ᠰ
+S|l|u	ᠰᠢ
+S|m|a	ᠰᠢᠶ
+S|m|f	ᠰ
+S|m|i	ᠰ
+S|m|m	ᠰ
+S|n|a	ᠰᠢᠭ
+S|n|g	ᠰᠢ
+S|n|o	ᠰᠢᠶᠠ
+S|o|g	ᠰ
+S|o|h	ᠰ
+S|o|i	ᠰ
+S|o|m	ᠱ
+S|o|o	ᠰᠢᠶᠠ
+S|r|a	ᠰᠢᠭ
+S|r|i	ᠰ
+S|r|o	ᠰᠢᠶᠠ
+S|s|i	ᠰ
+S|s|u	ᠰ
+S|t|a	
+S|t|e	
+S|t|i	ᠰ
+S|t|u	
+S|u|a	ᠰᠢᠶ
+S|u|g	ᠰ
+S|u|i	ᠰ
+S|u|m	ᠰᠢᠭ
+S|v|a	ᠰᠢᠶ
+S|v|f	ᠰᠢ
+S|v|g	ᠰᠢ
+S|v|m	ᠰ
+S|v|n	ᠰᠢ
+S|z|m	ᠱ
+S|z|u	ᠰ
+T|$|f	ᠴᠡ
+T|$|u	ᠴᠡ
+T|a|C	ᠴᠤ
+T|a|g	
+T|a|i	ᠼ
+T|a|l	ᠴᠠ
+T|a|n	ᠴᠠ
+T|a|r	ᠴᠤ
+T|d|f	ᠴᠡ
+T|e|$	ᠴᠡ
+T|e|d	ᠴᠡ
+T|e|g	
+T|e|i	ᠼ
+T|e|l	ᠴᠡ
+T|g|a	ᠴ
+T|g|d	ᠴᠡ
+T|g|e	ᠴ
+T|g|f	ᠴᠡ
+T|g|g	ᠴ
+T|g|i	ᠴ
+T|g|l	ᠴᠡ
+T|g|o	ᠴ
+T|g|r	ᠴᠡ
+T|g|s	ᠴᠡᠭ
+T|g|u	ᠴ
+T|h|u	ᠴᠡ
+T|i|g	
+T|i|i	ᠼ
+T|i|l	ᠴᠡ
+T|i|n	ᠴᠡ
+T|i|o	ᠴᠠ
+T|i|s	ᠴᠡᠭ
+T|i|v	ᠴᠡ
+T|k|$	ᠼ
+T|l|l	ᠴᠠ
+T|l|r	ᠴᠣ
+T|m|$	ᠼᠤ
+T|m|g	ᠴᠦ
+T|m|r	ᠴᠦ
+T|m|s	ᠴᠡᠭ
+T|n|i	ᠼ
+T|n|l	ᠴᠠ
+T|n|v	ᠴᠡ
+T|o|g	ᠴᠣ
+T|o|l	ᠴᠣ
+T|o|r	ᠴᠣ
+T|o|t	ᠴᠢ
+T|r|f	ᠴᠡ
+T|r|g	ᠴᠡ
+T|r|l	ᠴᠠ
+T|r|o	ᠴᠠ
+T|s|a	ᠴᠢ
+T|s|f	ᠴᠡᠭ
+T|t|e	ᠴ
+T|t|f	ᠴᠡ
+T|u|$	ᠴᠡ
+T|u|g	ᠴᠡ
+T|u|l	ᠴᠠ
+T|u|n	ᠴᠠ
+T|u|r	ᠴᠠ
+T|u|s	ᠴᠠ
+T|v|g	ᠴᠡ
+T|v|o	ᠴᠠ
+a|C|a	ᠠ
+a|C|l	ᠠ
+a|C|t	ᠠ
+a|S|d	
+a|S|h	
+a|S|i	ᠠ
+a|S|n	
+a|S|r	
+a|S|t	
+a|S|v	
+a|S|z	
+a|T|a	ᠠᠭ
+a|^|C	ᠠ
+a|^|a	ᠠᠭ
+a|a|$	
+a|a|C	ᠠ
+a|a|k	
+a|a|n	
+a|a|p	
+a|a|v	
+a|a|y	
+a|b|C	ᠠ
+a|b|a	ᠠᠭ
+a|d|a	ᠠᠭ
+a|g|C	ᠠ
+a|g|i	ᠠ
+a|h|C	ᠠ
+a|h|a	ᠠᠭ
+a|i|$	ᠠ
+a|i|C	ᠠ
+a|i|d	ᠠ
+a|i|g	
+a|i|h	
+a|i|j	ᠠ
+a|i|l	
+a|i|n	
+a|i|r	
+a|i|s	
+a|i|t	
+a|j|d	
+a|j|g	
+a|j|l	
+a|j|r	
+a|j|s	
+a|j|v	
+a|k|i	ᠠ
+a|l|C	ᠠ
+a|l|h	
+a|l|s	ᠠᠭ
+a|m|y	ᠠᠶ᠋
+a|n|C	ᠠ
+a|n|a	ᠠᠭ
+a|r|a	ᠠᠭ
+a|r|g	
+a|r|i	ᠠ
+a|r|v	
+a|s|C	ᠠ
+a|s|a	ᠠᠭ
+a|t|C	ᠠ
+a|t|a	ᠠᠭ
+a|t|h	
+a|t|i	ᠠ
+a|v|h	
+a|v|j	
+a|v|r	
+a|v|v	
+a|v|y	
+a|y|C	ᠠ
+a|y|T	
+a|y|l	
+a|y|t	
+a|y|u	
+a|y|z	
+a|z|a	ᠠᠭ
+b|^|s	ᠪᠠ
+b|e|y	ᠪᠧ
+b|i|y	ᠪᠧ
+b|n|e	ᠪᠦ
+b|u|l	ᠪᠡ
+b|y|f	ᠪᠧ
+d|C|o	ᠳᠠ
+d|C|u	ᠳᠡ
+d|S|o	ᠳᠠ
+d|T|o	ᠳᠠ
+d|^|i	ᠳ᠋
+d|^|r	ᠳ᠋
+d|^|y	ᠳ᠋ᠧ
+d|a|C	ᠳᠠ
+d|a|d	ᠳᠠ
+d|a|g	ᠳᠠ
+d|a|l	ᠳᠠ
+d|a|n	ᠳᠠ
+d|a|r	ᠳᠠ
+d|a|t	ᠳᠠ
+d|a|v	ᠳᠠ
+d|d|o	ᠳᠠ
+d|e|C	ᠳᠡ
+d|e|d	ᠳᠡ
+d|e|g	ᠳᠡ
+d|e|h	ᠳᠦ
+d|e|l	ᠳ᠋
+d|e|n	ᠳᠡ
+d|e|r	ᠳᠡ
+d|e|s	ᠳᠡᠭ
+d|e|v	ᠳᠡ
+d|g|$	ᠳᠡ
+d|g|C	ᠳᠡ
+d|g|d	ᠳᠠ
+d|g|g	ᠳᠣ
+d|g|i	ᠳᠦ
+d|g|j	ᠳᠠ
+d|g|l	ᠳᠣ
+d|g|n	ᠳᠠ
+d|g|o	ᠳᠠ
+d|g|r	ᠳᠡ
+d|g|u	ᠳᠡ
+d|g|v	ᠳᠠ
+d|h|o	ᠳᠠ
+d|i|g	ᠳᠠ
+d|i|i	ᠳᠡ
+d|i|n	ᠳᠠ
+d|i|o	ᠳᠠ
+d|i|r	ᠳᠤ
+d|j|m	ᠳᠠ
+d|j|o	ᠳᠠ
+d|l|$	ᠳᠠ
+d|l|C	ᠳᠠ
+d|l|d	ᠳᠠ
+d|l|g	ᠳᠡ
+d|l|h	ᠳᠠ
+d|l|j	ᠳᠠ
+d|l|l	ᠳᠠ
+d|l|o	ᠳᠠ
+d|l|r	ᠳᠦ
+d|l|s	ᠳᠦᠭ
+d|m|$	ᠳᠠ
+d|m|d	ᠳᠠ
+d|m|g	ᠳᠠ
+d|m|o	ᠳᠠ
+d|m|r	ᠳᠠ
+d|m|t	ᠳᠠ
+d|n|$	ᠳᠠ
+d|n|C	ᠳᠡ
+d|n|S	ᠳᠠ
+d|n|d	ᠳᠠ
+d|n|g	ᠳᠠ
+d|n|h	ᠳᠦ
+d|n|l	ᠳᠠ
+d|n|r	ᠳᠤ
+d|n|s	ᠳᠦ
+d|n|t	ᠳᠠ
+d|o|C	ᠳᠣ
+d|o|d	ᠳᠣ
+d|o|g	ᠳᠣ
+d|o|h	ᠳᠣ
+d|o|j	ᠳᠣ
+d|o|l	ᠳᠣ
+d|o|n	ᠳᠣ
+d|o|r	ᠳᠣ
+d|o|s	ᠳᠣᠭ
+d|o|t	ᠳᠣ
+d|r|$	ᠳᠡ
+d|r|d	ᠳᠠ
+d|r|g	ᠳᠠ
+d|r|h	ᠳ᠋
+d|r|j	ᠳᠠ
+d|r|l	ᠳᠤ
+d|r|n	ᠳᠠ
+d|r|o	ᠳᠠ
+d|s|a	ᠳ
+d|s|e	ᠳ
+d|s|f	ᠳᠡᠭ
+d|s|o	ᠳᠠ
+d|s|u	ᠳ
+d|t|o	ᠳᠠ
+d|u|C	ᠳᠤ
+d|u|d	ᠳ᠋
+d|u|g	ᠳᠡ
+d|u|l	ᠳᠦ
+d|u|n	ᠳᠦ
+d|u|r	ᠳᠤ
+d|u|v	ᠳᠡ
+d|v|C	ᠳᠡ
+d|v|g	ᠳᠠ
+d|v|l	ᠳᠣ
+d|v|r	ᠳᠡ
+d|v|s	ᠳᠦᠭ
+d|z|o	ᠳᠠ
+e|$|m	
+e|C|g	
+e|C|h	
+e|C|l	
+e|C|m	
+e|T|e	ᠡᠭ
+e|T|s	
+e|^|e	ᠡᠭ
+e|^|k	ᠡ
+e|^|y	ᠡ
+e|b|$	
+e|b|C	
+e|b|d	
+e|b|e	ᠡᠭ
+e|d|e	ᠡᠭ
+e|d|t	
+e|d|y	ᠡ
+e|e|$	
+e|e|g	
+e|e|h	
+e|e|m	
+e|e|n	
+e|e|s	
+e|f|f	
+e|g|$	
+e|g|T	
+e|g|y	ᠡ
+e|h|e	ᠡᠭ
+e|h|y	ᠡ
+e|i|m	
+e|j|$	
+e|j|e	
+e|j|m	
+e|k|n	ᠡ
+e|l|g	
+e|l|h	
+e|l|s	ᠡᠭ
+e|l|y	ᠡ
+e|m|m	
+e|n|y	ᠡ
+e|p|e	
+e|r|$	
+e|r|S	
+e|r|e	ᠡᠭ
+e|r|g	
+e|r|m	
+e|r|p	
+e|s|e	ᠡᠭ
+e|s|k	ᠡ
+e|t|h	
+e|v|e	ᠡᠭ
+e|v|m	
+e|v|r	
+e|v|s	
+e|y|$	ᠡ
+e|y|C	ᠡ
+e|y|S	ᠡ
+e|y|f	ᠡ
+e|z|$	
+e|z|e	ᠡᠭ
+e|z|m	
+e|z|v	
+g|C|o	ᠭᠠ
+g|S|e	ᠬᠢ
+g|S|i	ᠬ
+g|S|o	ᠭᠠ
+g|^|l	ᠭᠣ
+g|a|n	
+g|a|y	ᠭᠧ
+g|e|n	
+g|e|y	ᠭᠧ
+g|h|u	ᠭᠡ
+g|i|n	ᠭᠢ
+g|i|o	ᠭᠠ
+g|j|o	ᠭᠠ
+g|l|o	ᠭᠠ
+g|m|u	
+g|n|r	ᠭᠡ
+g|n|u	ᠭᠡ
+g|o|n	
+g|s|a	ᠬ
+g|s|e	ᠬ
+g|s|f	ᠬ
+g|t|i	ᠭᠡ
+g|t|y	ᠭᠧ
+g|u|n	ᠭᠡ
+g|u|o	ᠭᠤ
+g|u|r	ᠭᠦ
+g|v|u	
+g|y|f	ᠭᠧ
+h|C|a	ᠬ
+h|C|e	ᠬ
+h|C|f	ᠬᠡ
+h|C|u	ᠬᠡ
+h|S|m	ᠬ
+h|T|f	ᠬᠢ
+h|T|u	ᠬᠥ
+h|^|e	ᠬ
+h|^|l	
+h|^|r	
+h|^|u	ᠬ
+h|a|a	ᠬ
+h|a|l	ᠬᠠ
+h|a|n	ᠬᠠ
+h|a|r	ᠬᠠ
+h|a|t	ᠬᠤ
+h|a|u	ᠬᠤ
+h|b|u	ᠬ
+h|d|a	ᠬ
+h|d|e	ᠬ
+h|d|f	ᠬᠡ
+h|d|u	ᠬ
+h|e|C	ᠭᠡ
+h|e|a	ᠬ
+h|e|d	ᠬᠢ
+h|e|e	ᠬ
+h|e|g	ᠬᠦ
+h|e|j	ᠬᠢ
+h|e|l	ᠬᠢ
+h|e|n	ᠭ
+h|e|r	ᠬᠡ
+h|e|s	ᠬᠦᠭ
+h|g|a	ᠬ
+h|g|e	ᠬ
+h|g|f	ᠬᠦ
+h|g|u	ᠬᠡ
+h|i|$	ᠬᠤ
+h|i|T	ᠬᠢ
+h|i|d	ᠬᠡ
+h|i|e	ᠬ
+h|i|j	ᠬᠠ
+h|i|l	ᠬᠠ
+h|i|m	ᠬᠤ
+h|i|n	ᠬᠠ
+h|i|o	ᠬᠠ
+h|i|r	ᠬᠤ
+h|i|t	ᠬᠡ
+h|i|v	ᠬᠠ
+h|j|e	ᠬ
+h|j|m	ᠬᠠ
+h|l|$	ᠬ᠎ᠠ
+h|l|T	ᠬᠢ
+h|l|e	ᠬ
+h|l|f	ᠬᠡ
+h|l|l	ᠬᠠ
+h|l|r	ᠬᠠ
+h|l|s	ᠬᠤ
+h|l|t	ᠬᠦ
+h|l|u	ᠬ
+h|m|$	ᠬᠢ
+h|m|C	ᠬᠡ
+h|m|a	ᠬ
+h|m|e	ᠬ
+h|m|f	ᠬ
+h|m|l	ᠬᠢ
+h|m|m	ᠬ
+h|m|o	ᠬᠠ
+h|m|r	ᠬᠠ
+h|m|u	ᠬᠡ
+h|n|$	ᠬ᠎ᠠ
+h|n|d	ᠬᠤ
+h|n|e	ᠬ
+h|n|g	ᠬᠣ
+h|n|l	ᠬᠤ
+h|n|r	ᠬᠦ
+h|n|s	ᠬᠡ
+h|n|t	ᠬᠣ
+h|n|u	ᠬᠡ
+h|n|v	ᠬᠤ
+h|o|C	ᠬᠣ
+h|o|d	ᠬᠣ
+h|o|g	ᠬᠣ
+h|o|l	ᠬᠣ
+h|o|n	ᠬᠣ
+h|o|o	ᠬ
+h|o|r	ᠬᠣ
+h|o|s	ᠬ
+h|o|u	ᠬ
+h|r|$	ᠬᠡ
+h|r|e	ᠬ
+h|r|j	ᠬᠦ
+h|r|l	ᠬᠡ
+h|r|n	ᠬᠠ
+h|r|o	ᠬᠠ
+h|r|r	ᠬᠢ
+h|r|t	ᠬᠡ
+h|r|u	ᠬᠡ
+h|s|f	ᠬᠡᠭ
+h|s|u	ᠬᠦ
+h|t|a	ᠬ
+h|t|e	ᠬ
+h|t|f	ᠬᠡ
+h|t|u	ᠬᠡ
+h|u|C	ᠬᠤ
+h|u|T	ᠬᠦ
+h|u|a	ᠬ
+h|u|d	ᠬᠡ
+h|u|e	ᠬ
+h|u|l	ᠬᠡ
+h|u|m	ᠬᠤ
+h|u|n	ᠬᠤ
+h|u|r	ᠬᠥ
+h|u|s	ᠬᠦ
+h|u|v	ᠬᠠ
+h|v|$	ᠬᠡ
+h|v|C	ᠬᠣ
+h|v|S	ᠬᠢ
+h|v|T	ᠬᠤ
+h|v|e	ᠬ
+h|v|f	ᠬᠡ
+h|v|g	ᠬᠡ
+h|v|j	ᠬᠢ
+h|v|l	ᠬᠡ
+h|v|n	ᠬᠢ
+h|v|r	ᠬᠠ
+h|v|t	ᠬᠢ
+h|v|u	ᠬᠡ
+h|y|f	ᠬᠧ
+i|C|a	ᠢᠭ
+i|C|y	ᠢ
+i|S|T	ᠢᠵᠠ
+i|S|y	ᠢ
+i|T|a	ᠢᠶᠠ
+i|T|i	ᠡᠶ
+i|T|u	ᠶ
+i|^|S	ᠡᠰᠢ
+i|^|h	ᠶᠡ
+i|^|i	ᠡᠶ
+i|b|a	ᠢᠶᠠ
+i|b|y	ᠡᠶ
+i|d|a	ᠢᠶᠠ
+i|d|i	ᠡᠶ
+i|d|l	
+i|d|r	
+i|e|C	ᠶᠢ
+i|e|d	ᠶᠢ
+i|e|g	ᠶᠢ
+i|e|h	ᠶᠢ
+i|e|l	ᠶᠢ
+i|g|a	ᠢᠶᠠ
+i|g|i	ᠡᠶ
+i|g|o	ᠢᠶᠠ
+i|h|a	ᠢᠶᠠ
+i|h|o	ᠢᠶᠠ
+i|h|y	ᠢ
+i|i|$	
+i|j|T	ᠢᠵᠡ
+i|j|y	ᠢ
+i|l|a	ᠢᠶᠠ
+i|l|o	ᠢᠶᠠ
+i|l|z	ᠢᠰ
+i|m|S	
+i|m|a	ᠢᠶᠠ
+i|m|i	ᠡᠶ
+i|m|y	ᠢ
+i|n|a	ᠢᠶᠠ
+i|n|i	ᠡᠶ
+i|n|y	ᠢ
+i|n|z	ᠢᠰ
+i|o|z	
+i|p|n	
+i|r|a	ᠶ
+i|r|i	ᠡᠶ
+i|r|y	ᠢ
+i|s|i	ᠡᠶ
+i|t|g	
+i|t|i	ᠡᠶ
+i|t|r	
+i|t|z	ᠢᠰ
+i|v|a	ᠢᠶᠠ
+i|v|i	ᠡᠶ
+i|v|y	ᠢ
+i|y|m	ᠢ
+i|z|$	ᠶ᠎ᠠ
+i|z|i	ᠡᠶ
+j|$|f	ᠵᠦ
+j|$|u	ᠵᠦ
+j|^|a	ᠵᠢ
+j|a|a	ᠵᠢᠶ
+j|a|e	ᠵᠠᠢ
+j|a|i	ᠵ
+j|a|m	ᠵᠤ
+j|a|u	ᠵᠢᠭ
+j|d|e	ᠵᠠᠢ
+j|d|i	ᠵ
+j|d|m	ᠵᠠᠢ
+j|d|u	ᠵ
+j|e|$	ᠵᠦ
+j|e|e	ᠵᠢᠭ
+j|e|i	ᠵ
+j|e|m	ᠵᠠᠢ
+j|e|u	ᠵᠢᠭ
+j|g|$	ᠵᠢ
+j|g|e	ᠵᠢᠶ
+j|g|f	ᠵ
+j|g|i	ᠵ
+j|g|u	ᠵᠢᠭ
+j|h|e	ᠵᠠᠢ
+j|h|f	ᠵᠢᠭ
+j|h|m	ᠵᠠᠢ
+j|h|u	ᠵᠢᠭ
+j|i|e	ᠵᠠᠢ
+j|i|m	ᠵ
+j|k|m	ᠵ
+j|l|a	ᠵᠢᠶ
+j|l|e	ᠵ
+j|l|i	ᠵ
+j|l|m	ᠵᠤ
+j|l|u	ᠵᠦ
+j|m|$	ᠵᠢ
+j|m|a	ᠵᠢᠶ᠎ᠠ
+j|m|e	ᠵᠢᠶ
+j|m|i	ᠵ
+j|m|u	ᠵᠢᠭ
+j|n|$	ᠵᠢ
+j|n|a	ᠵ
+j|n|e	ᠵᠢᠭ
+j|n|m	ᠵ
+j|n|o	ᠵᠢᠶ᠎ᠠ
+j|o|e	ᠵᠠᠢ
+j|o|l	ᠵᠣ
+j|o|m	ᠵ
+j|o|o	ᠵᠢᠭᠠ
+j|o|t	ᠵᠣ
+j|o|u	ᠵᠢᠭ
+j|r|a	ᠵᠢᠶ
+j|r|e	ᠵ
+j|r|i	ᠵ
+j|r|u	ᠵ
+j|s|e	
+j|s|i	ᠵ
+j|t|e	ᠵᠠᠢ
+j|t|i	ᠵ
+j|t|u	ᠵᠢᠭ
+j|u|$	ᠵᠦ
+j|u|a	ᠵ
+j|u|e	ᠵ
+j|u|f	ᠵᠢᠭ
+j|u|m	ᠵᠢᠭ
+j|v|a	ᠵ
+j|v|e	ᠵᠢᠭ
+j|v|f	ᠵᠢᠭ
+j|v|m	ᠵ
+j|v|o	ᠵᠢᠶ᠎ᠠ
+j|v|u	ᠵᠢᠭ
+k|C|f	ᠺ
+k|n|$	ᠬᠢ
+k|n|y	ᠬ
+k|u|$	
+l|C|i	ᠯᠦ
+l|C|o	ᠯᠠ
+l|S|o	ᠯᠠ
+l|T|o	ᠯᠠ
+l|^|h	
+l|a|S	ᠯᠠ
+l|a|l	ᠯᠠ
+l|a|n	ᠯᠠ
+l|a|r	ᠯᠠ
+l|a|s	ᠯᠠᠭ
+l|e|l	ᠯᠡ
+l|e|n	ᠯᠡ
+l|e|r	ᠯᠡ
+l|e|s	ᠯᠡᠭ
+l|e|v	ᠯᠡ
+l|g|o	ᠯᠠ
+l|g|y	ᠯᠧᠧ
+l|h|o	ᠯᠠ
+l|i|C	ᠯᠡ
+l|i|S	ᠯᠢ
+l|i|n	ᠯᠠ
+l|i|o	ᠯᠠ
+l|i|r	ᠯᠡ
+l|i|s	ᠯᠠᠭ
+l|i|v	ᠯᠡ
+l|j|o	ᠯᠠ
+l|l|$	
+l|l|o	ᠯᠠ
+l|m|i	ᠯᠠ
+l|m|o	ᠯᠠ
+l|n|a	ᠯ
+l|n|e	ᠯ
+l|n|f	ᠯᠦ
+l|n|h	ᠯ
+l|n|i	ᠯ
+l|n|u	ᠯ
+l|o|S	ᠯᠠ
+l|o|n	ᠯᠠ
+l|o|r	ᠯᠣ
+l|o|s	ᠯᠠᠭ
+l|r|o	ᠯᠠ
+l|r|s	ᠯᠠᠭ
+l|s|i	ᠯᠠ
+l|s|o	ᠯᠠ
+l|t|o	ᠯᠠ
+l|u|S	ᠯᠠ
+l|u|l	ᠯᠤ
+l|u|r	ᠯᠠ
+l|u|s	ᠯᠤᠭ
+l|u|y	
+l|v|o	ᠯᠠ
+l|v|u	ᠯᠡ
+l|z|o	ᠯᠠ
+m|C|o	ᠮᠠ
+m|S|o	ᠮᠠ
+m|T|f	ᠮᠡ
+m|^|y	ᠮ
+m|a|h	ᠮᠠ
+m|a|r	ᠮᠠ
+m|d|o	ᠮᠠ
+m|d|u	ᠮᠡ
+m|e|T	ᠮᠡ
+m|e|g	ᠮᠡ
+m|e|l	ᠮᠡ
+m|e|r	ᠮᠡ
+m|e|u	ᠮᠡ
+m|g|a	ᠮ
+m|g|e	ᠮ
+m|g|f	ᠮᠡ
+m|g|u	ᠮ
+m|h|u	ᠮᠡ
+m|i|T	ᠮᠡ
+m|i|b	
+m|i|o	ᠮᠠ
+m|i|r	ᠮᠤ
+m|m|$	
+m|o|d	ᠮᠣ
+m|o|g	ᠮᠣ
+m|o|h	ᠮᠣ
+m|o|r	ᠮᠣ
+m|s|o	ᠮᠠ
+m|s|u	
+m|t|o	ᠮᠠ
+m|t|u	ᠮᠡ
+m|u|S	ᠮᠠ
+m|u|r	ᠮᠥ
+m|u|s	
+m|u|t	ᠮᠡ
+m|y|m	ᠮ
+m|z|e	ᠮᠦ
+n|C|a	ᠨ᠎
+n|C|e	ᠨ᠎
+n|C|o	ᠨ᠎ᠠ
+n|S|$	ᠨ
+n|S|e	ᠨ᠎
+n|T|a	ᠨ᠎
+n|T|e	ᠨ᠎
+n|a|l	ᠩ
+n|a|o	ᠨᠸ᠎
+n|b|f	ᠩ
+n|b|u	ᠩ
+n|d|a	ᠨ᠎
+n|d|e	ᠨ᠎
+n|d|i	
+n|d|o	ᠨ᠎ᠠ
+n|e|e	ᠨ᠎
+n|e|l	ᠩ
+n|e|y	ᠨᠧ
+n|g|a	ᠨ
+n|g|e	ᠨ
+n|g|f	ᠨ
+n|g|i	ᠨ
+n|g|o	ᠩᠨᠠ
+n|g|u	ᠨ
+n|h|a	ᠨ
+n|h|e	ᠨ᠎
+n|h|i	ᠨ
+n|h|o	ᠨ
+n|i|a	ᠨ᠎
+n|i|b	ᠩ
+n|i|e	ᠨᠢᠶ
+n|i|l	ᠩ
+n|i|o	ᠨ᠎ᠠ
+n|i|y	ᠨᠧ
+n|l|o	ᠨ᠎ᠠ
+n|l|u	ᠨ᠎ᠡ
+n|n|$	
+n|n|a	
+n|n|e	ᠨᠢ
+n|o|b	ᠩ
+n|o|r	ᠩ
+n|o|s	ᠨᠣ
+n|o|y	ᠨᠧ
+n|r|$	ᠨ
+n|r|i	ᠨ
+n|r|o	ᠨ᠎ᠠ
+n|r|u	ᠨ᠎ᠡ
+n|s|$	ᠨ
+n|s|a	ᠨ᠎
+n|s|e	ᠨ᠎
+n|s|i	ᠨ
+n|s|o	ᠨ᠎ᠠ
+n|t|e	ᠨ᠎
+n|t|y	ᠨᠧ
+n|u|b	ᠩ
+n|u|l	ᠩ
+n|u|n	ᠩ
+n|u|r	
+n|u|s	ᠨᠦ
+n|v|a	ᠨ᠎
+n|y|f	ᠨᠧ
+n|z|y	ᠨ᠋ᠧ
+o|C|h	ᠣ
+o|C|n	
+o|S|h	ᠣ
+o|S|u	ᠣᠭ
+o|T|h	ᠣ
+o|T|j	
+o|T|o	ᠣᠭ
+o|^|h	ᠣ
+o|^|o	ᠣᠭ
+o|a|$	ᠣ
+o|b|$	ᠣ
+o|b|h	ᠣ
+o|b|o	ᠣᠭ
+o|d|$	ᠣ
+o|d|T	
+o|d|j	
+o|d|s	
+o|d|y	ᠣᠶ᠋
+o|e|$	ᠣ᠋
+o|g|i	
+o|h|C	ᠣ
+o|h|S	ᠣ
+o|h|T	ᠣ
+o|h|d	ᠣ
+o|h|h	ᠣ
+o|h|j	ᠣ
+o|h|l	ᠣ
+o|h|n	ᠣ
+o|h|o	ᠣᠭ
+o|h|p	ᠣ
+o|h|r	ᠣ
+o|h|s	ᠣ
+o|h|t	ᠣ
+o|h|v	ᠣ
+o|h|y	ᠣ
+o|i|C	
+o|i|d	
+o|i|g	
+o|i|h	ᠣ
+o|i|j	
+o|i|l	
+o|i|n	
+o|i|r	
+o|i|s	
+o|i|t	
+o|j|l	
+o|k|$	ᠣ
+o|k|o	ᠣ
+o|l|$	ᠣ
+o|l|S	ᠤ
+o|l|g	
+o|l|j	
+o|l|l	
+o|l|n	
+o|l|s	
+o|l|v	
+o|l|y	
+o|m|$	ᠣ᠋
+o|m|h	ᠣ
+o|n|a	
+o|n|d	
+o|n|o	ᠣ
+o|n|z	
+o|o|S	ᠣᠭ
+o|o|g	ᠣ
+o|o|j	ᠣ
+o|o|l	ᠣ
+o|o|p	ᠣ
+o|o|s	ᠣ
+o|p|$	ᠣ
+o|p|o	ᠣ
+o|r|$	ᠣ
+o|r|i	
+o|r|v	
+o|s|$	ᠣ
+o|s|j	
+o|s|n	
+o|t|$	ᠣ
+o|t|C	
+o|t|h	ᠣ
+o|t|i	
+o|t|o	ᠣᠭ
+o|v|$	ᠣ
+o|v|d	
+o|v|l	
+o|y|h	ᠣ
+o|y|r	
+o|y|u	
+o|z|o	ᠣᠭ
+p|p|e	
+p|s|f	ᠫᠧ
+r|C|i	ᠷᠡ
+r|C|o	ᠷᠠ
+r|S|o	ᠷᠠ
+r|^|e	ᠷᠧ
+r|^|f	ᠷᠧ
+r|a|n	ᠷᠠ
+r|a|s	ᠷᠠᠭ
+r|b|f	ᠷᠧ
+r|d|o	ᠷᠠ
+r|e|n	ᠷᠡ
+r|e|s	ᠷᠡᠭ
+r|g|i	ᠷᠡ
+r|h|o	ᠷᠠ
+r|i|S	ᠷᠢ
+r|i|n	ᠷᠠ
+r|i|o	ᠷᠠ
+r|j|o	ᠷᠠ
+r|k|f	ᠷᠧ
+r|m|o	ᠷᠠ
+r|n|f	ᠷᠡ
+r|n|m	ᠷᠠ
+r|s|o	ᠷᠠ
+s|$|f	ᠰᠦ
+s|C|o	ᠰᠠ
+s|S|o	ᠰᠠ
+s|T|o	ᠰᠠ
+s|a|$	ᠰᠤ
+s|a|C	ᠰᠤ
+s|a|d	ᠰᠤ
+s|a|j	ᠰᠤ
+s|a|l	ᠰᠤ
+s|a|n	ᠰᠤ
+s|a|r	ᠰᠤ
+s|a|t	ᠰᠤ
+s|a|v	ᠰᠠ
+s|d|o	ᠰᠠ
+s|d|u	ᠰᠡ
+s|e|$	ᠰᠦ
+s|e|d	ᠰᠦ
+s|e|i	ᠰᠡ
+s|e|j	ᠰᠦ
+s|e|l	ᠰᠦ
+s|e|n	ᠰᠦ
+s|e|r	ᠰᠡ
+s|g|C	ᠰᠦ
+s|g|g	ᠰᠠ
+s|g|l	ᠰᠡ
+s|g|n	ᠰᠠ
+s|g|r	ᠰᠠ
+s|g|s	ᠰᠣᠭ
+s|g|v	ᠰᠣ
+s|g|z	ᠰᠣ
+s|h|o	ᠰᠠ
+s|h|u	ᠭᠰᠡ
+s|i|i	ᠰᠠ
+s|i|n	ᠰᠦ
+s|i|o	ᠰᠠ
+s|i|r	ᠰᠤ
+s|j|f	ᠰᠦ
+s|j|m	ᠰᠤ
+s|j|o	ᠰᠠ
+s|j|u	ᠰᠡ
+s|l|o	ᠰᠠ
+s|l|t	ᠰᠤ
+s|l|u	ᠰᠡ
+s|m|d	ᠰᠠ
+s|m|e	ᠰᠦ
+s|m|f	ᠰᠦ
+s|m|i	ᠰᠠ
+s|m|l	ᠰᠤ
+s|m|o	ᠰᠠ
+s|m|r	ᠰᠠ
+s|m|s	ᠰᠠᠭ
+s|m|t	ᠰᠤ
+s|n|$	ᠰᠡ
+s|n|f	ᠰᠦ
+s|n|g	ᠰᠦ
+s|n|i	ᠰᠦ
+s|n|j	ᠰᠦ
+s|n|l	ᠰᠡ
+s|n|r	ᠰᠠ
+s|n|s	ᠰᠤᠭ
+s|o|d	ᠰᠣ
+s|o|l	ᠰᠣ
+s|o|n	ᠰᠤ
+s|o|o	ᠰᠠ
+s|o|r	ᠰᠣ
+s|o|s	ᠰᠤᠭ
+s|o|t	ᠰᠣ
+s|r|S	ᠰᠦ
+s|r|i	ᠰᠥ
+s|r|j	ᠰᠦ
+s|r|s	ᠰᠤᠭ
+s|r|t	ᠰᠤ
+s|r|u	ᠰᠡ
+s|s|$	
+s|s|l	
+s|s|o	ᠰᠠ
+s|s|u	ᠰᠡ
+s|t|f	ᠰᠦ
+s|u|a	ᠰᠤ
+s|u|i	ᠰᠤ
+s|u|j	ᠰᠤ
+s|u|l	ᠰᠦ
+s|u|n	ᠰᠦ
+s|u|r	ᠰᠦ
+s|u|s	ᠰᠤᠭ
+s|v|$	ᠰᠠ
+s|v|C	ᠰᠤ
+s|v|d	ᠰᠣ
+s|v|g	ᠰᠠ
+s|v|l	ᠰᠠ
+s|v|o	ᠰᠤ
+s|v|r	ᠰᠤ
+s|v|t	ᠰᠦ
+t|$|f	ᠲᠦ
+t|$|m	ᠲᠠ
+t|$|u	ᠲᠦ
+t|C|m	ᠲᠠ
+t|C|o	ᠲᠠ
+t|C|u	ᠲᠡ
+t|S|o	ᠲᠤ
+t|S|u	ᠲᠡ
+t|T|e	ᠳ
+t|T|f	ᠳ
+t|T|o	ᠲᠠ
+t|^|y	ᠲᠧ
+t|a|S	
+t|a|h	ᠳ
+t|a|i	ᠲᠤ
+t|a|j	ᠲᠤ
+t|a|l	ᠲᠤ
+t|a|n	ᠲᠠ
+t|a|o	ᠲ᠋
+t|a|r	ᠲᠠ
+t|a|v	ᠲᠠ
+t|d|a	ᠲ
+t|d|e	ᠲ
+t|d|f	ᠲᠡ
+t|e|$	ᠲ
+t|e|C	ᠲ᠋
+t|e|a	ᠲ᠋
+t|e|h	ᠳ
+t|e|l	ᠲᠡ
+t|e|m	ᠲ᠋
+t|e|o	ᠲ᠋
+t|e|r	ᠲ᠋
+t|f|a	ᠲ᠋
+t|f|m	ᠲ᠋
+t|g|C	ᠲᠣ
+t|g|S	
+t|g|a	ᠲ
+t|g|e	ᠲ
+t|g|h	ᠲᠣ
+t|g|i	ᠲᠠ
+t|g|m	ᠲᠠ
+t|g|n	ᠲᠠ
+t|g|o	ᠲᠠ
+t|g|r	ᠲᠠ
+t|g|u	ᠲ
+t|g|v	ᠲᠠ
+t|h|$	ᠲᠦ
+t|h|e	ᠲ
+t|h|f	ᠲ
+t|h|u	ᠲ
+t|i|C	ᠲᠠ
+t|i|a	ᠲᠤ
+t|i|e	ᠲᠦ
+t|i|i	ᠲ᠋
+t|i|l	ᠲᠡ
+t|i|m	ᠲᠤ
+t|i|n	ᠲᠤ
+t|i|o	ᠲᠠ
+t|i|r	ᠲᠠ
+t|i|t	ᠲ᠋
+t|j|o	ᠲᠠ
+t|k|$	ᠲ
+t|l|$	ᠲᠠ
+t|l|C	ᠲᠤ
+t|l|S	
+t|l|a	ᠲ
+t|l|e	ᠲ
+t|l|f	ᠲᠡ
+t|l|g	ᠲᠠ
+t|l|i	ᠲ
+t|l|l	ᠲᠤ
+t|l|n	ᠲᠤ
+t|l|r	ᠲᠦ
+t|l|u	ᠲ
+t|m|$	ᠲᠦ
+t|m|C	ᠲᠡ
+t|m|S	ᠲᠠ
+t|m|d	ᠲᠤ
+t|m|f	ᠲᠡ
+t|m|g	ᠲᠠ
+t|m|j	ᠲᠠ
+t|m|m	ᠲᠠ
+t|m|o	ᠲᠤ
+t|m|r	ᠲᠡ
+t|m|t	ᠲᠠ
+t|m|u	ᠲᠡ
+t|n|$	ᠲ
+t|n|g	ᠲᠠ
+t|n|i	ᠲ᠋
+t|n|r	ᠲᠠ
+t|o|a	ᠲ᠋
+t|o|g	ᠳᠬᠠ
+t|o|n	ᠲᠣ
+t|r|$	ᠲ
+t|r|S	
+t|r|d	ᠲᠡ
+t|r|h	ᠲᠡ
+t|r|l	ᠲᠡ
+t|r|n	ᠲᠠ
+t|r|t	ᠲᠠ
+t|r|v	ᠲᠡ
+t|s|$	ᠲ
+t|s|i	ᠲ᠋
+t|s|o	ᠲᠠ
+t|s|r	ᠲ᠋
+t|t|$	
+t|t|f	ᠲᠡ
+t|u|C	ᠲᠡ
+t|u|S	
+t|u|d	ᠲᠦ
+t|u|i	ᠲ᠋
+t|u|l	ᠲᠦ
+t|u|n	ᠲᠦ
+t|u|o	ᠲ᠋
+t|u|r	ᠲᠤ
+t|v|C	ᠲᠤ
+t|v|e	ᠲᠦ
+t|v|f	ᠲᠦ
+t|v|g	ᠲᠠ
+t|v|l	ᠲᠡ
+t|v|m	ᠲᠤ
+t|v|n	ᠲᠤ
+t|v|o	ᠲᠤ
+t|v|r	ᠲᠡ
+u|$|m	
+u|C|C	ᠥ
+u|C|f	ᠦ
+u|C|h	ᠤ
+u|C|r	ᠥ
+u|C|t	
+u|C|u	ᠤ
+u|S|a	ᠤ
+u|S|d	
+u|S|f	ᠦ
+u|S|h	
+u|S|i	ᠦ
+u|S|l	
+u|S|n	
+u|S|r	
+u|S|t	
+u|S|v	
+u|T|C	ᠥ
+u|T|d	ᠦ
+u|T|f	ᠦ
+u|T|g	ᠥ
+u|T|h	ᠥ
+u|T|i	ᠤᠶ
+u|T|j	
+u|T|n	ᠦ
+u|T|s	
+u|T|t	
+u|T|u	ᠥ
+u|T|z	ᠦ
+u|^|$	ᠥ
+u|^|S	ᠥ
+u|^|T	ᠥ
+u|^|f	ᠦ
+u|^|g	ᠦ
+u|^|i	ᠦ
+u|^|j	ᠥ
+u|^|s	ᠥ
+u|^|u	ᠥ
+u|^|v	
+u|^|z	ᠦ
+u|a|C	ᠤᠢ
+u|a|d	ᠦ᠋
+u|a|n	
+u|b|$	
+u|b|C	ᠦ
+u|b|f	ᠦ
+u|b|g	ᠥ
+u|b|h	ᠥ
+u|b|i	ᠤᠶ
+u|b|n	ᠥ
+u|b|r	ᠦ
+u|b|t	ᠦ
+u|b|u	ᠥ
+u|d|$	ᠦ
+u|d|C	ᠥ
+u|d|S	
+u|d|d	ᠦ
+u|d|f	ᠡᠭᠦ
+u|d|i	ᠦ
+u|d|j	
+u|d|m	ᠠᠭᠤ
+u|d|n	ᠦ
+u|d|r	ᠤ
+u|d|s	ᠤ
+u|d|u	ᠠᠭᠤ
+u|d|v	ᠦ
+u|f|f	ᠤ
+u|f|n	ᠦ
+u|f|u	ᠦ
+u|g|$	
+u|g|T	
+u|g|f	ᠦ
+u|g|g	ᠥ
+u|g|h	
+u|g|i	ᠦ
+u|g|j	
+u|g|r	
+u|g|s	
+u|g|u	
+u|g|z	ᠦ
+u|h|S	ᠥ
+u|h|T	
+u|h|d	ᠥ
+u|h|g	ᠥ
+u|h|h	ᠥ
+u|h|i	ᠤᠶ
+u|h|j	
+u|h|m	
+u|h|t	ᠥ
+u|h|y	
+u|h|z	ᠥ
+u|i|f	ᠦ
+u|i|u	ᠦ
+u|j|g	
+u|j|m	ᠤ
+u|j|n	ᠤ
+u|j|r	
+u|j|t	
+u|j|u	ᠤ
+u|k|b	ᠦ
+u|k|i	ᠦ
+u|k|l	ᠦᠶᠢ
+u|k|m	ᠦ
+u|k|n	ᠦᠶᠢ
+u|l|d	ᠦ
+u|l|g	
+u|l|i	ᠤᠶ
+u|l|j	
+u|l|m	
+u|l|v	ᠥ
+u|l|y	
+u|m|C	ᠥ
+u|m|T	
+u|m|d	ᠥᠳ
+u|m|f	ᠥ
+u|m|g	ᠥ
+u|m|h	ᠥ
+u|m|i	ᠤᠶ
+u|m|j	ᠤ
+u|m|l	ᠥ
+u|m|r	ᠥ
+u|m|s	ᠥ
+u|m|u	ᠥ
+u|n|T	ᠦ
+u|n|a	
+u|n|f	ᠦ
+u|n|j	
+u|n|l	ᠥ
+u|n|n	ᠤ
+u|n|r	ᠤ
+u|o|l	ᠠᠭᠤ
+u|p|i	ᠦ
+u|p|m	ᠦ
+u|p|s	ᠤᠶᠢ
+u|p|t	ᠦ᠋
+u|r|f	ᠦ
+u|r|g	
+u|r|k	ᠤᠶᠢ
+u|r|r	ᠤ
+u|r|s	ᠦ᠋
+u|r|v	ᠥ
+u|s|d	ᠤ
+u|s|f	ᠦ
+u|s|i	ᠦ
+u|s|l	ᠦ
+u|s|p	ᠤ
+u|s|r	ᠤ
+u|s|s	ᠦ
+u|s|v	ᠤ
+u|s|y	ᠦ
+u|s|z	ᠦ
+u|t|C	ᠥ
+u|t|S	ᠦ
+u|t|d	
+u|t|f	ᠦ
+u|t|g	ᠦ
+u|t|h	ᠥ
+u|t|i	ᠤᠶ
+u|t|l	ᠥ
+u|t|r	ᠦ
+u|t|u	ᠥ
+u|t|v	ᠦ
+u|u|S	
+u|u|T	
+u|u|g	
+u|u|j	
+u|u|m	
+u|u|p	
+u|u|t	
+u|u|y	
+u|v|S	
+u|v|f	ᠦ
+u|v|g	ᠦ
+u|v|h	ᠦ
+u|v|l	ᠦ
+u|v|n	ᠥ
+u|v|r	ᠦ
+u|v|u	ᠥ
+u|y|C	ᠠᠭᠤ
+u|y|d	ᠦ
+u|y|f	ᠦ
+u|y|n	ᠦ
+u|y|r	ᠤᠶᠢ
+u|y|s	ᠤᠭ
+u|y|t	ᠦ
+u|y|u	ᠦ
+u|y|v	ᠠᠭᠤ
+u|z|C	ᠥ
+u|z|d	ᠦ
+u|z|f	ᠦ
+u|z|h	
+u|z|i	ᠦ
+u|z|n	ᠥ
+u|z|r	
+u|z|s	ᠦ
+u|z|t	
+u|z|u	ᠠᠭᠤ
+u|z|v	ᠥ
+v|$|f	ᠪᠡ
+v|$|u	ᠪ
+v|C|e	ᠡᠪ
+v|T|e	ᠪᠦ
+v|T|u	ᠪᠦ
+v|a|l	ᠪᠠ
+v|a|n	ᠪᠠ
+v|a|r	ᠪᠠ
+v|d|a	ᠪᠤ
+v|d|e	ᠪᠦ
+v|d|o	ᠪᠤ
+v|e|$	ᠪᠡ
+v|e|g	ᠪᠡ
+v|e|m	ᠸ
+v|e|r	ᠪᠡ
+v|g|a	ᠪᠤ
+v|g|f	ᠪᠡ
+v|g|u	ᠪ
+v|h|a	ᠪᠤ
+v|h|i	ᠪᠡ
+v|h|o	ᠪᠠ
+v|i|$	ᠪ
+v|i|S	ᠪᠤ
+v|i|i	ᠸ
+v|i|l	ᠪᠢ
+v|i|o	ᠪᠠ
+v|i|r	ᠪᠡ
+v|i|s	ᠪᠢ
+v|l|o	ᠪᠠ
+v|m|m	ᠪᠤ
+v|n|a	ᠸ
+v|n|m	ᠪᠠ
+v|o|T	ᠪᠣ
+v|o|a	ᠸ
+v|o|g	ᠪᠣ
+v|o|n	ᠪᠠ
+v|o|r	ᠪᠣ
+v|o|s	ᠪᠠ
+v|r|l	ᠸ
+v|s|a	ᠪᠤ
+v|s|e	ᠪᠦ
+v|s|o	ᠪᠠ
+v|t|o	ᠪᠤ
+v|u|$	ᠪ
+v|u|g	ᠪ
+v|u|n	ᠪᠦ
+v|u|r	ᠪᠤ
+y|S|a	ᠶ
+y|S|u	ᠶ
+y|^|e	ᠶ
+y|^|f	ᠶ
+y|b|f	
+y|b|u	ᠶ
+y|e|e	ᠶ᠎
+y|e|f	ᠶ᠎
+y|g|f	
+y|g|u	
+y|h|f	
+y|i|e	ᠶ᠎
+y|i|o	ᠶ᠎ᠠ
+y|i|u	ᠶ
+y|k|u	ᠶ
+y|l|a	ᠶ
+y|l|o	ᠶ
+y|l|u	ᠶ
+y|m|a	ᠢ
+y|m|m	ᠢ
+y|n|f	
+y|n|u	ᠶ
+y|p|a	ᠢ
+y|t|u	ᠶ
+y|u|e	ᠶ
+y|u|f	ᠶ
+z|$|f	ᠵᠡ
+z|$|u	ᠵᠡ
+z|S|m	ᠵᠢ
+z|S|u	ᠵᠠ
+z|a|l	ᠵᠠ
+z|a|o	ᠽ
+z|d|f	ᠵᠡ
+z|e|$	ᠽ
+z|e|g	ᠵᠡ
+z|e|i	ᠵ
+z|e|l	ᠵᠡ
+z|e|m	ᠽ
+z|g|a	ᠵ
+z|g|e	ᠵ
+z|g|f	ᠵᠡ
+z|g|l	ᠵᠡ
+z|g|o	ᠵ
+z|g|u	ᠵᠡ
+z|h|d	ᠵ
+z|i|a	ᠵ
+z|i|f	ᠵ
+z|i|l	ᠵᠠ
+z|i|m	
+z|i|n	ᠽᠢ
+z|l|i	ᠵ
+z|l|l	ᠵᠠ
+z|l|o	ᠵᠠ
+z|m|m	
+z|n|a	ᠵ
+z|n|e	ᠵ
+z|n|f	ᠵᠡ
+z|n|g	ᠵᠡ
+z|n|o	ᠵ
+z|n|u	ᠵᠡ
+z|o|g	ᠵᠣ
+z|o|l	ᠵᠣ
+z|r|a	ᠵ
+z|r|f	ᠵᠡ
+z|r|i	ᠵ
+z|r|o	ᠵ
+z|r|u	ᠵᠡ
+z|s|m	ᠵᠠᠭ
+z|s|o	ᠵ
+z|u|S	ᠵᠠ
+z|u|i	ᠵᠡ
+z|u|l	ᠵᠠ
+z|u|r	ᠵᠡ
+z|u|v	ᠵᠡ
+z|v|f	ᠵᠡ
+C|^|i|m	ᠴ
+C|^|o|m	ᠴ
+C|^|u|f	ᠴᠢ
+C|^|u|m	ᠴᠢ
+C|^|u|u	ᠴᠢ
+C|d|i|f	ᠴ
+C|e|i|m	ᠴ
+C|g|i|u	ᠴ
+C|g|u|m	ᠴᠢᠭ
+C|g|u|u	ᠴᠢᠭ
+C|h|u|f	ᠴ
+C|i|m|f	ᠴᠢ
+C|i|s|f	ᠴᠡᠭ
+C|i|u|m	ᠴ
+C|i|u|u	ᠴᠢᠭ
+C|l|g|u	ᠴᠥ
+C|l|i|u	ᠴ
+C|l|u|f	ᠴ
+C|l|u|m	ᠴ
+C|l|u|u	ᠴ
+C|m|u|m	ᠴ
+C|n|u|m	ᠴ
+C|n|u|u	ᠴᠡ
+C|r|e|f	ᠴ
+C|r|i|u	ᠴ
+C|r|u|f	ᠴᠢᠭ
+C|r|u|m	ᠴᠢᠭ
+C|r|u|u	ᠴ
+C|s|i|u	ᠴ
+C|s|u|f	ᠴᠢᠭ
+C|s|u|u	ᠴᠢᠭ
+C|t|i|f	ᠴ
+C|t|i|m	ᠴ
+C|t|i|u	ᠴ
+C|u|d|f	ᠴᠦ
+C|u|e|f	ᠴ
+C|u|i|f	ᠴ
+C|u|i|m	ᠴ
+C|u|u|m	ᠴ
+C|u|u|u	ᠴᠢᠭ
+C|v|h|u	ᠴᠢ
+C|v|i|u	ᠴ
+S|^|u|f	ᠰᠢ
+S|^|u|m	ᠰᠢ
+S|^|y|f	ᠱᠧ
+S|g|$|m	ᠰᠢ
+S|g|d|m	ᠰᠢ
+S|g|l|m	ᠰᠢ
+S|g|m|f	ᠰᠢ
+S|g|r|m	ᠰᠢ
+S|h|i|f	ᠰ
+S|h|u|f	ᠰᠢᠭ
+S|i|$|m	ᠰᠢ
+S|i|$|u	ᠰᠢ
+S|i|d|m	ᠰᠢ
+S|i|g|u	ᠰᠬᠢ
+S|i|l|f	
+S|i|l|m	ᠰᠢ
+S|i|r|m	ᠰᠢ
+S|i|u|f	ᠰᠢᠭ
+S|i|u|m	ᠰᠢᠭ
+S|i|u|u	ᠰᠢᠭ
+S|i|y|m	ᠱᠧ
+S|l|u|f	ᠰᠢᠭ
+S|m|$|m	ᠰᠢ
+S|m|g|m	ᠰᠢ
+S|m|l|m	ᠰᠢ
+S|m|r|f	ᠰᠢ
+S|m|r|m	ᠰᠢ
+S|m|u|f	ᠰᠢᠭ
+S|n|m|m	ᠰᠢ
+S|o|$|m	ᠰᠢ
+S|o|d|m	ᠰᠢ
+S|o|l|m	ᠰᠢ
+S|o|r|m	ᠰᠢ
+S|r|m|m	ᠰᠢ
+S|r|u|u	ᠰᠢᠶᠡ
+S|u|$|m	ᠰᠢ
+S|u|g|f	ᠰᠬᠢ
+S|u|l|m	ᠰᠢ
+S|u|m|f	ᠰᠢ
+S|u|r|m	ᠱ
+S|u|t|m	ᠰᠢ
+S|v|$|m	ᠰᠢ
+S|v|e|f	ᠰᠢᠶ
+S|v|i|f	ᠰ
+S|v|l|m	ᠰᠢ
+S|v|r|m	ᠰᠢ
+S|v|s|f	ᠰᠢᠭ
+S|v|u|f	ᠰᠢᠭ
+S|v|u|u	ᠰᠢᠶᠡ
+S|z|i|m	ᠱ
+T|e|i|m	ᠴᠡ
+T|g|d|m	ᠴᠠ
+T|g|g|f	ᠴᠡ
+T|g|g|m	ᠴᠣ
+T|g|i|u	ᠴᠦ
+T|g|l|m	ᠴᠠ
+T|g|r|m	ᠴᠣ
+T|g|r|u	ᠴᠥ
+T|h|u|f	ᠴ
+T|l|i|m	ᠴᠠ
+T|l|i|u	ᠴᠦ
+T|l|m|m	ᠴᠠ
+T|l|r|f	ᠴᠡ
+T|l|u|u	ᠴᠡ
+T|m|g|m	ᠴᠣ
+T|m|i|u	ᠴᠥ
+T|m|r|m	ᠴᠣ
+T|n|$|u	ᠴᠢ
+T|r|$|u	ᠴᠠ
+T|r|e|f	ᠴ
+T|r|g|m	
+T|r|i|f	ᠴ
+T|r|m|m	ᠴᠠ
+T|r|u|u	ᠴᠡ
+T|u|g|m	
+T|u|g|u	ᠴᠥ
+T|u|l|f	ᠴᠡ
+T|u|m|m	ᠴᠠ
+T|u|u|u	ᠴᠡ
+T|v|g|m	ᠴᠠ
+T|v|u|f	ᠴᠡ
+T|v|u|u	ᠴᠡ
+a|i|m|m	
+a|v|m|m	
+a|y|m|m	
+b|l|u|f	ᠪᠢᠭ
+b|l|u|u	ᠪᠡ
+b|m|i|u	ᠪᠥ
+d|C|u|f	ᠳ
+d|C|u|m	ᠳ
+d|^|i|f	ᠳ
+d|^|y|f	ᠳᠧ
+d|a|m|m	ᠳᠠ
+d|d|u|u	ᠳᠡ
+d|e|m|f	ᠳᠡ
+d|g|$|f	ᠲᠦ
+d|g|$|m	ᠳᠠ
+d|g|d|f	ᠳᠡ
+d|g|d|u	ᠳ
+d|g|g|f	ᠳᠦ
+d|g|i|f	ᠳ
+d|g|j|f	ᠳᠡ
+d|g|l|f	ᠳᠡ
+d|g|m|f	ᠳᠦ
+d|g|m|m	ᠳᠠ
+d|g|r|m	ᠳᠠ
+d|g|s|u	ᠳᠡᠭ
+d|g|u|f	ᠳ
+d|g|u|m	ᠳ
+d|i|m|f	ᠳᠡ
+d|i|n|f	ᠳᠡ
+d|i|r|f	ᠳᠡ
+d|i|t|f	ᠳᠡ
+d|i|u|u	ᠳᠡ
+d|i|v|m	ᠳᠠ
+d|j|a|m	ᠳ
+d|l|$|f	ᠳᠦ
+d|l|$|u	ᠳᠦ
+d|l|g|m	ᠳᠣ
+d|l|l|f	ᠳᠡ
+d|l|m|m	ᠳᠤ
+d|l|r|m	ᠳᠠ
+d|l|r|u	ᠳᠤ
+d|l|s|m	ᠳᠠᠭ
+d|l|v|m	ᠳᠠ
+d|m|$|u	ᠳᠡ
+d|m|u|u	ᠳᠡ
+d|n|$|f	ᠳᠡ
+d|n|$|u	ᠳᠡ
+d|n|C|m	ᠳᠣ
+d|n|d|f	ᠳᠦ
+d|n|g|f	ᠳᠡ
+d|n|g|u	ᠳᠡ
+d|n|l|f	ᠳᠦ
+d|n|l|u	ᠳᠡ
+d|n|m|m	ᠳᠠ
+d|n|r|f	ᠳᠦ
+d|n|s|m	ᠳᠠᠭ
+d|o|m|m	ᠳᠣ
+d|r|$|m	ᠳᠣ
+d|r|$|u	ᠳᠤ
+d|r|d|f	ᠳᠦ
+d|r|g|f	ᠳᠡ
+d|r|g|u	ᠳᠡ
+d|r|h|m	ᠳᠤ
+d|r|l|f	ᠳᠦ
+d|r|m|m	ᠳᠠ
+d|r|u|u	ᠳᠡ
+d|s|u|u	ᠳᠡ
+d|u|C|u	ᠳᠠ
+d|u|d|m	ᠳᠠ
+d|u|d|u	ᠳ
+d|u|e|m	ᠳᠦ
+d|u|g|m	
+d|u|h|u	ᠳᠥ
+d|u|i|m	ᠳᠤ
+d|u|l|m	ᠳᠤ
+d|u|l|u	ᠳᠡ
+d|u|n|m	ᠳᠠ
+d|u|n|u	ᠲᠥ
+d|u|r|f	ᠳᠡ
+d|u|r|u	ᠳᠡ
+d|u|s|u	ᠳᠦᠭ
+d|u|u|u	ᠳᠡ
+d|v|l|f	ᠳᠡ
+d|v|m|u	ᠳᠦ
+d|v|r|m	ᠳ
+d|v|r|u	ᠳᠦ
+e|b|r|m	ᠡ
+e|d|n|m	
+e|e|y|f	
+e|g|e|m	ᠡ
+e|g|r|m	ᠡ
+e|j|e|f	ᠡ
+e|l|h|m	ᠡ
+e|n|$|m	ᠡ
+e|n|e|m	ᠡ
+e|n|g|m	
+e|r|h|m	ᠡ
+e|r|l|m	ᠡ
+e|r|m|f	ᠡ
+e|r|y|f	
+e|s|m|m	ᠡ
+e|s|y|f	
+e|t|C|m	ᠡ
+e|y|$|m	
+e|y|b|f	
+e|y|f|f	
+e|y|g|f	
+e|y|h|f	
+e|y|i|f	
+e|y|j|f	
+e|y|k|f	
+e|y|m|f	
+e|y|n|f	
+e|y|p|f	
+e|y|r|f	
+e|y|s|f	
+e|y|t|f	
+e|y|u|f	
+e|y|v|f	
+e|y|y|f	
+e|y|z|f	
+e|z|m|f	ᠡ
+g|C|i|u	ᠭᠡ
+g|C|u|u	ᠭᠡ
+g|S|i|u	ᠭ
+g|T|u|u	ᠭᠡ
+g|d|u|u	ᠭᠡ
+g|e|m|f	ᠭᠡ
+g|e|s|f	ᠭ
+g|i|l|u	ᠬᠦ
+g|i|n|u	
+g|j|i|f	ᠭᠡ
+g|j|i|u	ᠭᠡ
+g|j|u|u	ᠭᠡ
+g|l|u|u	ᠭᠡ
+g|m|u|m	ᠭ
+g|n|i|u	ᠭ
+g|n|r|m	ᠭ
+g|n|u|f	ᠭ
+g|n|u|m	ᠭ
+g|s|i|f	ᠭ
+g|s|i|u	ᠭᠡ
+g|s|u|f	ᠭ
+g|s|u|m	ᠬ
+g|s|u|u	ᠬᠡ
+g|t|i|m	ᠬ
+g|t|u|u	ᠬᠡ
+g|u|T|m	
+g|u|h|u	ᠭ
+g|u|l|f	ᠭᠡ
+g|u|n|m	
+g|u|r|u	ᠭᠥ
+g|u|s|f	ᠭ
+g|u|u|f	ᠭᠡᠶ
+g|u|v|u	ᠭ
+g|v|u|f	ᠭ
+g|v|u|m	ᠭ
+g|z|u|u	ᠭᠡ
+h|S|i|m	ᠬ
+h|^|i|m	ᠬ
+h|^|u|f	ᠬᠦ
+h|^|u|m	ᠬᠤ
+h|a|i|m	ᠬ
+h|a|m|m	ᠬᠠ
+h|d|i|f	ᠬ
+h|d|i|m	ᠬ
+h|d|u|u	ᠬᠡ
+h|e|n|f	ᠬᠡ
+h|g|i|f	ᠬ
+h|g|i|m	ᠬ
+h|g|i|u	ᠬ
+h|i|$|f	ᠬᠦ
+h|i|$|u	ᠬᠦ
+h|i|a|m	ᠬ
+h|i|g|m	ᠬᠠ
+h|i|i|m	ᠬ
+h|i|l|f	ᠬᠡ
+h|i|m|m	ᠬᠢ
+h|i|n|f	ᠬᠡ
+h|i|r|f	ᠬᠢ
+h|i|s|m	ᠬᠠᠭ
+h|i|t|m	ᠬᠤᠪ
+h|i|t|u	ᠬᠢ
+h|i|u|f	ᠬᠢᠭ
+h|i|u|m	ᠬ
+h|i|u|u	ᠬᠡ
+h|i|v|f	ᠬᠡ
+h|l|$|u	ᠬᠢ
+h|l|i|f	ᠬ
+h|l|i|m	ᠬ
+h|l|l|f	ᠬᠢ
+h|l|m|m	ᠬᠠ
+h|l|r|f	ᠭᠦ
+h|l|s|f	ᠬᠢᠭ
+h|l|u|u	ᠬᠡ
+h|m|$|m	ᠬ᠎ᠠ
+h|m|d|m	ᠬᠠ
+h|m|i|m	ᠬ
+h|m|r|f	ᠬᠢ
+h|m|t|m	ᠬᠠ
+h|m|u|f	ᠬᠢᠭ
+h|m|u|m	ᠬᠤ
+h|m|u|u	ᠬᠢᠭ
+h|n|$|f	ᠬᠢ
+h|n|$|m	ᠬᠣ
+h|n|$|u	ᠬᠢ
+h|n|g|f	ᠬᠦ
+h|n|g|u	ᠬᠦ
+h|n|i|m	ᠬ
+h|n|i|u	ᠬᠦ
+h|n|l|f	ᠬᠡ
+h|n|l|u	ᠬᠡ
+h|n|m|f	ᠬᠦ
+h|n|m|m	ᠬᠤ
+h|n|r|m	ᠬᠠ
+h|n|r|u	ᠬᠡ
+h|n|u|f	ᠬᠦ
+h|n|u|m	ᠬᠤ
+h|o|i|m	ᠬ
+h|r|$|m	ᠬ᠎ᠠ
+h|r|i|m	ᠬ
+h|r|l|m	ᠬᠠ
+h|r|l|u	ᠬᠥ
+h|r|m|m	ᠬᠠ
+h|r|n|f	ᠬᠢ
+h|r|r|u	ᠬᠡ
+h|r|t|m	ᠬᠠ
+h|r|u|f	ᠬ
+h|r|u|m	ᠬᠠ
+h|u|C|u	ᠬᠡ
+h|u|T|u	ᠬᠥ
+h|u|d|m	ᠬᠤ
+h|u|g|f	ᠬᠠ
+h|u|g|m	ᠬᠠ
+h|u|g|u	ᠬ
+h|u|i|m	ᠬ
+h|u|i|u	ᠬᠡ
+h|u|j|u	ᠬᠦ
+h|u|l|m	ᠬᠤ
+h|u|l|u	ᠬᠥ
+h|u|n|f	ᠬᠦ
+h|u|n|u	ᠬᠥ
+h|u|r|f	ᠬᠦ
+h|u|r|m	ᠬᠤ
+h|u|s|f	ᠬᠡᠭ
+h|u|s|m	ᠬᠠ
+h|u|t|f	ᠬᠦ
+h|u|t|m	ᠬᠠ
+h|u|u|f	ᠬ
+h|u|u|m	ᠬ
+h|u|u|u	ᠬ
+h|u|v|u	ᠬᠥ
+h|v|$|m	ᠬ᠎ᠠ
+h|v|T|f	ᠬᠡ
+h|v|g|m	ᠬᠠ
+h|v|i|f	ᠬ
+h|v|i|m	ᠬ
+h|v|i|u	ᠬ
+h|v|l|m	ᠬᠣ
+h|v|r|f	ᠬᠡ
+h|v|r|u	ᠬᠢ
+h|v|t|m	ᠬᠠ
+h|v|u|f	ᠬ
+h|v|u|m	ᠬ
+i|C|C|f	
+i|C|y|f	
+i|T|i|m	
+i|T|i|u	ᠶ
+i|T|y|m	
+i|a|y|m	
+i|b|C|m	
+i|b|i|f	ᠡᠶ
+i|b|i|u	ᠶ
+i|b|r|m	
+i|b|u|m	ᠢᠭ
+i|b|y|m	ᠢ
+i|d|g|m	ᠢᠩ
+i|d|i|m	ᠢ
+i|d|y|m	
+i|g|S|u	
+i|g|i|m	ᠢ
+i|g|i|u	ᠢ
+i|g|j|f	
+i|g|u|m	ᠢᠭ
+i|g|u|u	
+i|h|g|f	
+i|h|i|f	ᠡᠶ
+i|h|s|m	ᠢᠭ
+i|h|u|m	ᠢᠭ
+i|h|v|f	
+i|h|y|m	
+i|i|$|m	ᠢ
+i|i|T|u	ᠢ
+i|i|d|m	
+i|i|g|m	
+i|i|j|m	
+i|i|m|m	
+i|i|s|m	
+i|i|t|m	
+i|i|v|m	
+i|i|z|f	
+i|i|z|u	ᠶᠡ
+i|j|i|f	ᠢᠭ
+i|l|$|f	
+i|l|S|m	
+i|l|g|f	
+i|l|i|f	ᠡᠶ
+i|l|m|f	ᠢᠩ
+i|l|u|m	ᠢᠭ
+i|l|y|m	
+i|m|i|m	ᠢ
+i|m|u|m	ᠢᠭ
+i|m|y|f	
+i|n|i|m	ᠢ
+i|n|u|m	ᠢᠭ
+i|n|u|u	ᠢᠭ
+i|n|v|f	ᠢᠤᠧ
+i|n|v|u	
+i|p|n|u	ᠢ
+i|r|g|f	ᠶᠢ
+i|r|i|m	ᠢ
+i|r|i|u	ᠢ
+i|r|u|m	ᠢᠭ
+i|r|y|f	
+i|s|i|m	ᠢ
+i|s|y|m	
+i|t|i|m	ᠢ
+i|t|i|u	ᠶ
+i|t|y|m	
+i|u|S|m	
+i|u|j|u	ᠶᠦ
+i|u|v|u	
+i|u|y|m	
+i|v|i|m	ᠢ
+i|v|i|u	ᠶ
+i|v|u|m	ᠢᠭ
+i|v|z|m	ᠢᠰ
+i|z|i|m	ᠢ
+j|^|u|f	ᠵ
+j|^|u|m	ᠵᠢ
+j|a|g|m	ᠵᠢ
+j|a|l|m	ᠵᠢ
+j|a|m|m	ᠵᠢ
+j|a|s|m	ᠵᠢᠭ
+j|a|t|m	ᠵᠢ
+j|d|e|f	ᠵ
+j|e|g|f	ᠵᠢ
+j|e|m|f	ᠵᠢ
+j|g|$|f	
+j|g|g|f	ᠵᠢ
+j|g|l|f	ᠵᠢ
+j|g|r|f	ᠵᠢ
+j|g|u|u	ᠵᠢᠭᠡ
+j|h|i|f	ᠵ
+j|h|i|u	ᠵ
+j|i|$|m	ᠵᠤ
+j|i|e|f	ᠵᠢᠭ
+j|i|g|f	ᠵᠢ
+j|i|g|m	ᠵᠢ
+j|i|r|m	ᠵᠢ
+j|i|u|u	ᠵᠡ
+j|l|e|m	ᠵᠠᠢ
+j|l|g|f	ᠵᠢ
+j|l|g|m	ᠵᠢ
+j|l|g|u	ᠵᠢ
+j|l|l|m	ᠵᠢ
+j|l|s|u	ᠵᠢᠭ
+j|l|t|m	ᠵᠢ
+j|l|u|f	ᠵᠢᠭ
+j|l|u|m	ᠵᠢᠭ
+j|l|u|u	ᠵᠢᠭ
+j|m|h|m	ᠵᠢ
+j|m|l|m	ᠵᠢ
+j|m|l|u	ᠵᠢ
+j|n|g|f	ᠵᠢ
+j|n|g|m	ᠵᠢ
+j|n|l|m	ᠵᠢ
+j|n|r|m	ᠵᠢ
+j|n|u|u	ᠵᠢᠭ
+j|o|$|m	ᠵᠤ
+j|o|d|m	ᠵᠢ
+j|o|g|m	ᠵᠢ
+j|r|e|m	
+j|r|g|f	ᠵᠢ
+j|r|u|f	ᠵᠢᠭ
+j|r|u|m	ᠵᠢᠭ
+j|u|g|f	ᠵᠢ
+j|u|g|m	ᠵᠢ
+j|u|i|f	ᠵ
+j|u|l|f	ᠵᠢ
+j|u|l|m	ᠵᠢ
+j|u|l|u	ᠵᠢ
+j|u|m|f	ᠵᠢ
+j|u|r|f	ᠵᠢ
+j|u|r|m	ᠵᠢ
+j|u|r|u	ᠵᠢ
+j|u|u|u	ᠵᠢᠭ
+j|v|$|m	ᠵᠤ
+j|v|$|u	ᠵᠢ
+j|v|i|f	ᠵ
+j|v|l|m	ᠵᠢ
+k|i|$|f	ᠭ
+l|C|u|u	ᠯᠡ
+l|S|u|u	ᠯᠡ
+l|T|u|u	ᠯᠡ
+l|^|y|m	ᠯ
+l|e|l|m	ᠯ
+l|g|i|f	ᠯᠡ
+l|g|u|u	ᠯᠡ
+l|h|i|f	ᠯᠡ
+l|h|u|u	ᠯᠡ
+l|i|C|m	ᠯ
+l|i|C|u	ᠯ
+l|i|S|u	ᠯ
+l|i|d|f	ᠯᠡ
+l|i|j|m	ᠯᠠ
+l|i|m|f	ᠯᠡ
+l|i|m|m	ᠯᠤ
+l|i|n|f	ᠯᠡ
+l|i|r|m	ᠯᠠ
+l|i|s|f	ᠯᠡᠭ
+l|i|s|u	ᠯᠡᠭ
+l|i|v|m	ᠯᠠ
+l|j|u|u	ᠯᠡ
+l|l|u|u	ᠯᠡ
+l|m|u|u	ᠯᠡ
+l|r|u|u	ᠯᠡ
+l|s|u|u	ᠯᠡ
+l|u|S|f	ᠯ
+l|u|S|u	ᠯᠡ
+l|u|i|f	ᠯᠦ
+l|u|l|f	ᠯ
+l|u|l|u	ᠯ
+l|u|n|u	ᠯᠡ
+l|u|r|f	ᠯᠡ
+l|u|r|u	ᠯᠥ
+l|u|s|f	ᠯᠦᠭ
+l|u|s|u	ᠯᠡᠭ
+l|u|v|m	ᠯᠠ
+l|v|i|f	ᠯᠤ
+l|v|u|f	ᠯ
+l|v|u|m	ᠯ
+m|^|s|u	ᠮ
+m|^|y|f	ᠮᠧ
+m|a|y|m	ᠮᠧ
+m|i|b|m	ᠮ
+m|i|d|f	ᠮᠡ
+m|i|d|u	ᠮ
+m|i|g|f	ᠮ
+m|i|h|m	ᠮᠠ
+m|i|r|f	ᠮᠡ
+m|i|s|f	ᠮᠢ
+m|i|t|f	ᠮᠡ
+m|j|u|u	ᠮᠡ
+m|m|$|u	ᠮ
+m|m|m|u	
+m|m|y|m	ᠮᠧ
+m|o|y|m	ᠮᠧ
+m|r|u|u	ᠮᠡ
+m|u|S|u	ᠮᠢ
+m|u|T|f	ᠮ
+m|u|d|m	ᠮᠤ
+m|u|d|u	ᠮ
+m|u|h|f	ᠡᠮ
+m|u|l|f	ᠮᠦ
+m|u|n|f	ᠮᠦ
+m|u|r|f	ᠮᠦ
+m|u|r|m	ᠮᠠ
+m|u|s|m	ᠮᠤ
+m|u|t|f	ᠮ
+m|u|t|m	ᠮᠠ
+m|u|u|m	ᠮᠦ
+n|C|u|u	ᠨᠡ
+n|d|i|m	ᠨ
+n|d|u|u	ᠨ᠎ᠡ
+n|e|b|f	ᠨ
+n|e|g|f	ᠩ
+n|e|g|m	ᠨ
+n|g|u|u	ᠨᠡ
+n|h|u|m	ᠨ
+n|h|u|u	ᠨ᠎ᠡ
+n|i|d|f	ᠩ
+n|i|d|u	ᠩ
+n|i|e|m	ᠨ᠎
+n|i|g|f	ᠩ
+n|i|g|u	ᠩ
+n|i|i|f	ᠨᠤ
+n|i|i|u	ᠨᠤ
+n|i|l|m	ᠨ
+n|i|u|u	ᠨ᠎ᠡ
+n|m|u|u	ᠨᠡ
+n|r|u|f	ᠨᠢᠭ
+n|r|u|m	ᠨᠠ
+n|u|C|u	ᠨᠥ
+n|u|b|m	ᠨ
+n|u|g|f	ᠩ
+n|u|g|u	ᠩ
+n|u|l|f	ᠨ
+n|u|s|m	ᠩ
+n|u|s|u	ᠩ
+n|u|u|u	ᠨ᠎ᠡ
+n|v|u|u	ᠨ᠎ᠡ
+o|h|m|m	ᠣ
+o|i|m|m	
+o|o|m|m	ᠣ
+o|v|m|m	
+p|^|y|m	ᠫ
+r|S|u|u	ᠷᠡ
+r|T|u|u	ᠷᠡ
+r|e|b|f	ᠷᠡ
+r|e|n|m	ᠷ
+r|e|v|m	ᠷᠠ
+r|g|u|u	ᠷᠡ
+r|h|u|u	ᠷᠡ
+r|i|C|m	ᠷᠠᠵᠤ
+r|i|T|f	ᠷᠢ
+r|i|l|m	ᠷᠠ
+r|i|n|f	ᠷᠡ
+r|i|s|f	ᠷᠡᠭ
+r|j|u|u	ᠷᠡ
+r|l|u|u	ᠷᠡ
+r|n|o|m	ᠷ
+r|o|n|m	ᠷ
+r|u|T|f	ᠷᠢ
+r|u|j|f	ᠷᠡ
+r|u|l|m	ᠷᠠ
+r|u|n|f	ᠷ
+r|u|n|u	ᠷᠡ
+r|u|s|m	ᠷᠠ
+r|v|u|u	ᠷᠡ
+s|^|t|f	ᠰ
+s|a|m|m	ᠰᠠ
+s|d|u|f	ᠰ
+s|e|$|m	ᠰ
+s|e|l|m	ᠰ
+s|g|$|m	ᠰᠠ
+s|g|C|m	ᠰᠤ
+s|g|d|m	ᠰᠠ
+s|g|g|f	ᠰᠡ
+s|g|g|u	ᠰ
+s|g|i|m	ᠰᠣ
+s|g|i|u	ᠰᠡ
+s|g|l|f	ᠰ
+s|g|r|f	ᠰᠦ
+s|i|$|f	ᠰ
+s|i|d|m	ᠰᠤ
+s|i|d|u	ᠰ
+s|i|s|f	ᠰᠦᠭ
+s|i|s|u	ᠰ
+s|i|t|f	ᠰ
+s|i|u|u	ᠭᠰᠡ
+s|j|a|m	ᠰ
+s|j|e|f	ᠰ
+s|k|$|f	ᠰ
+s|l|$|f	ᠰ
+s|l|$|m	ᠰᠤ
+s|l|$|u	ᠰ
+s|l|g|u	ᠰ
+s|l|l|u	ᠰᠥ
+s|l|t|f	ᠰᠦ
+s|l|t|m	ᠰ
+s|l|u|f	ᠰ
+s|l|u|m	ᠰ
+s|m|$|f	ᠰ
+s|m|$|m	ᠰᠤ
+s|m|d|u	ᠰ
+s|m|g|f	ᠰᠡ
+s|m|g|m	ᠰᠠ
+s|m|l|f	ᠰ
+s|m|l|u	ᠰᠦ
+s|m|t|m	ᠰᠠ
+s|m|u|f	ᠰ
+s|n|$|m	ᠰ
+s|n|e|f	ᠰ
+s|n|g|m	ᠰ
+s|n|i|m	ᠰ
+s|n|l|m	ᠰᠠ
+s|n|r|f	ᠰᠡ
+s|n|s|f	ᠰᠦᠭ
+s|n|t|f	ᠰ
+s|n|u|f	ᠰ
+s|n|u|m	ᠰᠢᠭ
+s|o|j|m	ᠰ
+s|r|$|f	ᠰ
+s|r|$|m	ᠰᠤ
+s|r|$|u	ᠰᠦ
+s|r|g|f	ᠰᠦ
+s|r|g|u	ᠰ
+s|r|i|m	ᠰᠤ
+s|r|l|m	ᠰᠤ
+s|r|l|u	ᠰᠥ
+s|r|m|m	ᠰᠤ
+s|r|u|f	ᠰ
+s|r|u|m	ᠰ
+s|u|$|f	ᠰ
+s|u|C|m	ᠰᠤ
+s|u|d|f	ᠰᠦ
+s|u|d|m	ᠰᠤ
+s|u|d|u	ᠰ
+s|u|j|u	ᠰᠡ
+s|u|l|m	ᠰᠤ
+s|u|m|m	ᠰᠤ
+s|u|n|m	ᠰᠤ
+s|u|n|u	ᠰᠥ
+s|u|r|m	ᠰᠠ
+s|u|r|u	ᠰᠡ
+s|u|s|f	ᠰᠡᠭ
+s|u|s|u	ᠰᠦᠭ
+s|u|t|m	ᠰᠠ
+s|u|t|u	ᠰᠥ
+s|u|v|f	ᠰᠡ
+s|v|$|f	ᠰᠦ
+s|v|$|u	ᠰ
+s|v|d|f	ᠰᠦ
+s|v|g|f	ᠰᠡ
+s|v|g|u	ᠰ
+s|v|i|u	ᠰᠥ
+s|v|l|f	ᠰᠦ
+s|v|r|f	ᠰᠡ
+s|v|t|m	ᠰᠤ
+t|C|a|m	ᠲ
+t|^|e|m	ᠲ
+t|a|$|m	ᠲᠤ
+t|a|C|m	ᠲ
+t|a|g|m	ᠳ
+t|e|$|f	ᠲᠦ
+t|e|i|m	ᠲ᠋
+t|e|r|f	ᠲᠦ
+t|g|$|m	ᠲᠤ
+t|g|$|u	ᠲᠤ
+t|g|g|u	ᠲᠦ
+t|g|i|u	ᠲᠦ
+t|g|r|f	ᠲᠡ
+t|g|r|u	ᠲᠥ
+t|h|$|m	ᠲᠤ
+t|h|g|f	ᠳ
+t|h|u|u	ᠲᠡ
+t|i|$|m	ᠲᠤ
+t|i|d|m	ᠲᠠ
+t|i|e|f	ᠲ
+t|i|g|f	ᠲᠡ
+t|i|g|m	ᠳ
+t|i|l|m	ᠲᠠ
+t|i|n|f	ᠲ
+t|i|r|f	ᠲᠡ
+t|i|r|u	ᠲ᠋
+t|i|u|m	ᠲ
+t|i|y|m	ᠲ᠋ᠧ
+t|k|i|m	ᠲ᠋
+t|l|$|f	ᠲᠡ
+t|l|$|u	ᠲᠡ
+t|l|C|m	ᠲᠣ
+t|l|C|u	ᠲᠦ
+t|l|g|f	ᠳ
+t|l|g|u	ᠲ
+t|l|i|m	ᠲᠤ
+t|l|i|u	ᠲᠦ
+t|l|l|f	ᠲᠡ
+t|l|r|m	ᠲᠠ
+t|l|r|u	ᠲᠥ
+t|m|$|m	ᠲᠠ
+t|m|C|m	ᠲᠤ
+t|m|a|m	ᠲ
+t|m|e|f	ᠲ
+t|m|g|f	ᠲᠡ
+t|m|g|u	ᠲᠡ
+t|m|i|f	ᠲ
+t|m|r|m	ᠲᠤ
+t|m|u|m	ᠲ
+t|n|$|m	ᠲᠤ
+t|n|e|m	ᠲ
+t|n|g|f	ᠲᠡ
+t|n|g|u	ᠲ
+t|n|i|f	ᠲ
+t|n|i|u	ᠲᠦ
+t|n|l|f	ᠲ᠋
+t|n|r|u	ᠲᠥ
+t|o|$|m	ᠲᠤ
+t|o|i|m	ᠲ
+t|r|$|f	ᠲᠦ
+t|r|$|u	ᠲᠦ
+t|r|d|m	ᠲᠤ
+t|r|g|u	ᠳᠬᠡ
+t|r|i|m	ᠲ᠋
+t|r|i|u	ᠲᠦ
+t|r|l|m	ᠲ
+t|r|l|u	ᠲᠦ
+t|r|v|m	ᠲᠠ
+t|s|$|u	ᠲᠦ
+t|s|g|m	ᠳ
+t|s|r|f	ᠲ
+t|t|e|f	ᠲ
+t|u|$|f	ᠲᠡ
+t|u|$|m	ᠲᠤ
+t|u|$|u	ᠲᠤ
+t|u|g|m	ᠳ
+t|u|g|u	ᠳ
+t|u|l|m	ᠲᠠ
+t|u|n|m	ᠲᠠ
+t|u|r|f	ᠲᠦ
+t|v|$|m	ᠲᠤ
+t|v|$|u	ᠲᠤ
+t|v|a|m	ᠲ
+t|v|g|f	ᠲᠡ
+t|v|g|u	ᠳ
+t|v|l|m	ᠲᠣ
+t|v|m|f	ᠲᠡ
+t|v|n|f	ᠲᠦ
+t|v|r|m	ᠲᠠ
+t|v|u|f	ᠲ
+t|v|u|m	ᠲ
+u|C|d|f	ᠦᠢ
+u|C|d|u	
+u|C|l|f	
+u|C|l|u	
+u|C|m|f	
+u|C|m|u	
+u|C|u|f	ᠦ
+u|C|u|u	ᠦ
+u|S|l|m	ᠤ
+u|S|n|u	ᠥ
+u|S|r|f	ᠦ
+u|S|r|u	ᠥ
+u|S|u|m	ᠤ
+u|S|u|u	
+u|S|v|u	ᠥ
+u|T|d|u	
+u|T|g|f	ᠦ
+u|T|g|m	ᠤ
+u|T|h|m	ᠤ
+u|T|l|m	ᠤ
+u|T|n|m	ᠤ
+u|T|s|u	ᠦ
+u|T|u|f	ᠡᠭᠦ
+u|T|u|m	ᠠᠭᠤ
+u|T|u|u	ᠥᠭᠡ
+u|^|C|f	ᠥ
+u|^|C|u	ᠥ
+u|^|T|m	ᠤ
+u|^|b|u	ᠤ
+u|^|d|f	ᠦ
+u|^|d|m	ᠤ
+u|^|d|u	
+u|^|f|m	ᠤ
+u|^|g|m	ᠤ
+u|^|g|u	ᠥ
+u|^|h|m	ᠤ
+u|^|i|m	ᠤᠶ
+u|^|j|m	ᠤ
+u|^|l|m	ᠤ
+u|^|s|f	ᠦ
+u|^|s|m	ᠤ
+u|^|u|f	ᠡᠭᠦ
+u|^|u|m	ᠠᠭᠤ
+u|^|u|u	ᠥᠭᠡ
+u|^|v|m	ᠤ
+u|b|S|u	ᠤ
+u|b|d|f	ᠦ
+u|b|d|m	ᠤ
+u|b|d|u	ᠤ
+u|b|f|f	ᠤ
+u|b|g|f	ᠦ
+u|b|g|m	ᠤ
+u|b|h|m	ᠤ
+u|b|j|u	ᠦ
+u|b|l|m	ᠤ
+u|b|n|f	ᠦ
+u|b|n|m	ᠤ
+u|b|r|m	ᠤ
+u|b|s|u	ᠦ
+u|b|t|m	ᠤ
+u|b|t|u	ᠤ
+u|b|u|f	ᠦ
+u|b|u|m	ᠠᠭᠤ
+u|b|u|u	ᠥᠭᠡ
+u|d|a|m	ᠤᠸ
+u|d|d|m	ᠤ
+u|d|g|m	ᠤ
+u|d|h|f	
+u|d|h|m	ᠤ
+u|d|h|u	
+u|d|i|m	ᠤᠶ
+u|d|j|f	ᠥ
+u|d|j|m	ᠤ
+u|d|l|f	ᠦ
+u|d|l|m	ᠤ
+u|d|l|u	
+u|d|m|m	ᠤ
+u|d|m|u	ᠥ
+u|d|n|m	ᠤ
+u|d|r|f	ᠦ
+u|d|r|u	ᠥ
+u|d|s|u	ᠦ
+u|d|t|f	ᠥ
+u|d|t|m	ᠤ
+u|d|u|f	ᠡᠭᠦ
+u|d|u|u	ᠡᠭᠦ
+u|e|d|f	ᠥᠭᠡ
+u|g|$|m	ᠤ
+u|g|S|u	ᠤ
+u|g|d|f	ᠦ
+u|g|d|m	ᠤ
+u|g|d|u	
+u|g|g|f	ᠦ
+u|g|i|m	ᠤᠶ
+u|g|i|u	ᠤ
+u|g|j|f	ᠦ
+u|g|l|m	ᠤ
+u|g|l|u	ᠥ
+u|g|m|f	ᠦ
+u|g|m|u	ᠦ
+u|g|r|m	ᠤ
+u|g|t|u	
+u|g|u|f	ᠦ
+u|g|u|m	ᠤ
+u|g|v|u	
+u|h|C|f	
+u|h|C|u	
+u|h|T|u	ᠥ
+u|h|a|m	ᠤᠸ
+u|h|d|m	
+u|h|g|m	
+u|h|h|m	
+u|h|i|f	
+u|h|i|u	
+u|h|l|u	ᠥ
+u|h|m|f	ᠥ
+u|h|m|u	ᠥ
+u|h|n|f	
+u|h|n|u	ᠥ
+u|h|r|f	
+u|h|r|u	ᠥ
+u|h|s|f	
+u|h|t|m	
+u|h|u|f	ᠦ
+u|h|u|m	ᠠᠭᠤ
+u|h|u|u	ᠥᠭᠡ
+u|h|v|f	ᠥ
+u|h|y|f	ᠥ
+u|h|z|f	
+u|i|$|m	ᠤ
+u|i|$|u	ᠤ
+u|i|d|m	ᠤ
+u|i|h|m	ᠤ
+u|i|l|m	ᠤ
+u|i|n|u	ᠤ
+u|i|r|u	ᠤ
+u|j|i|u	ᠤ
+u|j|j|u	ᠦ
+u|j|n|u	ᠦ
+u|j|r|u	ᠦ
+u|j|u|f	ᠦ
+u|j|u|u	ᠦ
+u|k|m|m	ᠦ᠋
+u|l|g|m	ᠤ
+u|l|h|m	ᠤ
+u|l|j|m	ᠤ
+u|l|n|m	ᠤ
+u|l|r|f	
+u|l|t|u	ᠤ
+u|l|u|f	ᠡᠭᠦ
+u|l|u|m	ᠠᠭᠤ
+u|m|S|f	ᠥ
+u|m|g|f	ᠦ
+u|m|g|m	ᠤ
+u|m|h|f	
+u|m|h|m	ᠤ
+u|m|l|m	ᠤ
+u|m|n|f	ᠥ
+u|m|r|m	ᠤ
+u|m|t|u	ᠥᠳ
+u|m|u|f	ᠡᠭᠦ
+u|m|u|m	ᠠᠭᠤ
+u|m|u|u	ᠥᠭᠡ
+u|n|$|m	ᠤ
+u|n|d|f	
+u|n|d|m	
+u|n|d|u	
+u|n|g|f	ᠥ
+u|n|g|u	ᠥ
+u|n|h|m	ᠤ
+u|n|j|m	ᠤ
+u|n|l|m	ᠤ
+u|n|n|u	
+u|n|r|f	ᠦ
+u|n|r|u	
+u|n|s|m	
+u|n|t|u	ᠤ
+u|n|u|f	ᠡᠭᠦ
+u|n|u|m	ᠠᠭᠤ
+u|n|u|u	ᠥᠭᠡ
+u|o|$|m	ᠤ
+u|o|d|m	ᠤ
+u|p|d|u	ᠦ
+u|p|m|u	ᠥ
+u|p|u|m	ᠤ
+u|r|i|u	ᠤᠶ
+u|r|m|f	ᠦ
+u|r|m|u	
+u|r|u|f	ᠡᠭᠦ
+u|r|u|m	ᠠᠭᠤ
+u|r|v|f	ᠦ
+u|s|d|u	ᠥ
+u|s|g|f	ᠥ
+u|s|g|u	ᠥ
+u|s|h|m	ᠤ
+u|s|i|m	ᠤᠶ
+u|s|j|u	
+u|s|l|m	ᠤ
+u|s|m|f	ᠦ
+u|s|m|u	ᠦ
+u|s|p|m	ᠦ
+u|s|r|f	ᠦ
+u|s|r|u	ᠥ
+u|s|s|u	ᠥ
+u|s|u|f	ᠡᠭᠦ
+u|s|u|m	ᠠᠭᠤ
+u|s|v|f	ᠦ
+u|s|v|u	ᠥ
+u|t|S|m	ᠤ
+u|t|d|f	ᠦ
+u|t|d|m	ᠦ᠋
+u|t|g|m	ᠤ
+u|t|h|f	ᠤ
+u|t|h|m	ᠤ
+u|t|i|f	ᠦ
+u|t|j|u	ᠦ
+u|t|l|f	ᠦ
+u|t|l|m	ᠤ
+u|t|m|f	ᠦ
+u|t|n|u	ᠤ
+u|t|r|m	ᠤ
+u|t|r|u	ᠥ
+u|t|u|f	ᠦᠭ
+u|t|u|m	ᠤᠭ
+u|t|u|u	ᠥᠭᠡ
+u|t|v|u	ᠥ
+u|u|C|f	
+u|u|C|u	
+u|u|d|f	
+u|u|d|m	
+u|u|d|u	
+u|u|g|m	ᠤ
+u|u|n|f	
+u|u|r|f	
+u|u|s|f	
+u|u|u|m	ᠤ
+u|u|u|u	ᠦ
+u|u|v|f	
+u|u|v|m	ᠤ
+u|u|v|u	
+u|u|z|m	ᠤ
+u|u|z|u	ᠤ
+u|v|l|u	
+u|v|u|f	ᠡᠭᠦ
+u|v|u|m	ᠠᠭᠤ
+u|v|u|u	
+u|y|$|m	ᠤ
+u|y|$|u	ᠤ
+u|y|d|m	ᠤ
+u|y|g|f	ᠡᠭᠦ
+u|y|h|m	ᠤ
+u|y|l|f	ᠡᠭᠦ
+u|y|l|m	ᠤ
+u|y|l|u	
+u|y|m|f	ᠠᠭᠤ
+u|y|m|u	ᠠᠭᠤ
+u|y|n|m	ᠤ
+u|y|r|f	ᠡᠭᠦ
+u|y|r|m	ᠤ
+u|y|t|f	ᠡᠭᠦ
+u|y|t|m	ᠦ᠋
+u|z|$|m	ᠤ
+u|z|d|m	ᠤ
+u|z|g|u	ᠥᠩᠨᠡ
+u|z|h|f	ᠦ
+u|z|i|m	ᠤᠶ
+u|z|l|m	ᠤ
+u|z|l|u	ᠤ
+u|z|m|u	
+u|z|n|m	ᠤ
+u|z|r|f	ᠦ
+u|z|r|u	ᠥ
+u|z|s|m	ᠤ
+u|z|s|u	
+u|z|t|m	ᠤ
+u|z|u|f	ᠡᠭᠦ
+u|z|u|u	ᠥᠭᠡ
+u|z|v|m	ᠤ
+v|e|r|m	ᠸ
+v|g|u|u	ᠪᠡ
+v|i|S|f	ᠪ
+v|i|S|u	ᠪ
+v|i|i|m	ᠪᠠ
+v|i|i|u	ᠪᠡ
+v|i|l|u	ᠪ
+v|i|n|u	ᠪᠢ
+v|i|s|f	ᠪᠡ
+v|i|u|m	ᠪᠢᠭ
+v|n|y|m	ᠸᠧ
+v|r|u|u	ᠪᠡ
+v|u|d|m	ᠪᠤ
+v|u|g|f	ᠪᠦ
+v|u|g|m	ᠪᠠ
+v|u|h|m	ᠪᠠ
+v|u|j|u	ᠪᠠ
+v|u|r|f	ᠪᠡ
+v|u|r|u	ᠪᠥ
+v|u|s|f	ᠡᠪᠡ
+y|C|e|f	
+y|S|e|f	
+y|T|e|f	
+y|b|e|f	
+y|d|e|f	
+y|f|e|f	
+y|g|e|f	
+y|h|e|f	
+y|i|e|m	ᠶᠧ
+y|j|e|f	
+y|k|e|f	
+y|l|e|f	
+y|m|e|f	
+y|m|e|m	
+y|m|o|m	ᠶ
+y|n|e|f	
+y|n|u|m	
+y|p|e|f	
+y|r|e|f	
+y|s|e|f	
+y|t|e|f	
+y|v|e|f	
+y|z|e|f	
+z|a|i|m	ᠽ
+z|a|m|m	ᠵᠠ
+z|g|l|m	ᠵᠠ
+z|i|$|m	ᠵᠠ
+z|i|d|m	ᠵᠠ
+z|i|i|m	ᠽ
+z|i|j|f	ᠵᠡ
+z|i|l|f	ᠽᠢ
+z|i|n|m	ᠵᠠ
+z|i|o|m	ᠽ
+z|i|y|f	ᠽᠧ
+z|l|i|m	ᠵᠠ
+z|l|m|m	ᠵᠠ
+z|l|u|u	ᠵᠡ
+z|n|g|m	ᠵᠣ
+z|o|i|m	ᠽ
+z|r|u|m	ᠵ
+z|u|$|u	ᠵᠠ
+z|u|i|u	ᠵ
+z|u|l|f	ᠵᠡ
+z|u|m|f	ᠵᠡ
+C|^|a|m|a	ᠴ
+C|^|a|m|g	ᠴᠢᠩᠨ
+C|^|a|m|l	ᠴ
+C|^|a|m|t	ᠴ
+C|^|i|f|C	ᠴᠡ
+C|^|o|m|n	ᠴᠢ
+C|^|u|f|d	ᠴ
+C|^|u|m|h	ᠴ
+C|^|u|m|u	ᠴᠢᠭ
+C|^|u|u|C	ᠴ
+C|^|u|u|r	ᠴ
+C|^|u|u|u	ᠴ
+C|g|i|u|i	ᠴᠡ
+C|i|e|f|g	ᠴᠢ
+C|i|e|f|h	ᠴᠢ
+C|i|e|f|j	ᠴ
+C|i|e|f|n	ᠴ
+C|r|i|u|l	ᠴᠡ
+C|u|i|f|n	ᠴᠦ
+C|u|i|f|r	ᠴᠦ
+S|^|a|m|S	ᠱ
+S|^|a|m|a	ᠱ
+S|^|a|m|g	ᠱ
+S|^|a|m|j	ᠱ
+S|^|a|m|l	ᠱ
+S|^|a|m|m	ᠱ
+S|^|e|f|n	ᠱᠢ
+S|^|u|f|g	ᠱ
+S|^|u|f|i	ᠱᠡᠶ
+S|^|u|f|r	ᠱ
+S|^|u|f|u	ᠰᠢᠭ
+S|^|u|m|a	ᠱ
+S|^|u|m|g	ᠱ
+S|^|u|m|l	ᠱ
+S|^|u|m|m	ᠱ
+S|^|u|m|u	ᠱ
+S|^|u|u|l	ᠰᠢ
+S|^|u|u|u	ᠰᠢᠭ
+S|^|y|m|a	ᠰᠢ
+S|a|a|m|$	ᠰᠬ᠎
+S|a|a|m|n	ᠰᠬ
+S|a|g|m|u	ᠰᠢ
+S|a|i|m|i	ᠰᠬ
+S|e|e|f|e	ᠰᠢᠭ
+S|e|i|f|g	ᠰ
+S|e|i|f|h	ᠰ
+S|e|i|f|l	ᠰ
+S|e|i|f|n	ᠱ
+S|i|g|f|u	ᠰᠬᠢ
+S|i|i|f|i	ᠰᠬ
+S|i|i|m|i	ᠰᠬ
+S|i|l|f|e	ᠱᠢ
+S|l|i|m|i	ᠰᠬ
+S|n|l|f|e	ᠱᠢ
+S|o|g|m|o	ᠱᠣ
+S|o|i|m|i	ᠰᠬ
+S|o|i|m|n	ᠱᠣ
+S|r|a|m|l	ᠱ
+S|r|e|f|n	ᠰᠬ
+S|r|i|u|i	ᠰᠬ
+S|u|g|f|e	ᠰᠢ
+S|u|g|m|a	ᠰᠢ
+S|u|i|f|i	ᠰᠬ
+S|u|i|u|i	ᠰᠬ
+S|u|u|u|n	ᠰᠬᠡ
+T|^|e|f|s	ᠼᠧ
+T|^|u|m|h	ᠴᠢ
+T|^|u|m|s	ᠴᠢ
+T|^|u|m|t	ᠴᠢ
+T|^|u|u|s	
+T|^|u|u|t	ᠴᠢ
+T|a|C|m|i	ᠴᠠ
+T|a|a|m|g	ᠴᠤ
+T|a|i|m|y	ᠴᠠ
+T|e|e|f|s	ᠴᠦ
+T|e|g|f|i	ᠴᠡ
+T|g|a|m|n	
+T|g|o|m|l	ᠴᠠ
+T|g|o|m|n	
+T|g|u|u|u	ᠴᠡᠭᠡ
+T|i|o|m|i	ᠴ
+T|i|o|m|o	ᠴᠠᠭ᠎ᠠ
+T|l|g|m|o	ᠴᠣ
+T|l|o|m|h	ᠴᠠ
+T|l|o|m|j	ᠴᠠ
+T|l|o|m|o	ᠴᠠᠭ᠎ᠠ
+T|l|r|m|a	ᠴᠠ
+T|l|u|u|g	ᠴ
+T|l|u|u|u	ᠴᠡᠭᠡ
+T|m|g|f|e	ᠴᠡ
+T|n|a|m|n	
+T|n|a|m|r	ᠴᠢ
+T|n|e|f|r	ᠴᠢ
+T|n|o|m|h	ᠴᠠ
+T|n|o|m|l	ᠴᠠ
+T|n|o|m|r	ᠴᠢ
+T|o|o|m|h	ᠴᠠ
+T|r|e|f|n	
+T|r|o|m|n	
+T|u|a|m|n	
+T|u|e|f|n	
+T|u|g|u|u	ᠴᠡ
+T|u|u|u|g	ᠴ
+T|u|u|u|u	ᠴ
+a|C|g|m|n	ᠠ
+a|C|m|m|i	ᠠ
+a|C|t|m|h	
+a|S|a|m|$	
+a|S|a|m|s	ᠠᠭ
+a|S|a|m|v	
+a|S|a|m|z	ᠠᠭ
+a|S|g|m|l	
+a|S|g|m|n	ᠠᠩ
+a|S|h|m|i	ᠠ
+a|S|l|m|g	
+a|S|l|m|t	
+a|S|l|m|z	
+a|S|m|m|a	
+a|S|m|m|d	
+a|S|m|m|l	
+a|S|m|m|n	
+a|S|n|m|$	ᠠ
+a|S|n|m|T	ᠠ
+a|S|n|m|d	ᠠ
+a|S|n|m|h	ᠠ
+a|S|n|m|l	ᠠ
+a|S|n|m|z	ᠠ
+a|S|r|m|C	ᠠ
+a|S|r|m|i	ᠠ
+a|S|r|m|j	ᠠ
+a|S|r|m|m	ᠠ
+a|S|r|m|t	ᠠ
+a|S|r|m|z	ᠠ
+a|S|t|m|l	ᠠ
+a|S|v|m|S	ᠠ
+a|S|v|m|i	ᠠ
+a|T|T|m|l	ᠰᠠ
+a|T|T|m|r	ᠰᠠ
+a|T|a|m|$	ᠠᠭ᠎
+a|T|i|m|$	ᠠ
+a|T|r|m|$	
+a|T|r|m|a	
+a|^|a|m|$	ᠠ
+a|^|a|m|a	ᠠᠢᠶ
+a|^|a|m|n	ᠠ
+a|^|g|m|n	ᠠᠩ
+a|^|i|m|g	ᠠ
+a|^|i|m|h	ᠠ
+a|^|i|m|j	ᠠ
+a|^|i|m|n	ᠠ
+a|a|C|m|a	
+a|a|C|m|i	
+a|a|C|m|s	
+a|a|C|m|u	
+a|a|S|m|$	
+a|a|g|m|a	
+a|a|g|m|d	
+a|a|g|m|n	
+a|a|g|m|u	
+a|a|h|m|a	
+a|a|h|m|g	
+a|a|h|m|i	
+a|a|l|m|$	
+a|a|l|m|T	
+a|a|l|m|h	
+a|a|l|m|j	
+a|a|l|m|n	
+a|a|m|m|t	
+a|a|n|m|a	ᠠ
+a|a|n|m|b	ᠠ
+a|a|n|m|i	ᠠ
+a|a|n|m|t	ᠠ
+a|a|r|m|$	
+a|a|r|m|g	
+a|a|r|m|i	
+a|a|r|m|l	
+a|a|r|m|t	
+a|a|s|m|a	
+a|a|v|m|g	ᠠ
+a|a|v|m|t	ᠠ
+a|a|y|m|u	ᠠ
+a|b|a|m|$	ᠠᠭ᠎
+a|b|a|m|g	ᠠ
+a|b|i|m|$	ᠠ
+a|b|r|m|$	
+a|b|r|m|l	
+a|d|C|m|l	ᠠ
+a|d|T|m|$	
+a|d|a|m|$	ᠠᠭ᠎
+a|d|a|m|C	ᠠ
+a|d|a|m|g	ᠠ
+a|d|a|m|n	ᠠ
+a|d|a|m|p	ᠠ
+a|d|a|m|v	ᠠ
+a|d|a|m|y	ᠠ
+a|d|g|m|n	ᠠᠩ
+a|d|i|m|$	ᠠ
+a|d|i|m|j	
+a|d|i|m|n	
+a|d|i|m|r	ᠠ
+a|d|l|m|g	
+a|d|l|m|s	
+a|d|m|m|S	
+a|d|r|m|C	
+a|g|C|m|a	
+a|g|C|m|u	
+a|g|g|m|n	ᠠᠩ
+a|g|i|m|C	ᠠᠶ
+a|g|i|m|d	ᠠᠶ
+a|g|i|m|g	ᠠᠶ
+a|g|i|m|h	ᠠᠶ
+a|g|i|m|l	ᠠᠶ
+a|g|i|m|n	ᠠᠶ
+a|g|i|m|r	ᠠᠶ
+a|g|i|m|s	ᠠᠶ
+a|g|i|m|t	ᠠᠶ
+a|g|i|m|v	ᠠᠶ
+a|g|l|m|d	
+a|g|m|m|a	
+a|g|m|m|h	
+a|g|m|m|l	
+a|g|m|m|t	
+a|g|n|m|T	ᠠᠭ
+a|g|s|m|a	ᠠᠭ
+a|g|s|m|u	
+a|g|v|m|C	
+a|h|a|m|$	ᠠ
+a|h|a|m|C	ᠠ
+a|h|a|m|S	ᠠ
+a|h|a|m|y	ᠠ
+a|h|i|m|$	ᠠ
+a|h|l|m|n	
+a|h|m|m|b	ᠠᠩ
+a|h|m|m|l	
+a|h|r|m|l	
+a|h|v|m|$	
+a|i|C|m|i	
+a|i|d|m|a	
+a|i|h|m|$	ᠠ
+a|i|l|m|$	ᠠ
+a|i|l|m|a	ᠠ
+a|i|l|m|n	ᠠ
+a|i|t|m|$	ᠠ
+a|j|a|m|$	
+a|j|l|m|b	ᠠ
+a|j|l|m|d	ᠠ
+a|j|r|m|$	ᠠ
+a|j|v|m|S	ᠠ
+a|l|a|m|C	ᠠᠭ
+a|l|a|m|T	ᠠᠭ
+a|l|a|m|d	ᠠᠭ
+a|l|a|m|l	ᠠᠭ
+a|l|a|m|n	ᠠᠭ
+a|l|a|m|r	ᠠᠭ
+a|l|a|m|s	ᠠᠭ
+a|l|a|m|t	ᠠᠭ
+a|l|g|m|$	
+a|l|g|m|a	
+a|l|g|m|n	ᠠᠩ
+a|l|h|m|a	ᠠ
+a|l|h|m|d	ᠠ
+a|l|h|m|g	ᠠ
+a|l|h|m|s	ᠠ
+a|l|h|m|u	ᠠ
+a|l|i|m|$	ᠠ
+a|l|m|m|d	
+a|l|m|m|g	
+a|l|m|m|l	
+a|l|n|m|C	
+a|l|n|m|T	
+a|l|s|m|$	ᠠ
+a|l|s|m|s	ᠠ
+a|l|v|m|$	
+a|m|a|m|d	ᠠᠭ
+a|m|a|m|h	
+a|m|a|m|j	ᠠᠭ
+a|m|a|m|l	ᠠᠭ
+a|m|a|m|m	
+a|m|a|m|p	
+a|m|a|m|s	ᠠᠭ
+a|m|a|m|y	
+a|m|a|m|z	ᠠᠭ
+a|m|g|m|n	ᠠᠩ
+a|m|h|m|C	
+a|m|h|m|a	
+a|m|h|m|l	
+a|m|i|m|$	ᠠ
+a|m|i|m|g	
+a|m|l|m|T	
+a|m|r|m|j	
+a|m|r|m|s	
+a|m|s|m|$	
+a|m|s|m|t	
+a|n|a|m|$	ᠠᠭ᠎
+a|n|a|m|g	ᠠ
+a|n|a|m|j	ᠠ
+a|n|a|m|r	ᠠ
+a|n|a|m|z	ᠠ
+a|n|h|m|a	
+a|n|i|m|$	ᠠ
+a|n|m|m|g	
+a|n|s|m|a	ᠠᠭ
+a|p|a|m|d	ᠠᠭ
+a|p|i|m|$	ᠠ
+a|r|a|m|$	ᠠᠭ᠎
+a|r|a|m|g	ᠠ
+a|r|a|m|m	ᠠ
+a|r|a|m|v	ᠠ
+a|r|g|m|$	ᠠ
+a|r|g|m|C	ᠠ
+a|r|g|m|d	ᠠ
+a|r|g|m|l	ᠠ
+a|r|g|m|n	ᠠᠩ
+a|r|h|m|a	
+a|r|i|m|C	ᠠᠶ
+a|r|i|m|T	ᠠᠲᠤᠭᠰ
+a|r|i|m|d	ᠠᠶ
+a|r|i|m|g	ᠠᠶ
+a|r|i|m|h	ᠠᠶ
+a|r|i|m|j	ᠠᠶ
+a|r|i|m|l	ᠠᠶ
+a|r|i|m|n	ᠠᠶ
+a|r|i|m|s	ᠠᠶ
+a|r|i|m|t	ᠠᠶ
+a|r|l|m|T	
+a|r|m|m|C	
+a|r|m|m|S	
+a|r|m|m|T	
+a|r|m|m|g	
+a|r|m|m|n	
+a|r|m|m|t	
+a|r|r|m|$	
+a|r|v|m|C	ᠠ
+a|r|v|m|t	ᠠ
+a|s|a|m|$	ᠠ
+a|s|a|m|C	ᠠ
+a|s|a|m|n	ᠠ
+a|s|g|m|d	
+a|s|g|m|n	
+a|s|h|m|$	
+a|s|i|m|$	ᠠ
+a|s|j|m|$	
+a|s|l|m|$	
+a|s|l|m|T	
+a|s|m|m|$	
+a|s|m|m|t	
+a|s|r|m|g	
+a|s|r|m|h	
+a|s|v|m|$	
+a|t|C|m|l	
+a|t|T|m|a	ᠠᠲᠠᠭᠰ
+a|t|a|m|$	ᠠᠭ᠎
+a|t|d|m|a	ᠠᠴᠢ
+a|t|g|m|n	ᠠᠩ
+a|t|h|m|a	ᠠ
+a|t|h|m|i	ᠠ
+a|t|h|m|l	ᠠ
+a|t|h|m|u	ᠠ
+a|t|i|m|g	ᠠᠶ
+a|t|i|m|h	ᠠᠶ
+a|t|i|m|l	ᠠᠶ
+a|t|i|m|n	ᠠᠶ
+a|t|i|m|r	ᠠᠶ
+a|t|i|m|t	ᠠᠶ
+a|t|i|m|v	ᠠᠶ
+a|t|i|m|z	ᠠᠶ
+a|t|l|m|g	
+a|t|l|m|j	
+a|t|r|m|$	
+a|t|s|m|g	
+a|t|v|m|i	ᠠᠯ
+a|u|i|m|$	ᠠ
+a|v|a|m|d	ᠠᠭ
+a|v|a|m|r	ᠠᠭ
+a|v|a|m|s	ᠠᠭ
+a|v|a|m|t	ᠠᠭ
+a|v|g|m|C	
+a|v|g|m|d	
+a|v|g|m|n	
+a|v|h|m|$	ᠠ
+a|v|i|m|$	ᠠ
+a|v|l|m|T	
+a|v|l|m|a	
+a|v|l|m|d	
+a|v|l|m|j	
+a|v|l|m|t	
+a|v|m|m|g	ᠠ
+a|v|n|m|a	
+a|v|n|m|h	
+a|v|r|m|C	ᠠ
+a|v|r|m|d	ᠠ
+a|v|r|m|s	ᠠ
+a|v|s|m|a	ᠠᠭ
+a|v|s|m|l	
+a|y|d|m|l	
+a|y|g|m|C	
+a|y|g|m|t	
+a|y|h|m|n	
+a|y|h|m|t	
+a|y|i|m|$	ᠠ
+a|y|l|m|i	ᠠ
+a|y|l|m|j	ᠠ
+a|y|l|m|l	ᠠ
+a|y|l|m|n	ᠠ
+a|y|l|m|s	ᠠ
+a|y|m|m|$	ᠠ
+a|y|m|m|b	ᠠᠩ
+a|y|m|m|l	ᠠ
+a|y|m|m|t	ᠠ
+a|y|n|m|T	
+a|y|n|m|a	
+a|y|n|m|u	
+a|y|n|m|z	
+a|y|r|m|a	
+a|y|r|m|g	
+a|y|r|m|m	
+a|y|r|m|t	
+a|y|r|m|u	
+a|y|r|m|v	
+a|y|r|m|z	
+a|y|s|m|l	
+a|y|s|m|n	
+a|y|s|m|u	
+a|y|t|m|$	ᠠ
+a|y|t|m|a	ᠠ
+a|y|t|m|o	ᠠ
+a|y|v|m|T	
+a|y|v|m|t	
+a|z|a|m|$	᠎ᠠ
+a|z|a|m|j	ᠠ
+a|z|a|m|v	ᠠ
+a|z|g|m|n	ᠠᠩ
+a|z|h|m|s	ᠰᠠ
+a|z|i|m|$	ᠠ
+b|^|r|m|i	ᠪᠠ
+b|^|y|m|e	ᠪᠧ
+b|l|a|m|r	ᠪᠤ
+b|l|e|f|$	ᠪᠢ
+b|l|e|f|d	
+b|l|e|f|n	ᠪᠢ
+b|l|i|m|o	ᠪᠢ
+b|l|i|m|r	ᠪᠠ
+b|l|u|f|r	ᠪᠳ
+b|l|u|u|u	ᠪᠢᠭ
+b|m|e|f|$	ᠪᠦ
+b|m|e|f|C	ᠪᠦ
+b|m|e|f|d	ᠪᠦ
+b|m|e|f|r	ᠪᠦ
+b|n|e|f|$	ᠪ
+d|^|i|f|z	ᠳ᠋
+d|^|i|m|a	ᠳ᠋ᠢ
+d|^|o|m|k	ᠳ᠋
+d|a|C|m|i	ᠳ
+d|a|g|m|i	ᠳ
+d|a|g|m|u	ᠳᠤ
+d|a|h|m|a	ᠳᠠ
+d|a|i|m|l	ᠳᠠ
+d|a|i|m|r	ᠳᠠ
+d|a|r|m|y	ᠳ᠋
+d|e|e|f|C	ᠳᠦ
+d|e|e|f|v	ᠳᠦ
+d|g|a|m|S	ᠳᠤ
+d|g|a|m|i	ᠳᠤᠶ
+d|g|a|m|r	ᠳᠤ
+d|g|g|m|a	ᠳᠠ
+d|g|l|m|a	ᠳᠠ
+d|g|o|m|i	ᠳ
+d|g|o|m|l	ᠳ
+d|g|o|m|o	ᠳᠠᠭᠠ
+d|g|o|m|r	ᠳ
+d|g|u|u|r	ᠳ
+d|g|u|u|u	ᠳ
+d|i|a|m|r	ᠳᠤ
+d|i|e|f|l	ᠳᠦ
+d|i|l|m|o	ᠳᠠ
+d|i|l|m|u	ᠳᠤ
+d|i|o|m|d	ᠳ
+d|i|o|m|n	ᠳ
+d|i|o|m|o	ᠳ
+d|i|o|m|r	ᠳ
+d|i|u|u|u	ᠳ
+d|l|a|m|a	ᠳᠤᠭ
+d|l|a|m|h	ᠳᠤ
+d|l|a|m|j	ᠳᠤ
+d|l|a|m|n	ᠳᠤ
+d|l|a|m|y	ᠳᠤ
+d|l|e|f|h	ᠳᠦ
+d|l|e|f|j	ᠳᠦ
+d|l|e|f|n	ᠳᠦ
+d|l|g|m|a	ᠳᠠ
+d|l|m|m|o	ᠳᠠ
+d|l|o|m|h	ᠳᠤ
+d|l|o|m|i	ᠳ
+d|l|o|m|n	ᠳᠤ
+d|l|o|m|o	ᠳ
+d|l|r|u|u	ᠳᠥ
+d|l|s|m|a	ᠳᠤᠭ
+d|l|u|u|g	ᠳᠡ
+d|m|a|m|j	ᠳᠤ
+d|m|o|m|o	ᠳᠠᠭᠠ
+d|m|u|u|u	ᠳ
+d|n|C|f|i	ᠳᠦ
+d|n|C|m|u	ᠳ
+d|n|d|m|a	ᠳᠤ
+d|n|e|f|l	ᠳᠦ
+d|n|e|f|s	ᠳᠦ
+d|n|e|f|t	ᠳᠦ
+d|n|g|m|o	ᠳᠣ
+d|n|l|m|o	ᠳᠣ
+d|n|o|m|h	ᠳᠠ
+d|n|r|m|o	ᠳᠣ
+d|n|s|f|u	ᠳᠠ
+d|n|u|f|g	ᠳᠡ
+d|n|u|f|l	ᠳᠡ
+d|n|u|u|g	ᠳᠡ
+d|n|u|u|h	ᠳᠡ
+d|n|u|u|l	ᠳᠡ
+d|o|g|m|a	ᠳᠠ
+d|o|i|m|y	ᠳᠣ
+d|o|l|m|u	ᠳ
+d|o|o|m|h	ᠳᠠ
+d|o|o|m|s	ᠳᠠ
+d|r|a|m|t	
+d|r|a|m|v	ᠳᠤ
+d|r|d|m|u	ᠳᠤ
+d|r|e|f|e	ᠳᠦᠭ
+d|r|g|m|o	ᠳᠣ
+d|r|l|m|o	ᠳᠠ
+d|r|o|m|i	ᠳ
+d|r|o|m|l	ᠳ
+d|r|o|m|n	ᠳ
+d|r|o|m|o	ᠳ
+d|r|o|m|s	ᠳ
+d|r|u|u|u	ᠳ
+d|s|o|m|o	ᠳᠠᠭ᠎ᠠ
+d|s|u|u|u	ᠳ
+d|u|e|f|j	ᠳᠦ
+d|u|e|f|s	ᠳᠦ
+d|u|e|f|t	ᠳᠦ
+d|u|e|f|v	ᠳᠦ
+d|u|i|u|i	ᠳᠡ
+d|u|i|u|l	ᠳᠤ
+d|u|l|m|a	ᠳᠠ
+d|u|l|u|i	ᠳᠤ
+d|u|u|f|h	ᠳᠡ
+d|u|u|f|l	ᠳᠡ
+d|u|u|f|r	ᠡᠳ
+d|u|u|u|j	ᠳᠴᠦ
+d|u|u|u|n	ᠳ
+d|u|u|u|r	ᠳ
+d|u|u|u|u	ᠳ
+d|v|l|m|a	ᠳ
+d|v|o|m|r	ᠲ
+d|v|u|u|h	ᠳᠡ
+d|v|u|u|l	ᠳᠡ
+e|C|e|f|$	ᠡᠢ
+e|C|e|f|g	ᠡᠭ
+e|S|e|f|s	ᠡᠭ
+e|T|g|f|n	ᠡᠩ
+e|T|h|f|l	
+e|T|r|f|$	
+e|T|v|f|r	
+e|^|e|f|j	ᠡ
+e|^|e|f|n	ᠡ
+e|^|e|f|v	ᠡᠭᠡᠭ
+e|^|g|f|n	ᠡᠩ
+e|b|e|f|$	ᠡ
+e|b|n|f|t	
+e|b|r|f|$	
+e|b|r|f|l	
+e|b|t|f|e	
+e|d|d|f|e	
+e|d|e|f|g	ᠡ
+e|d|g|f|g	
+e|d|g|f|n	ᠡᠩ
+e|d|l|f|j	
+e|d|l|f|m	
+e|d|l|f|n	
+e|d|m|f|g	
+e|d|r|f|n	
+e|d|s|f|j	
+e|e|C|f|i	
+e|e|S|f|d	ᠡᠭ
+e|e|S|f|e	ᠡᠭ
+e|e|S|f|l	ᠡᠭ
+e|e|T|f|e	
+e|e|T|f|u	
+e|e|g|f|$	ᠡ
+e|e|g|f|C	ᠡ
+e|e|g|f|d	ᠡ
+e|e|g|f|l	ᠡ
+e|e|h|f|i	ᠡ
+e|e|h|f|u	ᠡ
+e|e|j|f|$	
+e|e|l|f|$	
+e|e|l|f|C	
+e|e|l|f|d	
+e|e|l|f|g	
+e|e|l|f|n	
+e|e|m|f|e	ᠡ
+e|e|n|f|T	ᠡ
+e|e|r|f|C	
+e|e|r|f|S	
+e|e|v|f|$	
+e|e|v|f|C	
+e|e|v|f|t	
+e|g|e|f|g	ᠡᠭ
+e|g|e|f|j	ᠡᠭ
+e|g|e|f|l	ᠡᠭ
+e|g|e|f|s	ᠡᠭ
+e|g|e|f|t	ᠡᠭ
+e|g|l|f|C	
+e|g|l|f|e	
+e|g|l|f|i	
+e|g|l|f|j	
+e|g|l|f|r	
+e|g|m|f|n	
+e|g|s|f|$	
+e|g|s|f|e	ᠡᠭ
+e|g|v|f|e	
+e|h|T|f|$	
+e|h|e|f|r	ᠡ
+e|h|e|f|v	ᠡ
+e|h|g|f|n	
+e|h|l|f|T	
+e|h|l|f|d	
+e|h|l|f|j	
+e|h|m|f|$	
+e|h|m|f|l	
+e|h|r|f|$	
+e|h|t|f|g	
+e|h|v|f|$	
+e|j|e|f|$	ᠡᠢ
+e|l|e|f|C	ᠡᠭ
+e|l|e|f|d	ᠡᠭ
+e|l|e|f|h	ᠡᠭ
+e|l|e|f|r	ᠡᠭ
+e|l|e|f|s	ᠡᠭ
+e|l|g|f|d	ᠡ
+e|l|g|f|e	ᠡ
+e|l|g|f|l	ᠡ
+e|l|g|f|s	ᠡ
+e|l|h|f|u	ᠡ
+e|l|m|f|$	
+e|l|n|f|T	
+e|m|e|f|$	ᠡᠭ
+e|m|e|f|C	ᠡᠭ
+e|m|e|f|d	ᠡᠭ
+e|m|e|f|l	ᠡᠭ
+e|m|e|f|s	ᠡᠭ
+e|m|e|f|t	ᠡᠭ
+e|m|g|f|n	ᠡᠩ
+e|m|r|f|C	
+e|m|r|f|t	
+e|n|e|f|C	ᠡᠭ
+e|n|e|f|T	ᠡᠵ
+e|n|e|f|h	ᠡᠭ
+e|n|e|f|j	ᠡᠭ
+e|n|e|f|r	ᠡᠭ
+e|n|e|f|s	
+e|n|e|f|t	ᠡᠭᠡᠭ
+e|n|e|f|v	ᠡᠭᠡᠭ
+e|n|g|f|d	
+e|n|g|f|e	
+e|n|g|f|j	ᠡᠩ
+e|n|g|f|t	
+e|n|j|f|e	
+e|n|r|f|d	
+e|n|r|f|l	
+e|n|r|f|t	
+e|n|s|f|e	ᠡᠭ
+e|r|e|f|C	ᠡ
+e|r|e|f|g	ᠡ
+e|r|e|f|l	ᠡ
+e|r|e|f|n	ᠡ
+e|r|e|f|s	ᠡ
+e|r|e|f|t	ᠡ
+e|r|e|f|v	ᠡ
+e|r|g|f|C	ᠡ
+e|r|g|f|S	ᠡ
+e|r|g|f|d	ᠡ
+e|r|g|f|h	ᠡ
+e|r|g|f|j	ᠡ
+e|r|g|f|s	ᠡ
+e|r|g|f|t	ᠡ
+e|r|h|f|s	
+e|r|l|f|T	
+e|r|l|f|d	
+e|r|l|f|g	
+e|r|m|f|$	
+e|r|m|f|C	
+e|r|m|f|d	
+e|r|m|f|g	
+e|r|m|f|l	
+e|r|m|f|s	
+e|r|n|f|h	
+e|r|v|f|$	
+e|r|v|f|h	
+e|r|v|f|s	
+e|r|v|f|t	
+e|s|e|f|$	ᠡ
+e|s|e|f|C	ᠡ
+e|s|e|f|d	ᠡ
+e|s|e|f|h	
+e|s|e|f|n	ᠡ
+e|s|g|f|$	
+e|s|g|f|d	
+e|s|g|f|l	
+e|s|g|f|n	ᠡᠩ
+e|s|g|f|t	
+e|s|h|f|$	
+e|s|h|f|s	
+e|s|j|f|$	
+e|s|l|f|T	
+e|s|m|f|$	
+e|s|r|f|C	
+e|t|e|f|$	ᠡᠭ
+e|t|e|f|C	ᠡᠭ
+e|t|e|f|S	ᠡᠭᠡᠭ
+e|t|e|f|g	ᠡᠭ
+e|t|e|f|l	ᠡᠭ
+e|t|e|f|m	ᠡᠭ
+e|t|e|f|r	ᠡᠭ
+e|t|e|f|s	ᠡᠭᠡᠭ
+e|t|e|f|v	ᠡᠭᠡᠭ
+e|t|e|f|y	ᠡᠭᠡᠭ
+e|t|h|f|r	ᠡ
+e|t|h|f|u	ᠡ
+e|t|j|f|$	
+e|t|m|f|j	
+e|t|r|f|$	
+e|t|r|f|d	
+e|v|e|f|$	ᠡ
+e|v|r|f|C	ᠡ
+e|v|r|f|S	ᠡ
+e|v|r|f|g	ᠡ
+e|v|r|f|h	ᠡ
+e|v|r|f|j	ᠡ
+e|v|r|f|n	ᠡ
+e|v|r|f|s	ᠡ
+e|y|S|f|i	
+e|y|d|f|i	
+e|y|d|f|y	
+e|y|j|f|i	ᠡ
+e|y|l|f|$	
+e|y|l|f|i	
+e|y|l|f|y	
+e|y|n|f|u	ᠡ
+e|y|r|f|d	ᠡ
+e|y|r|f|e	ᠡ
+e|y|r|f|h	ᠡ
+e|y|r|f|l	ᠡ
+e|y|t|f|e	ᠡ
+e|y|t|f|g	ᠡ
+e|y|v|f|e	ᠡ
+e|z|e|f|C	ᠡ
+e|z|e|f|l	ᠡ
+e|z|e|f|n	ᠡ
+e|z|g|f|$	
+e|z|g|f|n	ᠡᠩ
+e|z|g|f|t	
+e|z|m|f|C	
+e|z|m|f|l	
+e|z|m|f|s	
+e|z|v|f|$	ᠡ
+e|z|v|f|s	ᠡ
+g|C|e|f|r	ᠭᠢ
+g|C|o|m|r	ᠭ
+g|S|a|m|r	ᠭᠢ
+g|S|e|f|e	ᠭ
+g|S|e|f|h	ᠭᠢ
+g|S|e|f|r	ᠭ
+g|S|e|f|s	ᠭ
+g|S|i|m|C	ᠭ
+g|S|i|m|a	ᠬᠢ
+g|S|o|m|$	ᠭ᠎ᠠ
+g|T|a|m|$	ᠭ᠎
+g|T|o|m|i	ᠭᠠᠶ
+g|^|i|f|j	ᠭᠡ
+g|^|i|u|S	ᠭᠡ
+g|^|i|u|y	ᠭᠡ
+g|^|y|m|e	ᠭᠧ
+g|a|C|m|u	
+g|a|a|m|$	ᠭ᠎
+g|a|a|m|g	ᠭᠤ
+g|a|n|m|i	ᠭ
+g|a|t|m|S	ᠬ
+g|d|a|m|$	ᠭ᠎
+g|d|u|u|i	ᠭ
+g|d|u|u|u	
+g|e|T|f|s	ᠭᠡ
+g|e|T|f|u	ᠭᠡ
+g|e|e|f|s	ᠭᠢ
+g|e|j|f|$	ᠭᠡ
+g|e|j|f|e	ᠭᠡ
+g|e|m|f|e	ᠭᠢ
+g|e|n|f|e	ᠭᠡ
+g|e|r|f|u	ᠭᠢ
+g|e|s|f|$	ᠭᠡ
+g|e|s|f|d	ᠭᠡ
+g|e|s|f|l	ᠭᠡ
+g|e|t|f|g	ᠭᠡ
+g|e|z|f|e	ᠭᠡ
+g|h|a|m|$	ᠭ᠎
+g|h|u|f|i	ᠭ
+g|i|C|f|l	ᠭᠡ
+g|i|d|u|$	ᠭᠢ
+g|i|d|u|u	ᠭᠡ
+g|i|o|m|$	ᠭ
+g|i|t|f|g	ᠭᠢ
+g|j|a|m|$	ᠭ᠎
+g|j|o|m|d	ᠭᠢ
+g|l|a|m|$	ᠭ᠎
+g|l|e|f|T	ᠭᠦ
+g|l|e|f|m	ᠬᠦ
+g|l|o|m|$	ᠭ᠎ᠠ
+g|l|o|m|T	ᠠᠵᠠᠭᠠ
+g|l|o|m|i	
+g|l|o|m|o	ᠭ
+g|l|o|m|s	ᠭ
+g|l|u|u|T	ᠭ
+g|l|u|u|g	ᠭ
+g|l|u|u|i	ᠭ
+g|l|u|u|u	ᠭ
+g|m|a|m|$	ᠭ᠎
+g|m|o|m|C	
+g|m|o|m|i	ᠭᠠ
+g|m|o|m|t	
+g|n|a|m|$	ᠭ᠎
+g|n|a|m|d	ᠭᠤ
+g|n|e|f|$	ᠭᠢ
+g|n|e|f|n	ᠭᠢ
+g|n|e|f|t	ᠭᠢ
+g|n|i|m|o	ᠭᠢ
+g|n|o|m|t	ᠭᠠ
+g|n|u|f|d	ᠭᠡ
+g|n|u|f|j	ᠭᠡ
+g|n|u|f|l	ᠭᠡ
+g|n|u|f|r	ᠭᠡ
+g|n|u|f|t	ᠭᠡ
+g|n|u|u|i	ᠭ
+g|n|u|u|u	ᠭᠡᠨ
+g|o|i|m|n	ᠭᠣᠨ
+g|o|o|m|$	ᠭ᠎ᠠ
+g|o|o|m|i	ᠭᠠᠶ
+g|r|a|m|$	ᠭ᠎
+g|r|a|m|S	ᠭᠤ
+g|r|e|f|T	ᠭᠢ
+g|r|e|f|t	ᠭᠢ
+g|r|e|f|y	ᠭᠢ
+g|r|i|f|y	ᠭᠡ
+g|r|i|u|i	ᠭᠡ
+g|r|o|m|n	ᠭᠠ
+g|r|o|m|s	ᠭᠠ
+g|r|u|f|j	ᠭᠡ
+g|r|u|u|T	ᠭᠡ
+g|r|u|u|g	
+g|r|u|u|h	ᠭᠡ
+g|r|u|u|j	ᠭᠡ
+g|r|u|u|n	ᠭᠡ
+g|r|u|u|r	ᠭᠡ
+g|r|u|u|s	ᠭᠡ
+g|r|u|u|t	ᠭᠡ
+g|s|a|m|$	ᠬ᠎
+g|s|a|m|a	ᠭ
+g|s|a|m|n	ᠭ
+g|s|e|f|l	ᠬᠦ
+g|s|o|m|$	ᠬ᠎ᠠ
+g|s|o|m|h	ᠬᠠ
+g|s|o|m|j	ᠬᠠ
+g|s|o|m|l	ᠬᠠ
+g|s|o|m|o	ᠭᠠ
+g|s|o|m|r	ᠬ
+g|s|u|f|r	ᠬᠡ
+g|s|u|f|u	ᠬ
+g|s|u|u|i	ᠭ
+g|s|u|u|l	ᠬ
+g|s|u|u|s	ᠭ
+g|t|a|m|$	ᠭ᠎
+g|t|a|m|C	ᠬ
+g|t|a|m|g	ᠬ
+g|t|a|m|h	ᠬ
+g|t|a|m|j	ᠬ
+g|t|a|m|l	ᠬ
+g|t|a|m|m	ᠬᠤ
+g|t|e|f|$	ᠬᠦ
+g|t|e|f|d	ᠬᠦ
+g|t|e|f|g	ᠬ
+g|t|e|f|h	ᠬ
+g|t|e|f|j	ᠬ
+g|t|e|f|l	ᠬ
+g|t|e|f|n	ᠬ
+g|t|e|f|v	ᠬᠦ
+g|t|e|f|y	ᠬᠦ
+g|t|o|m|h	
+g|t|o|m|i	ᠭᠠ
+g|t|o|m|l	
+g|t|u|f|r	ᠬᠡ
+g|t|u|m|i	ᠬ
+g|t|u|u|s	ᠭ
+g|t|u|u|u	ᠭ
+g|u|C|f|l	ᠭᠡ
+g|u|C|u|l	ᠭᠡ
+g|u|T|u|$	ᠭᠦ
+g|u|T|u|r	ᠭᠡ
+g|u|a|m|$	ᠭᠤ
+g|u|a|m|C	ᠭᠤ
+g|u|a|m|S	ᠭᠤ
+g|u|a|m|T	ᠭᠤ
+g|u|a|m|d	ᠭᠤ
+g|u|a|m|l	ᠭᠤ
+g|u|a|m|m	ᠭᠤ
+g|u|a|m|n	ᠭᠤ
+g|u|a|m|s	ᠭᠤ
+g|u|a|m|v	ᠭᠤ
+g|u|d|f|u	ᠭᠡ
+g|u|d|u|$	ᠭᠦ
+g|u|d|u|d	ᠭᠦ
+g|u|i|u|i	ᠭᠡ
+g|u|l|f|u	ᠭ
+g|u|n|f|e	
+g|u|s|u|$	ᠭᠡ
+g|u|s|u|g	
+g|u|t|f|e	ᠭᠢ
+g|u|u|f|r	ᠭᠡ
+g|u|u|f|u	ᠭ
+g|u|u|u|l	ᠭᠡ
+g|u|u|u|n	ᠭᠡ
+g|u|u|u|r	ᠭᠡ
+g|v|a|m|$	ᠭ᠎
+g|v|u|u|u	ᠭ
+g|z|a|m|$	ᠭ᠎
+h|^|i|f|g	ᠬᠡ
+h|^|i|f|v	ᠬᠡ
+h|^|i|u|v	ᠬᠡ
+h|^|o|m|s	ᠬᠣ
+h|^|u|f|S	ᠬ
+h|^|u|f|d	ᠬ
+h|^|u|f|g	ᠬ
+h|^|u|f|h	ᠬ
+h|^|u|f|m	ᠬ
+h|^|u|f|t	ᠬ
+h|^|u|f|u	ᠬᠡ
+h|^|u|f|v	ᠬ
+h|^|u|f|y	ᠬ
+h|^|u|m|a	ᠬ
+h|^|u|m|i	ᠬ
+h|^|u|m|u	ᠬ
+h|^|u|u|$	ᠬᠤ
+h|^|u|u|C	ᠬᠦ
+h|^|u|u|i	ᠬᠦ
+h|^|u|u|j	ᠬᠦ
+h|a|a|m|v	ᠬᠤ
+h|a|t|m|a	ᠬᠠ
+h|d|o|m|o	ᠬᠠᠭᠠ
+h|e|e|f|S	ᠬᠦ
+h|e|e|f|l	ᠬᠢ
+h|e|e|f|v	ᠬᠦ
+h|e|j|f|i	ᠬᠡ
+h|e|n|f|i	ᠭ
+h|e|u|f|n	ᠬᠡ
+h|i|a|m|r	ᠬᠤ
+h|i|a|m|v	ᠬᠤ
+h|i|d|f|e	ᠬᠢ
+h|i|e|f|l	ᠬᠢ
+h|i|l|m|o	ᠬᠤ
+h|i|o|m|o	ᠬᠠᠭᠠ
+h|i|r|m|u	ᠬᠠ
+h|i|u|u|u	ᠬᠡᠭ
+h|l|a|m|T	ᠬᠤᠵ
+h|l|d|m|o	ᠬᠣ
+h|l|e|f|e	ᠬᠢᠶ
+h|l|e|f|l	ᠬᠦ
+h|l|g|m|o	ᠬᠣ
+h|l|i|u|i	ᠬᠦ
+h|l|o|m|n	ᠬᠠ
+h|l|u|u|u	ᠬ
+h|m|e|f|h	ᠬᠦ
+h|m|e|f|t	ᠬᠢ
+h|n|a|m|j	ᠬᠤ
+h|n|e|f|l	ᠬᠦ
+h|n|g|m|a	ᠬᠠ
+h|n|l|m|i	ᠬᠣ
+h|n|l|m|o	ᠬᠣ
+h|n|r|f|u	ᠬᠡ
+h|n|t|m|a	ᠬᠠ
+h|n|u|m|i	ᠭ
+h|n|u|u|u	ᠬᠦ
+h|o|o|m|n	ᠬᠠ
+h|r|e|f|T	ᠬᠢ
+h|r|e|f|m	ᠬᠢ
+h|r|i|u|$	ᠬ
+h|r|o|m|o	ᠬᠠᠭᠠ
+h|r|u|u|d	ᠬ
+h|r|u|u|m	ᠬ
+h|r|y|m|e	ᠬᠧ
+h|u|C|m|l	ᠬᠠ
+h|u|C|u|$	ᠬᠠ
+h|u|a|m|S	ᠬᠤ
+h|u|a|m|h	ᠬᠤ
+h|u|a|m|l	ᠬᠤ
+h|u|a|m|r	ᠬᠤ
+h|u|a|m|s	ᠬᠤ
+h|u|e|f|g	ᠬᠦ
+h|u|e|f|j	ᠭ
+h|u|e|f|l	ᠬᠦ
+h|u|i|m|l	ᠭ
+h|u|i|m|m	ᠬᠢᠨ
+h|u|i|u|m	ᠬᠢᠨ
+h|u|l|u|i	ᠬᠦ
+h|u|r|f|e	ᠬᠢ
+h|u|t|f|g	ᠬᠢ
+h|u|u|f|l	ᠬᠦ
+h|u|u|f|r	ᠬᠦ
+h|u|u|f|s	ᠬᠦ
+h|u|u|u|n	ᠬᠡ
+h|u|u|u|s	
+h|u|u|u|v	ᠬᠡ
+h|v|a|m|T	ᠬᠤ
+h|v|a|m|l	ᠬᠤ
+h|v|a|m|r	ᠬᠤ
+h|v|g|m|o	ᠬᠣ
+h|v|l|m|a	ᠬᠠ
+h|v|r|m|o	ᠬᠣ
+i|C|C|f|e	ᠢ
+i|C|C|f|i	ᠢ
+i|C|C|f|l	ᠢ
+i|C|C|u|i	
+i|C|g|m|l	
+i|C|g|u|d	
+i|C|g|u|n	ᠢᠩ
+i|C|i|f|g	ᠢᠭ
+i|C|i|f|r	ᠢᠭ
+i|C|i|u|g	ᠢᠭ
+i|C|l|u|d	
+i|C|l|u|t	
+i|C|r|f|h	
+i|C|r|m|C	
+i|C|r|m|a	
+i|C|r|m|m	
+i|C|r|m|s	
+i|S|g|m|n	
+i|S|g|u|l	ᠢᠰ
+i|S|i|f|l	
+i|S|i|f|r	
+i|T|i|u|l	ᠡᠶ
+i|^|S|f|i	ᠢ
+i|^|h|f|u	ᠢ
+i|^|l|u|j	
+i|a|m|m|S	ᠶᠤ
+i|a|m|m|t	ᠶᠤ
+i|a|n|m|u	ᠶᠤ
+i|a|s|m|a	ᠢᠭ
+i|b|S|f|u	
+i|b|S|u|u	
+i|b|i|u|$	ᠢ
+i|b|l|f|C	
+i|b|o|m|$	ᠶ᠎ᠠ
+i|b|r|m|$	ᠢ
+i|b|r|m|o	ᠢ
+i|d|a|m|g	ᠶᠡ
+i|d|g|m|$	
+i|d|g|m|g	ᠢ
+i|d|i|f|$	ᠢ
+i|d|i|u|$	
+i|d|i|u|l	ᠶ
+i|d|r|m|a	ᠢ
+i|d|t|m|$	
+i|d|y|m|a	ᠢ
+i|g|S|f|u	
+i|g|a|m|$	ᠢᠶ᠎
+i|g|a|m|C	ᠶ
+i|g|a|m|d	ᠢᠭ
+i|g|i|f|$	ᠢ
+i|g|i|m|m	ᠡᠶ
+i|g|i|u|d	ᠡᠶ
+i|g|i|u|g	ᠡᠶ
+i|g|i|u|h	ᠡᠶ
+i|g|i|u|j	ᠡᠶ
+i|g|i|u|l	ᠡᠶ
+i|g|i|u|m	ᠡᠶ
+i|g|i|u|r	ᠡᠶ
+i|g|o|m|$	ᠶ᠎ᠠ
+i|g|o|m|d	ᠢᠭᠠ
+i|g|s|m|a	ᠢᠭ
+i|h|a|m|$	ᠢᠶ᠎
+i|h|a|m|d	ᠢᠭ
+i|h|g|f|t	ᠢ
+i|h|i|f|$	ᠢ
+i|h|i|f|C	ᠢ
+i|h|i|f|T	ᠢ
+i|h|i|f|g	ᠢ
+i|h|i|f|m	ᠢ
+i|h|i|u|d	ᠶ
+i|h|i|u|j	ᠶ
+i|h|i|u|l	ᠶ
+i|h|i|u|r	ᠡᠶ
+i|h|i|u|s	ᠶ
+i|h|o|m|$	ᠶ᠎ᠠ
+i|h|o|m|s	ᠶᠠᠭ
+i|h|s|m|$	ᠢ
+i|h|s|m|t	ᠢ
+i|h|y|m|a	ᠢ
+i|i|S|u|$	
+i|i|T|f|g	ᠢᠵᠡ
+i|i|T|f|l	
+i|i|g|f|d	
+i|i|g|m|a	ᠢ
+i|i|g|u|C	
+i|i|h|m|a	
+i|i|h|m|g	
+i|i|l|f|T	
+i|i|l|m|a	
+i|i|l|m|e	
+i|i|l|m|u	
+i|i|m|f|$	
+i|i|m|m|$	ᠢ
+i|i|m|m|o	ᠢ
+i|i|n|m|$	
+i|i|n|m|d	
+i|i|n|m|t	
+i|i|s|f|e	ᠢᠭ
+i|i|t|f|g	
+i|i|v|u|$	
+i|i|z|f|d	ᠢ
+i|j|i|f|$	ᠢ
+i|j|i|f|h	ᠢ
+i|j|i|f|l	ᠢ
+i|j|i|m|b	ᠢᠭ
+i|j|n|u|h	
+i|j|r|m|d	
+i|l|C|m|$	
+i|l|S|m|i	ᠢ
+i|l|a|m|$	ᠢᠶ᠎
+i|l|i|f|$	ᠢ
+i|l|i|f|d	ᠢ
+i|l|i|f|n	
+i|l|i|f|t	ᠶ
+i|l|i|f|z	ᠢ
+i|l|m|m|s	
+i|l|m|u|s	
+i|l|o|m|$	ᠶ᠎ᠠ
+i|l|o|m|C	ᠢᠭᠠ
+i|l|o|m|d	ᠢᠭᠠ
+i|l|o|m|h	ᠢ
+i|l|o|m|n	ᠶ
+i|l|r|m|a	
+i|l|r|m|u	
+i|l|s|m|o	ᠢᠭ
+i|l|t|m|$	
+i|l|t|m|C	
+i|l|t|m|r	
+i|l|u|m|$	ᠢ
+i|l|u|m|s	ᠢ
+i|l|y|m|o	ᠢ
+i|m|a|m|$	ᠢᠶ᠎
+i|m|i|f|$	ᠢ
+i|m|i|u|$	ᠢ
+i|m|i|u|d	
+i|n|a|m|$	ᠢᠶ᠎
+i|n|i|f|$	
+i|n|i|u|$	
+i|n|i|u|h	
+i|n|l|f|e	
+i|o|l|m|s	ᠶᠢ
+i|o|r|m|n	
+i|o|r|m|u	
+i|o|s|m|o	ᠢᠭ
+i|o|v|m|C	ᠶᠢ
+i|r|T|m|g	ᠢᠵᠠ
+i|r|a|m|$	ᠢᠶ᠎
+i|r|g|m|n	ᠢᠩ
+i|r|i|f|$	ᠢ
+i|r|i|f|s	ᠢ
+i|r|i|m|m	
+i|r|i|u|h	ᠡᠶ
+i|r|i|u|l	ᠶ
+i|r|i|u|m	
+i|r|l|m|j	
+i|r|o|m|d	ᠢᠭᠠ
+i|r|s|m|a	ᠢᠭ
+i|r|s|m|o	ᠢᠭ
+i|r|s|m|t	
+i|s|i|f|$	ᠢ
+i|s|i|m|$	
+i|s|i|u|h	ᠶ
+i|s|i|u|l	ᠶ
+i|s|i|u|m	ᠢ
+i|s|y|m|o	ᠢ
+i|t|g|m|$	ᠢ
+i|t|i|f|$	
+i|t|i|m|h	
+i|t|i|u|$	ᠢ
+i|t|i|u|C	ᠡᠶ
+i|t|i|u|S	ᠡᠶ
+i|t|i|u|m	ᠡᠶ
+i|t|v|m|$	ᠢᠣ
+i|u|l|f|h	ᠶᠤ
+i|u|l|u|t	ᠶᠤ
+i|u|r|f|C	
+i|u|r|f|s	
+i|u|s|f|e	ᠶᠦᠭ
+i|u|v|u|$	ᠢ
+i|u|v|u|C	ᠶᠤ
+i|u|v|u|u	ᠢ
+i|v|a|m|$	ᠢᠶ᠎
+i|v|a|m|d	ᠢᠭ
+i|v|i|f|$	ᠢ
+i|v|i|m|l	ᠶ
+i|v|i|u|$	ᠢ
+i|v|r|m|h	
+i|v|r|m|l	
+i|v|r|m|m	
+i|z|i|u|$	
+j|^|a|m|a	ᠵᠢᠭ
+j|^|a|m|i	ᠵ
+j|^|a|m|m	ᠵ
+j|^|a|m|n	ᠵ
+j|^|o|m|l	ᠵᠢ
+j|^|u|m|n	ᠵ
+j|^|u|m|u	ᠵ
+j|^|u|u|g	ᠵᠢ
+j|^|u|u|t	ᠵᠢ
+j|^|u|u|u	ᠵᠢᠭ
+j|e|e|f|$	ᠵᠢ
+j|e|u|f|r	ᠵᠢ
+j|m|i|m|r	ᠵᠤ
+j|n|a|m|a	ᠵᠢᠶ
+j|n|l|m|u	ᠵᠤ
+j|u|a|m|a	ᠵᠢᠶ᠎ᠠ
+k|^|a|m|z	ᠬ
+k|a|t|m|l	ᠭ
+l|C|o|m|o	ᠯᠠᠭᠠ
+l|C|u|u|u	ᠯ
+l|S|e|f|e	ᠯ᠎
+l|S|o|m|o	ᠯ᠎ᠠ
+l|S|u|u|g	ᠯ
+l|T|a|m|a	ᠯ᠎
+l|T|a|m|m	ᠯᠤ
+l|T|e|f|e	ᠯ᠎
+l|T|o|m|o	ᠯᠠᠭᠠ
+l|^|y|m|a	ᠯᠢ
+l|a|C|m|l	ᠯᠠ
+l|a|a|m|y	ᠯᠤ
+l|a|j|m|$	ᠯᠠ
+l|a|l|m|u	ᠯ
+l|a|r|m|i	ᠯ
+l|a|s|m|$	ᠯᠠ
+l|a|s|m|l	ᠯᠤ
+l|a|s|m|r	ᠯᠤ
+l|a|s|m|t	ᠯᠠ
+l|a|s|m|u	ᠯ
+l|a|y|m|a	ᠯ
+l|a|y|m|u	ᠯᠢ
+l|a|z|m|g	ᠯᠠ
+l|d|a|m|a	ᠯ᠎
+l|d|a|m|l	ᠯᠤ
+l|d|e|f|e	ᠯ᠎
+l|d|o|m|h	ᠯᠠ
+l|d|o|m|i	ᠯᠠ
+l|d|o|m|o	ᠯ᠎ᠠ
+l|d|u|u|h	ᠯᠡ
+l|d|u|u|n	ᠯᠡ
+l|d|u|u|u	ᠯᠡᠭᠡ
+l|e|g|f|i	ᠯᠡ
+l|e|i|f|g	ᠯᠡ
+l|e|i|f|y	ᠯᠡ
+l|e|j|f|$	ᠯᠡ
+l|e|j|f|e	ᠯᠡ
+l|e|l|f|u	ᠯ
+l|e|s|f|$	ᠯᠡ
+l|e|s|f|g	ᠯᠡ
+l|e|s|f|u	ᠯ
+l|e|t|f|g	ᠯᠡ
+l|g|i|f|i	ᠯ
+l|g|o|m|i	ᠯ
+l|g|o|m|o	ᠯᠠᠭᠠ
+l|g|o|m|r	ᠯ
+l|g|o|m|s	ᠯᠠᠭ
+l|g|u|f|j	ᠯᠡ
+l|g|u|u|s	ᠯᠡᠭ
+l|g|u|u|u	ᠯ
+l|h|a|m|a	ᠯ᠎
+l|h|i|m|g	ᠯᠠ
+l|h|o|m|r	ᠾᠯ
+l|h|u|u|g	ᠯᠢ
+l|h|u|u|u	ᠯ
+l|i|C|f|e	ᠯ
+l|i|C|u|i	ᠯᠡ
+l|i|S|m|i	ᠯᠠ
+l|i|d|f|s	ᠯ
+l|i|d|f|u	ᠯ
+l|i|i|f|y	ᠯᠡ
+l|i|i|m|y	ᠯᠠ
+l|i|j|f|$	ᠯᠡ
+l|i|j|m|a	ᠯ
+l|i|j|m|e	ᠯ
+l|i|j|m|i	ᠯ
+l|i|j|u|$	ᠯᠡ
+l|i|l|f|e	ᠯᠡ
+l|i|l|m|o	ᠯᠠ
+l|i|o|m|o	ᠯ᠎ᠠ
+l|i|o|m|s	ᠯ
+l|i|o|m|v	ᠯ
+l|i|s|f|d	ᠯᠢ
+l|i|s|m|$	ᠯᠠ
+l|i|s|u|$	ᠯᠡ
+l|i|t|f|g	ᠯᠡ
+l|i|t|m|g	ᠯᠠ
+l|i|u|u|h	ᠯᠡ
+l|j|e|f|e	ᠯ᠎
+l|j|o|m|g	ᠯ
+l|j|u|u|u	ᠯ᠎ᠡ
+l|l|a|m|a	ᠯ᠎
+l|l|a|m|n	ᠯᠤ
+l|l|a|m|s	ᠯᠤᠭ
+l|l|e|f|e	ᠯ᠎
+l|l|o|m|g	ᠯ
+l|l|o|m|o	ᠯ᠎ᠠ
+l|l|u|u|g	ᠯ
+l|l|u|u|u	ᠯ᠎ᠡ
+l|l|y|m|u	ᠯ
+l|n|a|m|n	ᠯᠤ
+l|n|e|f|g	ᠯᠢ
+l|o|C|m|o	ᠯᠣ
+l|o|d|m|$	ᠯᠣ
+l|o|d|m|i	ᠯᠠ
+l|o|d|m|l	ᠯᠠ
+l|o|l|m|o	ᠯᠠ
+l|o|l|m|u	ᠯᠠ
+l|o|n|m|o	ᠯᠤ
+l|o|o|m|h	ᠯᠠ
+l|o|o|m|j	ᠯᠠ
+l|o|o|m|l	ᠯᠠ
+l|o|r|m|u	ᠯᠤ
+l|r|a|m|a	ᠯ᠎
+l|r|e|f|e	ᠯ᠎
+l|r|e|f|g	ᠯᠢ
+l|r|i|m|y	ᠯᠠ
+l|r|o|m|g	ᠯ
+l|r|o|m|o	ᠯ᠎ᠠ
+l|r|o|m|s	ᠯᠠᠭ
+l|r|u|u|s	ᠯᠡᠭ
+l|r|u|u|u	ᠯ᠎ᠡ
+l|s|a|m|a	ᠯ᠎
+l|s|e|f|e	ᠯ᠎
+l|s|o|m|o	ᠯ᠎ᠠ
+l|s|u|u|u	ᠯ
+l|t|a|m|a	ᠯ᠎
+l|t|e|f|e	ᠯ᠎
+l|t|e|f|n	ᠯᠦ
+l|t|o|m|o	ᠯ᠎ᠠ
+l|u|S|f|u	ᠯᠡ
+l|u|T|f|e	ᠯᠢ
+l|u|a|m|g	ᠯᠤ
+l|u|a|m|l	ᠯᠤ
+l|u|a|m|n	ᠯᠤ
+l|u|a|m|y	ᠯᠤ
+l|u|d|f|e	ᠯᠡ
+l|u|d|f|l	ᠯᠡ
+l|u|d|f|s	ᠯᠡ
+l|u|d|f|v	ᠯᠡ
+l|u|e|f|e	ᠯᠢᠶ
+l|u|e|f|g	ᠯᠦ
+l|u|e|f|n	ᠯᠦ
+l|u|g|u|i	ᠯᠥ
+l|u|i|f|i	ᠯ
+l|u|i|m|n	ᠯᠠ
+l|u|i|m|r	ᠯᠠ
+l|u|i|m|y	ᠯᠤ
+l|u|i|u|m	
+l|u|l|f|e	ᠯᠢ
+l|u|l|m|u	ᠯᠠ
+l|u|m|f|e	ᠯᠦ
+l|u|s|f|d	ᠯᠦ
+l|u|s|f|t	ᠯᠦ
+l|u|s|f|u	ᠯᠡ
+l|u|s|m|g	ᠯᠠ
+l|u|s|u|$	ᠯ
+l|u|s|u|g	ᠯᠦ
+l|u|s|u|l	ᠯᠥ
+l|u|t|m|g	ᠯᠠ
+l|u|u|f|h	ᠯᠡ
+l|u|u|f|l	ᠯᠢ
+l|u|u|u|h	ᠯᠡ
+l|u|u|u|l	ᠯᠡ
+l|u|u|u|n	ᠯᠡ
+l|v|a|m|a	ᠯ᠎
+l|v|o|m|g	ᠯ
+l|v|u|f|g	ᠯᠡ
+l|v|u|u|s	ᠯᠡᠭ
+l|v|u|u|u	ᠯ
+l|z|e|f|e	ᠯ᠎
+m|^|a|m|h	ᠮᠢ
+m|^|i|f|S	ᠮᠥ
+m|^|u|f|h	ᠮᠡ
+m|^|y|m|e	ᠮᠧ
+m|a|S|m|$	ᠮᠠ
+m|a|S|m|u	ᠮᠠ
+m|a|a|m|$	ᠮ᠎
+m|a|a|m|h	ᠮᠤ
+m|a|h|m|i	ᠮ
+m|a|h|m|r	ᠮ
+m|a|h|m|t	ᠮ
+m|a|p|m|i	
+m|a|r|m|u	ᠮᠤ
+m|a|s|m|l	ᠮᠤ
+m|a|s|m|u	ᠮᠠ
+m|a|t|m|g	ᠮᠠ
+m|a|t|m|u	ᠮᠠ
+m|e|T|f|g	ᠮ
+m|e|T|f|i	ᠮ
+m|e|h|f|i	ᠮᠡ
+m|e|s|f|$	ᠮᠡ
+m|e|t|f|g	ᠮᠡ
+m|i|a|m|h	ᠮᠤ
+m|i|a|m|r	ᠮᠤ
+m|i|d|f|u	ᠮ
+m|i|d|u|u	
+m|i|h|f|i	ᠮᠡ
+m|i|h|u|u	ᠮ
+m|i|l|m|o	ᠮᠣ
+m|i|o|m|n	ᠮ
+m|i|o|m|r	ᠮ
+m|i|s|f|g	ᠮᠡ
+m|i|s|m|g	ᠮᠠ
+m|i|s|u|$	ᠮᠢ
+m|i|t|m|g	ᠮᠠ
+m|i|t|m|o	ᠮᠣ
+m|i|t|u|$	ᠮ
+m|l|a|m|s	ᠮᠤ
+m|l|o|m|o	ᠮᠠ
+m|l|u|u|l	ᠮᠡ
+m|o|C|m|u	ᠮᠣ
+m|o|d|m|u	ᠮ
+m|o|h|m|r	ᠮ
+m|o|s|m|g	ᠮᠣ
+m|o|t|m|g	ᠮᠠ
+m|r|a|m|s	ᠮᠤ
+m|r|e|f|n	ᠮᠦ
+m|r|u|u|s	
+m|u|C|f|u	ᠮᠥ
+m|u|S|u|i	ᠮᠥ
+m|u|a|m|n	ᠮᠤ
+m|u|d|m|a	ᠮᠠ
+m|u|d|u|$	ᠮᠡ
+m|u|h|f|i	ᠮᠦ
+m|u|h|u|$	ᠡᠮ
+m|u|i|u|i	ᠮᠥ
+m|u|l|m|u	ᠮᠤ
+m|u|s|m|a	ᠮ
+m|u|s|u|$	ᠮᠠ
+m|u|s|u|d	ᠮᠢ
+n|C|e|f|e	ᠨ
+n|^|e|f|g	ᠨᠢ
+n|^|e|f|j	ᠨᠢ
+n|^|o|m|d	ᠨᠢ
+n|^|u|f|d	ᠨᠢ
+n|^|u|f|g	ᠨᠢ
+n|^|u|f|j	ᠨᠡ
+n|^|u|m|d	ᠨᠢ
+n|^|u|m|s	ᠨᠢ
+n|^|u|m|u	ᠨᠢᠭ
+n|^|y|m|e	ᠨᠧ
+n|a|T|m|a	
+n|a|a|m|$	ᠨ᠎
+n|a|d|m|$	ᠩ
+n|a|g|m|e	ᠨ
+n|a|h|m|o	ᠨ
+n|a|j|m|u	ᠩ
+n|a|s|m|$	ᠨ
+n|a|t|m|y	ᠩ
+n|a|z|m|d	ᠩ
+n|d|a|m|h	ᠨ
+n|e|T|f|u	ᠩ
+n|e|T|f|v	ᠩ
+n|e|d|f|s	ᠩ
+n|e|e|f|e	ᠨ
+n|e|e|f|g	ᠨ
+n|e|e|f|h	ᠨ
+n|e|e|f|l	ᠨ
+n|e|e|f|m	ᠨᠦ
+n|e|e|f|n	ᠨ
+n|e|e|f|r	ᠨ
+n|e|e|f|s	ᠨ
+n|e|e|f|t	ᠨ
+n|e|g|m|e	ᠩ
+n|e|i|f|n	ᠧᠨ
+n|e|l|f|u	ᠨ
+n|e|t|m|a	ᠨ᠋
+n|e|t|m|g	ᠨ᠋
+n|e|t|m|o	ᠩ
+n|e|z|f|$	ᠩ
+n|e|z|f|i	ᠩ
+n|g|o|m|g	ᠨ
+n|g|o|m|i	ᠨ
+n|g|u|u|$	ᠨ᠎ᠡ
+n|g|u|u|j	
+n|g|u|u|s	
+n|g|u|u|u	ᠨ
+n|h|a|m|$	ᠨ᠎
+n|h|e|f|g	ᠨ
+n|h|o|m|$	ᠨ᠎ᠠ
+n|i|C|u|i	ᠩ
+n|i|T|m|o	ᠩ
+n|i|a|m|a	ᠨ
+n|i|a|m|g	ᠨ
+n|i|a|m|h	ᠨ
+n|i|a|m|l	ᠨ
+n|i|a|m|n	ᠨ
+n|i|a|m|t	ᠨ
+n|i|e|f|$	ᠨ᠎
+n|i|e|f|C	ᠨ
+n|i|e|f|g	ᠨ
+n|i|e|f|h	ᠨ
+n|i|e|f|l	ᠨ
+n|i|e|f|r	ᠨᠦ
+n|i|e|f|s	ᠨ
+n|i|e|f|t	ᠨ
+n|i|h|m|o	ᠨ
+n|i|i|u|$	ᠨ
+n|i|o|m|d	ᠨᠠ
+n|i|o|m|f	ᠨ
+n|i|o|m|g	ᠨ
+n|i|o|m|h	ᠨᠠ
+n|i|o|m|s	ᠨ
+n|i|o|m|t	
+n|i|t|m|o	ᠩ
+n|m|a|m|s	ᠨᠤ
+n|m|e|f|$	ᠨ᠎
+n|m|u|u|u	ᠨ
+n|o|b|m|a	ᠨ
+n|o|n|m|i	ᠩ
+n|o|o|m|$	ᠨ᠎ᠠ
+n|o|o|m|h	ᠨᠠ
+n|o|s|m|l	ᠩ
+n|o|s|m|p	ᠨ
+n|o|s|m|t	ᠨ
+n|o|s|m|u	ᠨ
+n|o|s|m|y	ᠨ
+n|o|t|m|$	ᠩ
+n|r|a|m|T	ᠨ
+n|r|a|m|g	
+n|r|a|m|i	ᠨ
+n|r|u|u|h	ᠨᠡ
+n|r|u|u|l	ᠨᠢ
+n|r|u|u|n	ᠨᠢ
+n|r|u|u|s	ᠨᠢᠭ
+n|r|u|u|u	ᠨᠢᠭ
+n|s|e|f|g	ᠨᠦ
+n|t|a|m|$	ᠨ᠎
+n|t|e|f|h	ᠨ
+n|t|o|m|$	ᠨ᠎ᠠ
+n|t|o|m|h	ᠨᠠ
+n|u|C|u|i	ᠨ
+n|u|C|u|u	ᠨ
+n|u|S|m|l	ᠨ
+n|u|a|m|$	ᠨ᠎
+n|u|a|m|a	ᠨᠤᠭ
+n|u|a|m|h	ᠨᠤ
+n|u|a|m|j	ᠨᠤ
+n|u|a|m|m	ᠨᠤ
+n|u|a|m|n	ᠨᠤ
+n|u|a|m|r	ᠨᠤ
+n|u|a|m|s	ᠨᠤᠭ
+n|u|d|m|d	
+n|u|d|m|s	
+n|u|e|f|$	ᠨ᠎
+n|u|e|f|e	ᠨ᠎
+n|u|e|f|r	ᠨᠦ
+n|u|j|f|i	ᠩ
+n|u|s|f|d	ᠨᠡ
+n|u|s|f|g	ᠩ
+n|u|s|f|i	ᠩ
+n|u|s|f|l	ᠨᠡ
+n|u|s|u|$	ᠨᠡ
+n|u|u|f|r	ᠨᠢ
+n|u|u|u|d	ᠨᠢ
+n|u|u|u|g	ᠨ
+n|u|u|u|h	ᠨᠡ
+n|u|u|u|j	ᠨᠢ
+n|u|u|u|n	ᠨᠡ
+n|u|u|u|r	ᠨᠢ
+n|u|u|u|s	ᠨᠡ
+n|u|u|u|u	ᠨ
+n|v|u|u|u	ᠨ
+o|S|n|m|$	
+o|S|o|m|d	ᠣᠭ
+o|S|o|m|r	ᠣ
+o|S|o|m|v	ᠣᠭ
+o|S|u|m|d	ᠣ
+o|T|g|m|C	
+o|T|g|m|i	ᠣᠭ
+o|T|h|m|$	
+o|T|i|m|$	
+o|T|l|m|$	
+o|T|l|m|b	
+o|T|l|m|d	
+o|T|l|m|s	
+o|T|o|m|$	
+o|T|o|m|h	ᠣ
+o|T|o|m|j	ᠣ
+o|T|o|m|n	ᠣ
+o|T|r|m|$	
+o|T|r|m|C	ᠤ
+o|^|g|m|n	ᠣᠩ
+o|^|h|m|i	
+o|b|h|m|$	ᠤ
+o|b|i|m|$	ᠣ
+o|b|o|m|$	ᠣᠭ᠎ᠠ
+o|b|o|m|h	ᠣ
+o|b|o|m|t	ᠣᠭᠠ
+o|b|o|m|v	ᠣ
+o|b|r|m|$	ᠤ
+o|b|r|m|a	ᠤ
+o|d|g|m|$	
+o|d|g|m|C	
+o|d|g|m|n	ᠣᠩ
+o|d|g|m|s	
+o|d|h|m|i	ᠣ
+o|d|i|m|$	ᠣ
+o|d|l|m|$	
+o|d|l|m|t	
+o|d|m|m|b	ᠣᠩ
+o|d|m|m|t	
+o|d|n|m|o	
+o|d|o|m|S	ᠣᠭ
+o|d|o|m|g	ᠣ
+o|d|o|m|j	ᠣᠭ
+o|d|o|m|l	ᠣ
+o|d|o|m|n	ᠣᠭᠠ
+o|d|o|m|r	ᠣ
+o|d|o|m|v	ᠣ
+o|d|v|m|$	
+o|d|v|m|C	
+o|g|C|m|i	ᠤ
+o|g|C|m|l	ᠣᠭᠠ
+o|g|g|m|C	
+o|g|g|m|u	
+o|g|h|m|d	ᠣ
+o|g|h|m|o	ᠣ
+o|g|i|m|h	ᠣᠶ
+o|g|i|m|j	ᠣᠶ
+o|g|i|m|l	ᠣᠶ
+o|g|i|m|n	ᠣᠶ
+o|g|i|m|t	ᠣᠶ
+o|g|j|m|$	
+o|g|n|m|$	
+o|g|n|m|i	ᠤ
+o|g|o|m|C	ᠣ
+o|g|o|m|g	ᠣᠭ
+o|g|o|m|j	ᠣᠭ
+o|g|o|m|l	ᠣ
+o|g|o|m|m	ᠣ
+o|g|o|m|n	ᠣ
+o|g|o|m|v	ᠣ
+o|g|r|m|l	
+o|g|s|m|o	
+o|g|t|m|g	ᠣᠭᠠ
+o|g|v|m|C	ᠤ
+o|h|d|m|$	
+o|h|g|m|S	ᠣ
+o|h|g|m|j	ᠣ
+o|h|g|m|l	ᠣ
+o|h|g|m|n	ᠣ
+o|h|h|m|$	
+o|h|i|m|$	
+o|h|i|m|C	
+o|h|i|m|d	
+o|h|j|m|$	
+o|h|l|m|$	
+o|h|n|m|$	
+o|h|o|m|$	
+o|h|o|m|d	
+o|h|o|m|h	ᠣ
+o|h|o|m|n	
+o|h|o|m|v	ᠣ
+o|i|h|m|$	
+o|i|l|m|o	ᠣ
+o|i|n|m|a	ᠣ
+o|i|t|m|y	ᠣ
+o|j|o|m|t	ᠣ
+o|j|r|m|o	
+o|l|d|m|o	
+o|l|g|m|S	ᠣ
+o|l|g|m|i	ᠣ
+o|l|g|m|l	ᠣ
+o|l|h|m|s	ᠣ
+o|l|i|m|$	
+o|l|l|m|o	ᠣ
+o|l|m|m|j	ᠤ
+o|l|n|m|T	ᠣ
+o|l|n|m|d	ᠣ
+o|l|n|m|g	ᠣ
+o|l|n|m|h	ᠣ
+o|l|n|m|i	ᠣ
+o|l|o|m|l	ᠣ
+o|l|o|m|s	ᠤᠭᠠ
+o|l|o|m|v	ᠣ
+o|l|o|m|z	ᠣ
+o|l|r|m|h	ᠤ
+o|l|v|m|S	ᠣ
+o|l|v|m|o	ᠣ
+o|m|g|m|$	
+o|m|g|m|d	
+o|m|i|m|$	ᠣ
+o|m|l|m|$	
+o|m|l|m|j	
+o|m|o|m|j	ᠣᠭᠠ
+o|m|o|m|l	ᠣᠭ
+o|n|d|m|o	ᠣ
+o|n|h|m|i	ᠣ
+o|n|h|m|o	ᠣ
+o|n|o|m|$	
+o|n|o|m|C	ᠣᠭᠠ
+o|n|o|m|d	ᠣᠭᠠ
+o|n|s|m|o	ᠣᠭ
+o|n|v|m|t	
+o|n|z|m|o	ᠣ
+o|o|C|m|i	ᠣ
+o|o|C|m|l	ᠣ
+o|o|C|m|u	ᠣ
+o|o|S|m|i	ᠣ
+o|o|d|m|l	ᠣ
+o|o|d|m|o	ᠣ
+o|o|d|m|r	ᠣ
+o|o|d|m|v	ᠣ
+o|o|g|m|d	
+o|o|g|m|o	
+o|o|h|m|g	ᠣ
+o|o|h|m|o	ᠣ
+o|o|l|m|$	
+o|o|l|m|d	
+o|o|l|m|g	
+o|o|l|m|j	
+o|o|l|m|n	
+o|o|l|m|s	
+o|o|m|m|j	
+o|o|r|m|T	ᠣ
+o|o|r|m|d	ᠣ
+o|o|r|m|h	ᠣ
+o|o|r|m|i	ᠣ
+o|o|s|m|$	
+o|o|s|m|o	
+o|o|s|m|r	ᠤ
+o|o|t|m|g	ᠣ
+o|o|t|m|y	ᠣ
+o|o|v|m|d	ᠣ
+o|o|v|m|i	ᠣ
+o|o|y|m|e	ᠣ
+o|r|g|m|$	
+o|r|g|m|l	
+o|r|g|m|n	ᠣᠩ
+o|r|g|m|o	
+o|r|h|m|i	ᠣ
+o|r|h|m|o	ᠣ
+o|r|i|m|T	ᠣᠶ
+o|r|i|m|g	ᠣᠶ
+o|r|i|m|h	ᠣᠶ
+o|r|i|m|l	ᠣᠶ
+o|r|i|m|t	ᠣᠶ
+o|r|l|m|$	
+o|r|l|m|t	
+o|r|m|m|g	
+o|r|m|m|t	ᠤ
+o|r|n|m|a	ᠤ
+o|r|n|m|h	
+o|r|n|m|z	
+o|r|o|m|h	ᠣ
+o|r|v|m|t	ᠣ
+o|s|d|m|$	
+o|s|g|m|$	
+o|s|g|m|C	
+o|s|g|m|d	
+o|s|h|m|C	ᠣ
+o|s|h|m|l	ᠣ
+o|s|h|m|o	ᠣ
+o|s|h|m|r	ᠣ
+o|s|i|m|$	
+o|s|i|m|z	ᠤᠸᠠ
+o|s|l|m|s	
+o|s|n|m|d	ᠣ
+o|s|n|m|g	ᠣ
+o|s|n|m|i	ᠣ
+o|s|n|m|o	ᠣ
+o|s|n|m|s	ᠣ
+o|s|o|m|$	ᠣ
+o|s|o|m|C	ᠤᠭᠠ
+o|s|o|m|d	ᠤᠭᠠ
+o|s|o|m|h	ᠣᠭ
+o|s|o|m|s	ᠣᠭ
+o|s|o|m|t	ᠣᠭ
+o|s|r|m|l	
+o|t|d|m|$	
+o|t|h|m|$	
+o|t|i|m|g	ᠣᠶ
+o|t|i|m|h	ᠣᠶ
+o|t|i|m|l	ᠣᠶ
+o|t|i|m|m	ᠣᠶ
+o|t|i|m|n	ᠣᠶ
+o|t|i|m|r	ᠣ
+o|t|i|m|v	ᠣᠶ
+o|t|j|m|$	
+o|t|l|m|$	
+o|t|n|m|$	
+o|t|o|m|$	
+o|t|o|m|T	ᠣᠭᠠ
+o|t|o|m|g	
+o|t|o|m|l	ᠣᠭᠠ
+o|t|o|m|r	ᠣ
+o|t|o|m|t	ᠣᠭᠠ
+o|t|t|m|$	
+o|v|l|m|i	ᠣ
+o|v|l|m|z	ᠣ
+o|v|r|m|$	
+o|v|r|m|l	
+o|y|C|m|l	
+o|y|d|m|$	
+o|y|g|m|o	
+o|y|l|m|o	
+o|y|l|m|u	
+o|y|l|m|z	
+o|y|r|m|g	ᠣ
+o|y|s|m|l	ᠤ
+o|z|h|m|i	ᠣ
+o|z|n|m|o	
+o|z|o|m|$	ᠣ
+o|z|o|m|d	
+o|z|o|m|l	ᠣ
+o|z|o|m|t	ᠣ
+p|^|r|m|a	ᠫᠠ
+p|^|y|m|e	ᠫᠧ
+p|m|i|m|n	ᠫᠠ
+r|C|e|f|l	ᠷᠦ
+r|C|o|m|o	ᠷᠠᠭ᠎ᠠ
+r|C|u|u|h	ᠷᠡ
+r|T|o|m|h	ᠷᠠ
+r|a|C|m|e	ᠷᠠᠵᠠᠢ
+r|a|C|m|u	ᠷᠠ
+r|a|T|m|g	ᠷᠠᠵᠠ
+r|a|T|m|l	ᠷᠤ
+r|a|T|m|u	ᠷᠤ
+r|a|d|m|$	ᠷᠠ
+r|a|d|m|C	ᠷᠠ
+r|a|h|m|y	ᠷᠢ
+r|a|i|m|a	ᠷᠢ
+r|a|j|m|$	ᠷᠠ
+r|a|j|m|e	ᠷᠠ
+r|a|n|m|i	ᠷ
+r|a|s|m|$	ᠷᠠ
+r|a|s|m|g	ᠷ
+r|a|z|m|$	ᠷᠠ
+r|a|z|m|d	ᠷᠤ
+r|a|z|m|l	ᠷᠠ
+r|e|S|f|u	ᠷᠡ
+r|e|g|f|u	ᠷᠭᠢ
+r|e|i|f|g	ᠷᠡ
+r|e|i|f|y	ᠷᠡ
+r|e|i|m|a	ᠷᠢ
+r|e|j|f|$	ᠷᠡ
+r|e|j|f|u	ᠷᠢ
+r|e|s|f|$	ᠷ
+r|e|s|f|d	ᠷᠡ
+r|e|s|f|g	ᠷᠡ
+r|e|s|f|l	ᠷᠡ
+r|e|s|f|u	ᠷ
+r|g|u|u|g	ᠷᠢ
+r|g|u|u|u	ᠷ
+r|h|a|m|m	ᠷᠤ
+r|h|o|m|l	ᠷ
+r|h|u|u|u	ᠷ
+r|i|C|f|$	ᠷᠡᠵᠦ
+r|i|C|f|e	ᠷᠡ
+r|i|C|m|i	ᠷᠢ
+r|i|C|u|$	ᠷᠡᠵᠦ
+r|i|S|m|i	ᠷ
+r|i|T|m|o	ᠷᠠ
+r|i|e|f|l	ᠷᠢ
+r|i|g|m|u	ᠷᠢ
+r|i|j|f|e	ᠷᠠ
+r|i|j|m|$	ᠷᠡ
+r|i|l|m|i	ᠷ
+r|i|l|m|o	ᠷ
+r|i|l|m|u	ᠷ
+r|i|o|m|n	ᠷᠢ
+r|i|o|m|o	ᠷᠠᠭᠠ
+r|i|s|m|a	ᠷᠠᠭ
+r|i|s|u|u	ᠷᠡᠭ
+r|i|t|m|g	ᠷᠠ
+r|i|t|m|o	ᠷᠠ
+r|i|u|u|h	ᠷᠡ
+r|j|u|u|g	ᠷ
+r|l|u|u|u	ᠷ
+r|m|o|m|g	ᠷ
+r|m|u|u|h	ᠷᠡ
+r|o|C|m|$	ᠷᠠᠵᠤ
+r|o|C|m|e	ᠷᠠᠵᠠᠢ
+r|o|S|m|d	ᠷᠣ
+r|o|h|m|$	ᠷᠠ
+r|o|j|m|e	ᠷᠴᠠᠢ
+r|o|n|m|o	ᠷᠣ
+r|o|o|m|h	ᠷᠠ
+r|o|z|m|l	ᠷᠠ
+r|s|e|f|e	ᠷᠦᠭ
+r|s|e|f|l	ᠷᠦ
+r|s|u|u|h	ᠷᠡ
+r|t|e|f|g	ᠷᠢ
+r|t|o|m|h	ᠷᠠ
+r|t|u|u|h	ᠷᠡ
+r|u|C|u|l	ᠷᠡ
+r|u|C|u|u	ᠷᠠ
+r|u|S|u|u	ᠷᠥ
+r|u|a|m|g	ᠷᠤ
+r|u|d|u|$	ᠷᠢ
+r|u|e|f|e	ᠷᠢᠶ
+r|u|e|f|m	ᠷᠢ
+r|u|h|f|S	ᠷᠦ
+r|u|i|m|a	ᠷᠢ
+r|u|i|m|y	ᠷᠤ
+r|u|i|u|i	ᠷᠦ
+r|u|j|f|e	ᠷᠢ
+r|u|j|f|i	ᠷ
+r|u|j|f|l	ᠷ
+r|u|j|u|$	ᠷᠠ
+r|u|s|f|j	ᠷᠡ
+r|u|s|m|g	ᠷᠤ
+r|u|s|m|l	ᠷᠤ
+r|u|s|m|s	ᠷᠤ
+r|u|s|m|t	ᠷ
+r|u|s|u|l	ᠷᠥ
+r|u|s|u|u	ᠷᠡᠭ
+r|u|t|f|g	ᠷᠢ
+r|u|t|m|g	ᠷᠠ
+r|u|u|f|g	ᠷᠢ
+r|u|u|f|n	ᠷᠡ
+r|u|u|u|$	ᠷᠡ
+r|u|u|u|h	ᠷᠡ
+r|v|e|f|l	ᠷᠢ
+r|v|o|m|g	ᠷᠠ
+r|v|u|u|u	ᠷ
+s|a|C|m|$	ᠰ
+s|a|a|m|j	ᠰᠴᠤ
+s|a|a|m|l	ᠰᠤ
+s|a|a|m|r	ᠰᠤ
+s|a|s|m|a	ᠰᠤᠭ
+s|a|t|m|r	ᠰ
+s|d|a|m|r	ᠰᠤ
+s|d|e|f|r	ᠰᠦ
+s|d|o|m|o	ᠰᠠᠭᠠ
+s|d|u|u|u	ᠰᠡᠭᠡ
+s|e|d|f|e	ᠰ
+s|e|e|f|j	ᠰᠴᠦ
+s|e|e|f|m	ᠰᠦ
+s|e|r|f|u	ᠰᠦ
+s|e|s|f|e	ᠰᠦᠭ
+s|e|s|m|i	
+s|e|t|f|$	ᠰ
+s|g|a|m|m	ᠰᠤ
+s|g|a|m|r	ᠰᠤ
+s|g|g|m|o	ᠰᠣ
+s|g|o|m|d	ᠰᠠ
+s|g|u|u|n	ᠰᠡ
+s|i|C|u|u	ᠰᠠ
+s|i|e|f|e	ᠰᠦᠭ
+s|i|e|f|g	ᠰᠦ
+s|i|e|f|j	ᠰᠴᠦ
+s|i|e|f|l	ᠰᠦ
+s|i|o|m|h	ᠰ
+s|i|o|m|o	ᠰᠠᠭᠠ
+s|i|r|m|a	ᠰᠠ
+s|l|d|f|e	ᠰᠦ
+s|l|e|f|l	ᠰᠦ
+s|l|o|m|o	ᠰᠠᠭᠠ
+s|l|t|m|$	ᠰᠤ
+s|l|t|m|a	ᠰᠤ
+s|l|u|u|j	ᠰᠴᠦ
+s|l|u|u|u	ᠰᠡᠭᠡ
+s|m|a|m|g	ᠰᠤ
+s|m|e|f|h	ᠰ
+s|m|e|f|n	ᠰ
+s|m|e|f|r	ᠰ
+s|m|g|f|e	ᠰ
+s|m|g|m|o	ᠰ
+s|m|o|m|g	ᠰᠤ
+s|m|o|m|h	ᠰ
+s|m|r|m|a	ᠰᠤ
+s|n|a|m|g	ᠰᠤ
+s|n|a|m|n	ᠰᠤ
+s|n|d|f|e	ᠰ
+s|n|e|f|e	ᠰᠦᠭ
+s|n|e|f|n	ᠰᠦ
+s|n|l|m|o	ᠰᠤ
+s|n|l|m|u	ᠰᠣ
+s|n|o|m|g	ᠰᠤ
+s|n|o|m|j	ᠰᠴᠤ
+s|n|o|m|n	ᠰᠤ
+s|n|u|m|l	ᠰ
+s|o|l|m|o	ᠰ
+s|o|o|m|f	ᠰ
+s|o|o|m|h	ᠰ
+s|o|o|m|j	ᠰᠴᠤ
+s|o|o|m|l	ᠰ
+s|o|o|m|o	ᠰ
+s|o|o|m|r	ᠰ
+s|o|t|m|y	ᠰ
+s|r|a|m|j	ᠰᠴᠤ
+s|r|a|m|m	ᠰᠤ
+s|r|g|m|o	ᠰᠣ
+s|r|i|m|i	ᠰᠡ
+s|r|l|m|u	ᠰᠣ
+s|r|o|m|j	ᠰᠤ
+s|r|o|m|l	ᠰᠤ
+s|r|o|m|n	ᠰᠠ
+s|r|o|m|o	ᠰᠠᠭᠠ
+s|r|u|u|h	ᠰ
+s|r|u|u|l	ᠰ
+s|r|u|u|u	ᠰᠡᠭᠡ
+s|s|o|m|r	ᠰ
+s|u|C|u|i	ᠰᠦ
+s|u|a|m|a	ᠰᠤᠭ
+s|u|a|m|h	ᠰ
+s|u|a|m|i	ᠰ
+s|u|a|m|j	ᠰᠴᠤ
+s|u|a|m|v	ᠰ
+s|u|d|m|a	ᠰ
+s|u|e|f|g	ᠰᠦ
+s|u|e|f|j	ᠰᠴᠦ
+s|u|e|f|m	ᠰᠦ
+s|u|e|f|n	ᠰᠦ
+s|u|g|f|i	ᠰᠦ
+s|u|g|u|i	ᠰᠥ
+s|u|n|m|i	ᠰᠠ
+s|u|r|u|u	ᠰᠥ
+s|u|t|m|$	ᠰ
+s|u|t|m|a	ᠰᠤ
+s|u|t|u|$	ᠰᠦ
+s|u|u|u|n	ᠰᠡ
+s|v|e|f|n	ᠰᠦ
+s|v|l|f|e	ᠰᠡ
+s|v|l|m|o	ᠰᠣ
+s|v|o|m|n	ᠰᠠ
+s|v|o|m|r	ᠰ
+s|v|u|u|n	ᠭᠰᠡ
+t|^|u|u|d	ᠲᠡ
+t|a|C|m|i	ᠲᠤ
+t|a|a|m|h	ᠲᠤ
+t|a|a|m|k	ᠲ᠋
+t|a|a|m|l	ᠲᠤ
+t|a|g|m|u	ᠳᠬᠤ
+t|a|i|m|k	ᠲ᠋
+t|a|i|m|n	ᠲ᠋
+t|a|i|m|s	ᠲ᠋
+t|a|i|m|v	ᠲ᠋
+t|a|r|m|$	ᠲ᠋
+t|a|r|m|C	ᠲ᠋
+t|a|r|m|i	ᠲ
+t|a|t|m|u	ᠲᠤ
+t|a|u|m|r	ᠲ᠋
+t|d|a|m|h	ᠳ
+t|d|e|f|h	ᠲᠦ
+t|e|e|f|h	ᠲᠦ
+t|e|e|f|r	ᠲᠦ
+t|e|g|f|u	ᠳᠬᠡ
+t|e|r|f|$	ᠲ᠋
+t|g|a|m|h	ᠲᠤ
+t|g|a|m|y	ᠲᠤ
+t|g|e|f|h	ᠲᠦ
+t|g|e|f|r	ᠲᠦ
+t|g|g|f|u	ᠳᠬᠡ
+t|g|l|m|o	ᠲᠣ
+t|g|o|m|h	ᠲᠤ
+t|g|o|m|j	ᠲ
+t|g|o|m|l	ᠲ
+t|g|o|m|o	ᠲᠠᠭᠠ
+t|g|o|m|r	ᠲ
+t|g|o|m|s	ᠲ
+t|g|r|f|u	ᠲᠥ
+t|g|r|m|o	ᠲᠣ
+t|h|a|m|i	ᠲ
+t|h|e|f|h	ᠲᠦ
+t|i|a|m|a	ᠲ
+t|i|a|m|i	ᠲ
+t|i|a|m|l	ᠲ
+t|i|a|m|n	ᠲ
+t|i|a|m|r	ᠲ᠋
+t|i|a|m|t	ᠲ
+t|i|e|f|g	ᠲᠦ
+t|i|e|f|h	ᠲᠦ
+t|i|g|f|u	ᠳᠬᠡ
+t|i|g|m|u	ᠳᠬᠠ
+t|i|o|m|g	ᠲ
+t|i|o|m|h	ᠲᠤ
+t|j|o|m|h	ᠲᠤ
+t|l|C|m|u	ᠲᠤ
+t|l|a|m|h	ᠲᠤ
+t|l|e|f|e	ᠲᠦᠭ
+t|l|e|f|h	ᠲᠦ
+t|l|e|f|r	ᠲᠦ
+t|l|g|f|i	ᠲᠡ
+t|l|g|m|u	ᠳᠬᠠ
+t|l|o|m|h	ᠲᠤ
+t|l|o|m|s	ᠲ
+t|l|r|f|e	ᠲᠡ
+t|l|u|u|g	ᠲᠡ
+t|l|u|u|h	ᠳ
+t|m|a|m|h	ᠲᠤ
+t|m|a|m|t	ᠲᠤ
+t|m|e|f|e	ᠲᠦᠭ
+t|m|e|f|h	ᠲᠦ
+t|m|g|f|e	ᠳ
+t|m|o|m|h	ᠳ
+t|m|o|m|i	ᠲᠠᠶ
+t|n|a|m|h	ᠲᠤ
+t|n|e|f|h	ᠲᠦ
+t|n|e|f|n	ᠲᠦ
+t|n|g|f|y	ᠲ᠋
+t|n|g|m|o	ᠲᠣ
+t|n|g|m|y	ᠲ᠋
+t|n|o|m|h	ᠲᠤ
+t|n|o|m|r	ᠲ᠋
+t|n|r|m|o	ᠲ᠋
+t|n|u|m|s	ᠳ
+t|n|u|u|g	ᠲᠡ
+t|o|o|m|$	ᠲ᠋
+t|o|o|m|C	ᠲᠠ
+t|o|o|m|d	ᠲᠠ
+t|o|o|m|h	ᠲᠤ
+t|o|o|m|i	ᠲᠠ
+t|r|a|m|C	ᠲᠤ
+t|r|a|m|T	ᠲᠠᠵ
+t|r|a|m|h	ᠲᠤ
+t|r|a|m|k	ᠲ᠋
+t|r|a|m|m	ᠲ᠋
+t|r|a|m|s	ᠲᠤ
+t|r|a|m|t	ᠲᠤ
+t|r|a|m|v	ᠲᠤ
+t|r|e|f|h	ᠲᠦ
+t|r|e|f|s	ᠳ
+t|r|g|f|u	ᠳᠬᠡ
+t|r|g|m|o	ᠲᠣ
+t|r|i|m|g	ᠲ
+t|r|i|m|y	ᠲᠠ
+t|r|l|m|a	ᠲᠤ
+t|r|o|m|h	ᠲᠤ
+t|r|u|f|n	ᠲᠢ
+t|r|u|m|n	ᠲ᠋
+t|r|u|u|g	ᠲᠡ
+t|r|u|u|u	ᠲᠡᠭᠡ
+t|s|a|m|a	ᠲᠤᠭ
+t|s|a|m|h	ᠲᠤ
+t|s|a|m|r	ᠲ᠋
+t|s|a|m|t	ᠲ᠋
+t|s|e|f|h	ᠲᠦ
+t|s|o|m|h	ᠲᠤ
+t|s|o|m|n	ᠲᠤ
+t|s|r|m|a	ᠲ
+t|s|y|m|u	ᠲ᠋
+t|t|a|m|h	ᠳ
+t|u|C|u|l	ᠲᠦ
+t|u|a|m|a	ᠲᠤᠭ
+t|u|a|m|g	ᠲᠤ
+t|u|a|m|h	ᠲᠤ
+t|u|a|m|l	ᠲᠤ
+t|u|a|m|m	ᠲᠤ
+t|u|a|m|r	ᠲᠤ
+t|u|a|m|t	ᠲ᠋
+t|u|e|f|e	ᠲᠦᠭ
+t|u|e|f|h	ᠲᠦ
+t|u|e|f|j	ᠲᠦ
+t|u|e|f|m	ᠲᠦ
+t|u|e|f|n	ᠲᠦ
+t|u|g|f|u	ᠳᠬᠡ
+t|u|g|m|u	ᠳᠬᠠ
+t|u|l|f|u	ᠲᠡ
+t|u|u|u|i	ᠲᠡ
+t|u|u|u|n	ᠲᠡ
+t|u|u|u|r	ᠳ
+t|v|a|m|l	ᠲᠤ
+t|v|a|m|r	ᠲᠤ
+t|v|e|f|e	ᠲᠦᠭ
+t|v|e|f|i	ᠲ
+t|v|e|f|l	ᠲ
+t|v|e|f|n	ᠲ
+t|v|l|m|a	ᠲᠠ
+t|v|o|m|b	ᠲ᠋
+t|v|o|m|i	ᠲᠠ
+t|v|o|m|l	ᠲ
+t|v|o|m|m	ᠲ᠋
+t|v|u|u|l	ᠳ
+u|C|u|f|h	ᠥ
+u|C|u|f|t	ᠥᠭᠡ
+u|C|u|m|t	ᠠᠭᠤ
+u|C|u|u|h	
+u|S|i|f|l	
+u|S|l|f|g	ᠥ
+u|S|l|f|h	ᠦ
+u|S|l|f|t	ᠦ
+u|S|l|m|u	
+u|S|l|u|h	ᠦ
+u|S|m|m|b	ᠤᠩ
+u|S|n|m|g	ᠤ
+u|S|n|u|$	
+u|S|r|f|e	
+u|S|r|u|$	
+u|S|r|u|S	ᠦ
+u|S|r|u|m	
+u|S|u|f|g	
+u|S|u|u|d	ᠤ
+u|S|u|u|g	ᠤ
+u|S|u|u|j	ᠦ
+u|S|u|u|n	ᠦ
+u|S|u|u|r	ᠦ
+u|S|v|m|t	ᠤ
+u|S|v|u|t	
+u|S|v|u|u	
+u|T|g|f|T	ᠥ
+u|T|g|f|n	ᠥ
+u|T|g|u|$	
+u|T|h|m|a	
+u|T|h|u|$	
+u|T|i|m|$	ᠤ
+u|T|l|f|d	
+u|T|l|u|$	ᠤ
+u|T|l|u|d	
+u|T|l|u|g	ᠤ
+u|T|l|u|i	
+u|T|l|u|z	ᠦ
+u|T|s|u|t	ᠰᠥ
+u|T|u|f|T	ᠦ
+u|T|u|f|d	ᠦ
+u|T|u|f|r	ᠦ
+u|T|u|f|v	ᠦᠭ
+u|T|u|m|$	ᠤ
+u|T|u|m|T	ᠤ
+u|T|u|m|d	ᠤ
+u|T|u|m|g	ᠤ
+u|T|u|m|h	ᠤ
+u|T|u|m|r	ᠤ
+u|T|u|m|s	ᠤ
+u|T|u|m|t	ᠤ
+u|T|u|u|$	
+u|T|u|u|T	ᠦ
+u|T|u|u|d	
+u|T|u|u|g	ᠤ
+u|T|u|u|l	
+u|T|v|u|$	ᠤ
+u|^|C|f|i	ᠤ
+u|^|C|u|r	ᠤ
+u|^|S|f|g	ᠦ
+u|^|S|f|i	
+u|^|S|u|$	ᠦ
+u|^|S|u|i	
+u|^|d|f|u	
+u|^|d|m|g	ᠨᠢᠳᠤ
+u|^|d|u|$	ᠦ
+u|^|d|u|i	ᠡᠳᠦ
+u|^|d|u|l	ᠥ
+u|^|g|u|$	ᠦ
+u|^|g|u|T	ᠤ
+u|^|g|u|i	ᠦ
+u|^|g|u|j	ᠤ
+u|^|g|u|n	ᠥᠩᠨᠡ
+u|^|g|u|t	ᠤ
+u|^|g|u|u	ᠥᠭ
+u|^|g|u|z	ᠤ
+u|^|h|u|$	ᠤ
+u|^|i|m|l	ᠤᠬ
+u|^|i|u|$	ᠤ
+u|^|j|f|r	ᠦ
+u|^|j|u|S	ᠦ
+u|^|l|f|m	ᠥ
+u|^|l|f|z	ᠥ
+u|^|l|m|z	ᠥ
+u|^|l|u|$	ᠦ
+u|^|l|u|g	
+u|^|l|u|h	ᠦ
+u|^|l|u|i	ᠤ
+u|^|l|u|j	ᠤ
+u|^|m|f|g	ᠦ
+u|^|m|f|h	
+u|^|m|f|s	ᠡᠮᠦ
+u|^|m|u|b	ᠤ
+u|^|m|u|n	ᠡᠮᠦ
+u|^|m|u|s	ᠡᠮᠦ
+u|^|n|f|g	ᠥ
+u|^|n|u|S	ᠤ
+u|^|n|u|s	ᠦ
+u|^|r|f|S	ᠥ
+u|^|r|f|n	ᠥ
+u|^|r|f|u	ᠥ
+u|^|r|u|C	ᠦ
+u|^|r|u|d	ᠤ
+u|^|r|u|g	
+u|^|r|u|h	ᠤ
+u|^|r|u|i	ᠤ
+u|^|r|u|j	ᠦ
+u|^|s|f|g	ᠥ
+u|^|s|u|C	ᠦ
+u|^|s|u|t	ᠤ
+u|^|t|f|g	ᠥ
+u|^|t|f|u	ᠥ
+u|^|u|f|T	ᠦᠭ
+u|^|u|f|g	ᠦ
+u|^|u|f|h	ᠦ
+u|^|u|f|t	ᠥᠭᠡ
+u|^|u|f|v	ᠦᠭ
+u|^|u|m|T	ᠤ
+u|^|u|m|g	ᠤ
+u|^|u|m|h	ᠤ
+u|^|u|m|t	ᠤᠭ
+u|^|u|m|y	ᠤ
+u|^|u|u|$	ᠦ
+u|^|u|u|C	ᠠᠭᠤ
+u|^|u|u|T	ᠤᠭ
+u|^|u|u|j	ᠠᠭᠤ
+u|^|u|u|s	ᠠᠭᠤ
+u|^|u|u|t	ᠤᠭ
+u|^|u|u|u	ᠤ
+u|^|u|u|v	ᠥ
+u|^|v|f|d	ᠡᠪᠦ
+u|^|v|f|l	ᠥ
+u|^|v|u|$	ᠥ
+u|^|v|u|T	ᠥ
+u|^|v|u|h	ᠥ
+u|^|v|u|l	ᠥ
+u|b|d|u|C	ᠥ
+u|b|d|u|n	ᠥ
+u|b|d|u|u	ᠦ
+u|b|g|f|e	ᠥ
+u|b|g|f|n	ᠦᠩ
+u|b|g|f|t	ᠥ
+u|b|g|f|u	ᠥ
+u|b|g|m|S	ᠤᠷᠰᠢ
+u|b|g|u|S	ᠤ
+u|b|g|u|d	ᠦ
+u|b|g|u|n	ᠦ
+u|b|h|f|e	ᠦ
+u|b|i|u|l	ᠦ
+u|b|l|u|$	
+u|b|l|u|b	ᠦ
+u|b|l|u|h	ᠦ
+u|b|l|u|j	ᠤ
+u|b|l|u|t	ᠤ
+u|b|m|u|$	ᠦ
+u|b|r|f|u	
+u|b|r|m|n	ᠤᠮ
+u|b|r|u|g	ᠤ
+u|b|r|u|j	ᠤ
+u|b|r|u|t	ᠥ
+u|b|r|u|u	
+u|b|s|m|$	ᠦ᠋
+u|b|u|f|g	ᠥᠭᠡ
+u|b|u|m|$	ᠤ
+u|b|u|m|d	ᠤ
+u|b|u|m|h	ᠤ
+u|b|u|m|r	ᠤᠭ
+u|b|u|u|$	ᠦ
+u|b|u|u|h	ᠥ
+u|b|u|u|n	ᠠᠭᠤ
+u|b|v|u|$	ᠤ
+u|d|g|f|l	
+u|d|g|f|n	ᠦᠩ
+u|d|g|u|l	ᠦ
+u|d|g|u|t	ᠤ
+u|d|g|u|u	ᠤ
+u|d|h|f|u	ᠥ
+u|d|h|u|u	ᠥ
+u|d|i|u|$	ᠤ
+u|d|j|f|i	ᠦ
+u|d|j|u|i	ᠥ
+u|d|l|f|g	
+u|d|l|f|z	
+u|d|l|u|i	ᠦ
+u|d|l|u|l	ᠤ
+u|d|l|u|r	ᠥ
+u|d|l|u|u	ᠥ
+u|d|m|u|$	ᠦ
+u|d|n|f|d	ᠥ
+u|d|n|f|e	
+u|d|n|m|d	ᠤᠮ
+u|d|n|u|S	ᠤ
+u|d|n|u|d	ᠥ
+u|d|n|u|g	ᠥ
+u|d|n|u|i	ᠤ
+u|d|r|f|t	ᠥ
+u|d|r|f|u	ᠥ
+u|d|r|u|$	ᠦ
+u|d|r|u|S	ᠤ
+u|d|r|u|h	ᠦ
+u|d|r|u|i	ᠦ
+u|d|r|u|j	ᠦ
+u|d|r|u|l	ᠦ
+u|d|u|f|d	ᠦ
+u|d|u|f|g	ᠦ
+u|d|u|f|r	ᠦᠭ
+u|d|u|f|s	ᠦᠭ
+u|d|u|f|t	ᠦᠭ
+u|d|u|m|C	ᠤ
+u|d|u|m|g	ᠤ
+u|d|u|m|n	ᠤᠭ
+u|d|u|m|t	ᠤ
+u|d|u|u|C	ᠠᠭᠤ
+u|d|u|u|S	
+u|d|u|u|d	ᠦᠭᠡ
+u|d|u|u|g	ᠤ
+u|d|u|u|h	
+u|d|u|u|n	ᠦᠭᠡ
+u|d|u|u|s	ᠠᠭᠤ
+u|d|v|u|$	ᠤ
+u|g|C|u|$	
+u|g|S|u|i	
+u|g|T|u|$	ᠦ
+u|g|d|f|i	ᠤ
+u|g|d|f|u	
+u|g|d|u|$	ᠤ
+u|g|d|u|i	ᠤ
+u|g|g|f|i	
+u|g|g|u|C	
+u|g|g|u|d	ᠦ
+u|g|h|u|i	ᠥ
+u|g|h|u|u	ᠥ
+u|g|i|f|C	ᠦᠶᠢ
+u|g|i|f|d	ᠦᠶ
+u|g|i|f|h	ᠦᠶ
+u|g|i|f|l	
+u|g|i|f|r	ᠦᠶ
+u|g|i|f|s	
+u|g|i|f|t	ᠦᠶ
+u|g|i|m|$	ᠤ
+u|g|i|m|C	ᠦᠶ
+u|g|i|m|T	ᠦᠶ
+u|g|i|m|g	ᠤ
+u|g|i|m|h	ᠦᠶ
+u|g|i|m|j	ᠦᠶ
+u|g|i|m|m	ᠤ
+u|g|i|m|s	ᠤ
+u|g|i|m|t	ᠦᠶ
+u|g|i|m|y	ᠤ
+u|g|i|u|C	ᠦᠶ
+u|g|i|u|d	
+u|g|i|u|g	ᠦ
+u|g|i|u|h	ᠦ
+u|g|i|u|j	ᠦ
+u|g|i|u|l	ᠦ
+u|g|i|u|m	ᠦ
+u|g|i|u|n	ᠦ
+u|g|i|u|r	
+u|g|j|f|u	
+u|g|l|f|u	
+u|g|l|u|$	
+u|g|l|u|T	ᠦ
+u|g|l|u|d	ᠤ
+u|g|l|u|g	ᠤ
+u|g|l|u|j	
+u|g|l|u|s	
+u|g|l|u|t	ᠦ
+u|g|l|u|u	
+u|g|l|u|z	
+u|g|m|u|h	ᠥ
+u|g|m|u|s	ᠥ
+u|g|n|f|j	ᠥ
+u|g|n|u|S	ᠤ
+u|g|n|u|d	ᠦ
+u|g|n|u|i	ᠤ
+u|g|n|u|j	ᠥ
+u|g|r|f|e	ᠦ
+u|g|r|f|g	ᠦ
+u|g|r|f|v	ᠦ
+u|g|r|u|S	ᠥ
+u|g|r|u|i	ᠤ
+u|g|r|u|l	ᠥ
+u|g|r|u|m	ᠥ
+u|g|r|u|v	ᠤ
+u|g|s|u|$	ᠦ
+u|g|u|f|d	
+u|g|u|f|j	
+u|g|u|f|s	ᠦᠭᠡ
+u|g|u|m|l	ᠠᠭᠤ
+u|g|u|u|C	ᠦᠭᠡ
+u|g|u|u|S	ᠦ
+u|g|u|u|l	ᠤ
+u|g|u|u|r	ᠦ
+u|g|v|u|$	ᠦ
+u|g|v|u|S	ᠥ
+u|g|v|u|d	ᠥ
+u|g|v|u|i	ᠥ
+u|h|a|m|$	
+u|h|g|f|n	
+u|h|g|u|$	
+u|h|g|u|d	
+u|h|h|f|e	
+u|h|h|u|$	
+u|h|i|m|$	
+u|h|i|m|v	ᠤ
+u|h|i|u|h	ᠤᠶ
+u|h|i|u|s	ᠤᠶ
+u|h|j|u|$	ᠥ
+u|h|l|f|C	ᠥ
+u|h|l|f|d	ᠥ
+u|h|l|f|s	ᠥ
+u|h|l|u|j	
+u|h|l|u|t	
+u|h|m|f|e	
+u|h|m|u|h	
+u|h|m|u|i	
+u|h|n|f|l	ᠦ
+u|h|n|f|t	ᠥ
+u|h|n|u|$	
+u|h|n|u|i	
+u|h|n|u|j	
+u|h|n|u|l	
+u|h|n|u|s	
+u|h|r|u|$	
+u|h|r|u|C	
+u|h|r|u|T	
+u|h|r|u|d	
+u|h|r|u|i	
+u|h|r|u|j	
+u|h|r|u|n	
+u|h|s|u|r	ᠥ
+u|h|s|u|u	ᠥ
+u|h|u|f|T	ᠡᠭᠦ
+u|h|u|f|d	ᠡᠭᠦ
+u|h|u|f|l	ᠡᠭᠦ
+u|h|u|f|m	ᠥᠭᠡ
+u|h|u|f|n	
+u|h|u|f|s	ᠡᠭᠦ
+u|h|u|f|t	ᠥ
+u|h|u|f|y	ᠥᠶ᠋
+u|h|u|m|$	ᠤ
+u|h|u|m|S	ᠤ
+u|h|u|m|g	ᠤ
+u|h|u|m|h	ᠤ
+u|h|u|m|j	
+u|h|u|m|n	
+u|h|u|u|$	ᠦ
+u|h|u|u|C	ᠠᠭᠤ
+u|h|u|u|S	ᠤ
+u|h|u|u|T	ᠥᠭᠡᠭᠡ
+u|h|u|u|d	ᠦᠭᠡ
+u|h|u|u|g	ᠥᠭᠡᠭᠡ
+u|h|u|u|j	ᠥᠭᠡᠭᠡ
+u|h|u|u|l	ᠤ
+u|h|u|u|m	ᠥᠬᠡ
+u|h|u|u|n	ᠥᠭᠡᠭᠡ
+u|h|u|u|z	ᠤ
+u|h|v|f|r	
+u|h|v|f|u	ᠥᠪ
+u|h|v|u|i	
+u|h|v|u|t	
+u|j|n|u|z	ᠤ
+u|j|r|f|j	ᠦ
+u|j|u|m|z	
+u|j|u|u|d	
+u|j|u|u|h	
+u|j|u|u|s	
+u|k|i|m|$	ᠤ
+u|l|g|f|l	ᠦ
+u|l|g|u|S	ᠤ
+u|l|g|u|n	ᠥ
+u|l|g|u|t	ᠥ
+u|l|j|f|i	ᠦ
+u|l|l|u|T	ᠦ
+u|l|n|u|g	ᠥ
+u|l|r|u|h	ᠥ
+u|l|u|m|$	ᠤ
+u|l|u|m|s	ᠤᠭ
+u|l|u|u|C	ᠡᠭᠦ
+u|l|u|u|h	ᠠᠭᠤ
+u|l|u|u|j	ᠤ
+u|l|u|u|l	ᠦᠭᠡ
+u|l|u|u|n	ᠦᠭᠡ
+u|l|u|u|r	ᠡᠭᠦ
+u|l|u|u|s	ᠥᠭᠡ
+u|l|u|u|t	ᠦᠭ
+u|l|v|u|$	ᠦ
+u|l|v|u|C	
+u|l|v|u|S	ᠦ
+u|m|h|u|i	ᠤ
+u|m|h|u|r	ᠤ
+u|m|l|u|$	
+u|m|l|u|g	ᠤ
+u|m|r|f|d	ᠦ
+u|m|r|f|l	ᠦ
+u|m|r|u|$	ᠦ
+u|m|r|u|C	ᠦ
+u|m|r|u|i	ᠤ
+u|m|r|u|l	ᠦ
+u|m|s|u|$	ᠦ
+u|m|u|f|j	ᠦ
+u|m|u|f|l	ᠦ
+u|m|u|f|s	ᠦ
+u|m|u|m|$	ᠤ
+u|m|u|m|s	ᠤ
+u|m|u|u|$	ᠦ
+u|m|u|u|g	ᠥ
+u|m|u|u|j	ᠦ
+u|m|u|u|l	ᠠᠭᠤ
+u|m|u|u|n	ᠡᠭᠦ
+u|m|u|u|s	ᠦ
+u|n|d|f|e	ᠦ
+u|n|d|u|u	ᠦ
+u|n|g|f|e	
+u|n|g|u|S	
+u|n|g|u|d	
+u|n|h|f|T	ᠥ
+u|n|h|f|u	ᠥ
+u|n|h|u|T	ᠥ
+u|n|h|u|u	ᠥ
+u|n|h|u|v	ᠥ
+u|n|j|u|r	ᠥ
+u|n|l|m|m	
+u|n|l|u|d	
+u|n|l|u|i	ᠤ
+u|n|l|u|m	
+u|n|m|u|C	ᠤ
+u|n|n|u|j	ᠤ
+u|n|n|u|u	ᠥ
+u|n|r|f|u	
+u|n|r|m|u	
+u|n|r|u|$	ᠦ
+u|n|r|u|S	ᠤ
+u|n|u|f|$	ᠦ
+u|n|u|f|C	ᠦᠭ
+u|n|u|f|h	ᠦ
+u|n|u|f|n	ᠦ
+u|n|u|f|s	ᠦ
+u|n|u|m|$	ᠤ
+u|n|u|m|T	ᠤ
+u|n|u|m|g	ᠤ
+u|n|u|m|h	ᠤ
+u|n|u|m|s	ᠤᠭ
+u|n|u|m|y	ᠤ
+u|n|u|u|$	ᠤ
+u|n|u|u|d	ᠥ
+u|n|u|u|g	ᠤ
+u|n|u|u|j	ᠡᠭᠦ
+u|n|u|u|n	
+u|n|u|u|r	ᠡᠭᠦ
+u|n|u|u|v	ᠦᠭᠡ
+u|p|n|u|$	
+u|p|u|m|r	
+u|r|g|u|T	ᠥ
+u|r|g|u|n	ᠥ
+u|r|i|m|h	ᠤᠶ
+u|r|i|m|l	ᠤᠶ
+u|r|l|u|b	ᠥ
+u|r|l|u|h	ᠦ
+u|r|l|u|j	ᠦ
+u|r|l|u|t	ᠥ
+u|r|l|u|z	ᠦ
+u|r|m|u|$	ᠦ
+u|r|m|u|d	ᠥ
+u|r|n|u|g	ᠥ
+u|r|u|f|$	ᠦ
+u|r|u|f|T	ᠦ
+u|r|u|f|d	ᠦ
+u|r|u|f|g	ᠦ
+u|r|u|f|h	ᠦ
+u|r|u|f|r	ᠦᠭᠡ
+u|r|u|f|s	
+u|r|u|f|t	ᠦ
+u|r|u|f|v	ᠦᠭᠡ
+u|r|u|f|y	
+u|r|u|m|$	ᠤ
+u|r|u|m|S	ᠤᠭ
+u|r|u|m|T	ᠤᠭ
+u|r|u|m|d	ᠤᠭ
+u|r|u|m|t	ᠤ
+u|r|u|m|v	ᠤᠭ
+u|r|u|u|$	ᠦ
+u|r|u|u|d	ᠦᠭᠡ
+u|r|u|u|l	ᠡᠭᠦ
+u|r|u|u|n	ᠤᠭ
+u|r|u|u|s	ᠥᠭᠡ
+u|r|u|u|v	ᠥᠭᠡ
+u|r|v|u|$	
+u|r|v|u|d	ᠦ
+u|r|v|u|g	
+u|r|v|u|h	ᠦ
+u|r|v|u|l	ᠦ
+u|s|g|u|$	
+u|s|g|u|l	ᠦ
+u|s|g|u|n	ᠥᠩᠨᠡ
+u|s|h|f|$	
+u|s|h|f|u	ᠥ
+u|s|h|u|r	ᠥ
+u|s|h|u|u	ᠥ
+u|s|j|u|i	ᠦ
+u|s|l|f|u	ᠥ
+u|s|l|m|$	ᠤᠶᠢ
+u|s|l|u|$	ᠥ
+u|s|l|u|i	ᠥ
+u|s|l|u|u	ᠥ
+u|s|l|u|z	ᠥ
+u|s|n|u|C	ᠤ
+u|s|n|u|d	ᠤ
+u|s|n|u|j	ᠤ
+u|s|n|u|u	ᠥ
+u|s|r|f|g	ᠥ
+u|s|r|f|l	ᠥ
+u|s|r|u|C	ᠤ
+u|s|r|u|S	ᠦ
+u|s|r|u|d	ᠦ
+u|s|r|u|h	ᠦ
+u|s|r|u|j	ᠤ
+u|s|r|u|t	ᠦ
+u|s|u|f|C	ᠦᠭ
+u|s|u|f|l	ᠦᠭ
+u|s|u|f|m	ᠦ
+u|s|u|f|r	ᠦᠭᠡ
+u|s|u|m|n	ᠤᠭ
+u|s|u|m|s	ᠤᠭ
+u|s|u|u|d	ᠦᠭᠡ
+u|s|u|u|g	ᠠᠭᠤ
+u|s|u|u|j	ᠡᠭᠦ
+u|s|u|u|l	ᠦᠭᠡ
+u|s|u|u|m	ᠥᠭ
+u|s|u|u|v	ᠥᠭᠡ
+u|s|v|u|d	ᠤ
+u|t|S|u|u	ᠥ
+u|t|d|u|u	ᠥ
+u|t|g|f|s	ᠡᠭᠦ
+u|t|g|m|n	ᠤᠩ
+u|t|g|u|C	ᠤ
+u|t|g|u|l	
+u|t|g|u|n	ᠥ
+u|t|g|u|r	ᠥ
+u|t|g|u|s	ᠡᠭᠦ
+u|t|g|u|u	ᠤ
+u|t|i|u|$	ᠤ
+u|t|j|u|$	ᠥ
+u|t|l|f|j	ᠥ
+u|t|l|f|u	ᠥ
+u|t|l|u|$	
+u|t|l|u|g	ᠤ
+u|t|l|u|h	ᠦ
+u|t|m|f|u	
+u|t|m|u|u	
+u|t|n|f|T	
+u|t|n|u|$	
+u|t|n|u|S	ᠦ
+u|t|r|m|$	ᠦ᠋
+u|t|r|u|$	ᠦ
+u|t|r|u|S	ᠤ
+u|t|r|u|i	ᠦ
+u|t|r|u|j	ᠦ
+u|t|r|u|s	ᠦ
+u|t|s|f|u	ᠥ
+u|t|s|u|$	ᠤ
+u|t|u|f|$	ᠦ
+u|t|u|f|d	ᠡᠭᠦ
+u|t|u|f|g	ᠡᠭᠦ
+u|t|u|f|m	ᠡᠭᠦ
+u|t|u|f|n	ᠡᠭᠦ
+u|t|u|f|r	ᠡᠭᠦ
+u|t|u|f|v	ᠡᠭᠦ
+u|t|u|m|$	ᠤ
+u|t|u|m|S	ᠠᠭᠤ
+u|t|u|m|d	ᠤ
+u|t|u|m|g	
+u|t|u|m|h	ᠤ
+u|t|u|m|j	ᠠᠭᠤ
+u|t|u|m|n	ᠠᠭᠤ
+u|t|u|m|r	ᠠᠭᠤ
+u|t|u|m|s	ᠤ
+u|t|u|m|v	
+u|t|u|m|z	ᠤ
+u|t|u|u|$	ᠦ
+u|t|u|u|C	
+u|t|u|u|S	ᠦᠭ
+u|t|u|u|h	ᠦ
+u|t|u|u|j	ᠤᠭ
+u|t|u|u|l	ᠤ
+u|t|u|u|z	ᠦ
+u|t|v|f|l	ᠥ
+u|t|v|u|S	ᠦ
+u|u|C|f|i	ᠦᠯ
+u|u|S|m|a	ᠤ
+u|u|S|m|r	ᠤ
+u|u|S|u|u	ᠦ
+u|u|T|f|g	ᠦ
+u|u|T|f|l	ᠦ
+u|u|T|m|g	ᠤ
+u|u|T|m|u	ᠤ
+u|u|d|f|i	ᠦ
+u|u|d|m|n	ᠤ
+u|u|g|m|a	
+u|u|g|m|d	
+u|u|g|m|u	ᠦ
+u|u|g|u|i	ᠤ
+u|u|h|m|i	ᠤ
+u|u|h|m|t	ᠤ
+u|u|h|u|C	ᠤ
+u|u|j|u|u	ᠤ
+u|u|l|f|b	ᠦ
+u|u|l|u|i	ᠤ
+u|u|r|f|g	ᠦ
+u|u|r|f|i	ᠦ
+u|u|r|f|s	ᠦ
+u|u|r|u|v	ᠤ
+u|u|t|m|l	ᠤ
+u|u|t|u|$	ᠤ
+u|u|v|f|C	ᠦ
+u|u|v|m|t	
+u|v|l|u|j	ᠦ
+u|v|l|u|z	ᠥ
+u|v|n|u|h	ᠦ
+u|v|r|u|C	
+u|v|r|u|s	ᠥ
+u|v|u|f|$	ᠦ
+u|v|u|f|T	
+u|v|u|f|n	
+u|v|u|f|r	ᠦ
+u|v|u|m|$	ᠤ
+u|v|u|m|S	ᠤ
+u|v|u|m|d	ᠤ
+u|v|u|m|h	ᠤ
+u|v|u|m|l	ᠤᠭ
+u|v|u|m|z	ᠤ
+u|v|u|u|n	ᠡᠭᠦ
+u|v|u|u|r	ᠡᠭᠦ
+u|y|l|f|h	ᠦ
+u|y|m|m|$	ᠤᠶᠢ
+u|y|m|u|$	ᠤ
+u|y|n|u|$	ᠠᠭᠤ
+u|y|r|m|a	ᠤᠶᠢ
+u|y|t|m|a	ᠦ
+u|z|g|m|t	
+u|z|g|u|$	
+u|z|g|u|i	ᠤ
+u|z|i|m|$	ᠦ
+u|z|i|m|C	ᠦᠶ
+u|z|n|u|$	
+u|z|n|u|j	ᠤ
+u|z|n|u|t	
+u|z|r|f|C	ᠥ
+u|z|r|f|h	
+u|z|r|f|u	ᠥ
+u|z|r|m|S	ᠤ
+u|z|r|m|v	ᠤ
+u|z|r|u|$	ᠦᠢ
+u|z|r|u|S	
+u|z|r|u|g	
+u|z|r|u|h	
+u|z|r|u|j	
+u|z|s|f|l	
+u|z|s|m|a	
+u|z|u|f|n	ᠥᠭᠡ
+u|z|u|f|v	ᠥᠭᠡᠭᠡ
+u|z|u|m|h	ᠤ
+u|z|u|m|n	ᠤ
+u|z|u|m|v	ᠤ
+u|z|u|m|z	ᠤ
+u|z|u|u|$	ᠦ
+u|z|u|u|C	ᠠᠭᠤ
+u|z|u|u|d	
+u|z|u|u|j	ᠥᠭᠡᠭᠡ
+u|z|u|u|m	ᠥᠭᠡᠭᠡ
+u|z|u|u|r	ᠠᠭᠤ
+u|z|u|u|v	ᠥᠭᠡᠭᠡ
+u|z|v|f|l	ᠦ
+u|z|v|u|C	ᠦ
+v|a|C|m|h	ᠪᠤ
+v|a|a|m|n	ᠪᠤ
+v|a|a|m|r	ᠪᠤ
+v|a|a|m|v	ᠪᠤ
+v|a|a|m|y	ᠪᠤ
+v|a|d|m|u	ᠪᠠ
+v|a|j|m|$	ᠪᠠ
+v|a|l|m|i	ᠪᠤ
+v|a|l|m|u	ᠪ
+v|a|r|m|$	ᠸ
+v|a|r|m|a	ᠪᠤ
+v|a|s|m|t	ᠪᠤ
+v|a|t|m|$	ᠪᠤ
+v|a|t|m|n	ᠪᠠ
+v|a|t|m|o	
+v|d|a|m|l	ᠪ
+v|d|e|f|l	ᠪ
+v|d|o|m|l	ᠪᠠ
+v|e|d|f|u	ᠪᠡ
+v|e|e|f|h	ᠪᠢ
+v|e|g|f|u	ᠪ
+v|e|l|f|i	
+v|e|r|m|o	
+v|e|s|f|d	ᠪᠡ
+v|g|a|m|a	ᠸ
+v|g|a|m|i	ᠪ
+v|h|a|m|a	ᠪ
+v|h|a|m|l	ᠪ
+v|i|a|m|r	ᠪᠤ
+v|i|a|m|t	ᠸ
+v|i|e|f|n	ᠪᠦ
+v|i|g|m|o	ᠪᠢ
+v|i|l|m|a	ᠪ
+v|o|i|m|d	ᠸ
+v|o|i|m|n	ᠸ
+v|o|n|m|o	ᠪᠤ
+v|o|o|m|g	ᠪᠤ
+v|o|o|m|m	ᠪᠠ
+v|o|s|m|$	ᠪ
+v|o|s|m|d	ᠪᠣ
+v|o|s|m|l	ᠪᠣ
+v|o|s|m|o	ᠪᠠᠭ
+v|r|a|m|j	ᠪᠤ
+v|r|a|m|s	ᠪᠤ
+v|r|e|f|s	ᠪᠢ
+v|r|i|u|i	ᠪᠥ
+v|r|o|m|o	ᠸ᠎ᠠ
+v|r|u|f|l	ᠪᠡ
+v|r|u|u|g	ᠪ
+v|r|u|u|u	ᠪᠡᠭᠡ
+v|s|a|m|a	ᠪ
+v|s|e|f|e	ᠪ
+v|s|e|f|l	ᠪ
+v|t|a|m|r	ᠪᠤ
+v|u|a|m|a	ᠪᠢᠶ
+v|u|a|m|h	ᠪᠤ
+v|u|a|m|r	ᠪᠤ
+v|u|d|m|a	ᠪ
+v|u|d|m|i	ᠪᠠ
+v|u|d|u|$	ᠪᠤ
+v|u|e|f|h	ᠪᠢ
+v|u|e|f|n	ᠪᠦ
+v|u|e|f|r	ᠪᠦ
+v|u|h|u|r	ᠪᠥ
+v|u|i|u|i	ᠪᠦ
+v|u|r|f|u	ᠪᠦ
+v|u|s|m|a	ᠪᠤᠭ
+v|u|t|u|g	ᠡᠪᠡ
+v|u|u|f|l	ᠡᠪ
+v|u|u|u|l	ᠡᠪ
+v|z|a|m|r	ᠪᠤ
+y|^|a|m|T	ᠢ
+y|^|a|m|l	ᠢ
+y|^|a|m|t	ᠢ
+y|^|a|m|z	ᠢ
+y|^|e|f|g	ᠶᠥ
+y|^|e|f|j	ᠶᠡᠭ
+y|^|e|f|n	ᠶᠥ
+y|^|e|f|s	ᠶᠢ
+y|^|o|m|C	ᠶᠣ
+y|^|o|m|t	ᠶᠣ
+y|^|o|m|z	ᠶᠣ
+y|^|u|f|j	ᠶᠡ
+y|a|a|m|$	ᠶ᠎
+y|a|a|m|v	ᠶᠠᠭ
+y|a|u|m|h	ᠶᠤ
+y|a|u|m|r	ᠶᠤ
+y|a|u|m|z	ᠶᠤ
+y|e|e|f|d	ᠶ
+y|e|e|f|l	ᠶ
+y|e|e|f|n	ᠶ
+y|e|e|f|r	
+y|e|e|f|v	ᠶ
+y|i|a|m|d	ᠶ
+y|i|a|m|l	ᠶ
+y|i|a|m|n	ᠶ
+y|i|a|m|s	ᠶ
+y|i|a|m|t	ᠶ
+y|i|e|f|l	
+y|i|e|f|n	ᠶ
+y|i|e|f|r	
+y|i|e|m|$	ᠶ᠎
+y|i|o|m|l	ᠶᠠ
+y|i|o|m|s	ᠶ
+y|l|a|m|n	ᠢ
+y|l|a|m|r	ᠶᠠᠭ
+y|l|u|m|l	
+y|m|a|m|$	ᠶ᠎
+y|o|e|m|$	ᠶ
+y|o|o|m|$	ᠶ᠎ᠠ
+y|o|o|m|C	ᠶᠠ
+y|o|o|m|r	ᠶᠠ
+y|t|e|m|a	ᠶ
+y|u|a|m|$	ᠶ᠎
+y|u|a|m|C	ᠶᠠᠭ
+y|u|a|m|S	ᠶᠠᠭ
+y|u|e|f|$	ᠶ᠎
+y|u|e|f|g	ᠶᠥ
+y|u|e|f|h	ᠶᠥ
+z|^|a|m|p	ᠽ
+z|^|e|f|m	ᠵᠢ
+z|^|e|f|v	ᠵᠢ
+z|^|u|f|t	ᠵᠢ
+z|^|u|m|r	ᠵᠢ
+z|^|u|u|s	ᠵᠢ
+z|e|e|f|e	ᠵᠢᠶ
+z|e|g|f|e	ᠵᠢ
+z|e|g|f|i	ᠵᠢ
+z|g|e|f|g	ᠵᠢ
+z|l|e|f|m	ᠵᠢ
+z|l|i|m|i	ᠵᠡ
+z|l|o|m|l	ᠵ
+z|l|o|m|o	ᠵ
+z|l|u|u|u	ᠵᠡᠭᠡ
+z|n|a|m|g	ᠵᠤ
+z|n|d|m|o	ᠵᠢ
+z|n|g|m|a	ᠵᠤ
+z|n|l|m|u	ᠵᠤ
+z|o|o|m|g	ᠽ

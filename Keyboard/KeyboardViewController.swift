@@ -23,6 +23,10 @@ final class KeyboardViewController: UIInputViewController {
     /// Candidates for the current buffer, in display order (kept in sync with
     /// what the candidate bar shows so tap indexes always agree).
     private var candidates: [Candidate] = []
+    /// Cyrillic form of the word committed last (nil after punctuation, a
+    /// newline, a deletion in the host, or a verbatim commit). Drives the
+    /// next-word predictions and the context ranking of the next word.
+    private var lastCommitted: String?
     private var keyboardView: KeyboardView!
     private var heightConstraint: NSLayoutConstraint?
 
@@ -34,9 +38,14 @@ final class KeyboardViewController: UIInputViewController {
         super.viewDidLoad()
         MongolFont.register(in: fontBundle)
 
-        // Parse the lexicon off the main thread so the first keystroke never
-        // waits for it (Lexicon.shared is a thread-safe lazy static).
-        DispatchQueue.global(qos: .userInitiated).async { _ = Lexicon.shared.count }
+        // Parse the data tables off the main thread so the first keystroke
+        // never waits for them (the shared instances are thread-safe lazy
+        // statics).
+        DispatchQueue.global(qos: .userInitiated).async {
+            _ = Lexicon.shared.count
+            _ = Predictor.shared.count
+            _ = OrthographyConverter.shared.isEmpty
+        }
 
         let kb = KeyboardView(fontBundle: fontBundle)
         kb.delegate = self
@@ -84,10 +93,18 @@ final class KeyboardViewController: UIInputViewController {
     // MARK: Composition bridge
 
     private func refreshPreview() {
-        candidates = engine.hasComposition
-            ? suggester.candidates(forLatin: engine.latinBuffer, verbatim: engine.mongolianOutput)
-            : []
-        let defaultIndex = candidates.firstIndex { $0.source != .completion } ?? 0
+        if engine.hasComposition {
+            candidates = suggester.candidates(forLatin: engine.latinBuffer,
+                                              verbatim: engine.mongolianOutput,
+                                              previous: lastCommitted)
+        } else if let previous = lastCommitted {
+            // Empty buffer right after a word: offer what usually follows it.
+            candidates = suggester.predictions(after: previous)
+        } else {
+            candidates = []
+        }
+        // Predictions have no default (nothing is committed by Space).
+        let defaultIndex = candidates.firstIndex { $0.source != .completion && $0.source != .prediction } ?? -1
         keyboardView.updateCandidates(latin: engine.latinBuffer,
                                       candidates: candidates,
                                       highlightedIndex: defaultIndex)
@@ -99,10 +116,11 @@ final class KeyboardViewController: UIInputViewController {
     /// (completions) are never auto-committed.
     private func flushComposition() {
         guard engine.hasComposition else { return }
-        let text = SuggestionEngine.defaultCandidate(in: candidates)?.mongolian
-            ?? engine.mongolianOutput
+        let chosen = SuggestionEngine.defaultCandidate(in: candidates)
+        let text = chosen?.mongolian ?? engine.mongolianOutput
         engine.reset()
         candidates = []
+        lastCommitted = chosen?.cyrillic
         textDocumentProxy.insertText(text)
     }
 
@@ -127,6 +145,7 @@ extension KeyboardViewController: KeyboardViewDelegate {
         case .symbol(let s):
             flushComposition()
             textDocumentProxy.insertText(s)
+            lastCommitted = nil      // punctuation ends the phrase
             refreshPreview()
 
         case .backspace:
@@ -134,6 +153,8 @@ extension KeyboardViewController: KeyboardViewDelegate {
                 refreshPreview()
             } else {
                 textDocumentProxy.deleteBackward()
+                lastCommitted = nil  // the context word is being edited
+                refreshPreview()
             }
 
         case .space:
@@ -144,6 +165,7 @@ extension KeyboardViewController: KeyboardViewDelegate {
         case .newline:
             flushComposition()
             textDocumentProxy.insertText("\n")
+            lastCommitted = nil
             refreshPreview()
 
         case .switchToNumbers:
@@ -161,14 +183,16 @@ extension KeyboardViewController: KeyboardViewDelegate {
         }
     }
 
-    /// A tapped candidate commits that word followed by a space (word-level
-    /// input, like tapping a pinyin candidate).
+    /// A tapped candidate (or prediction) commits that word followed by a
+    /// space (word-level input, like tapping a pinyin candidate), and the
+    /// bar moves on to what usually follows it.
     func keyboardView(_ view: KeyboardView, didSelectCandidateAt index: Int) {
         guard candidates.indices.contains(index) else { return }
-        let text = candidates[index].mongolian
+        let chosen = candidates[index]
         engine.reset()
         candidates = []
-        textDocumentProxy.insertText(text + " ")
+        lastCommitted = chosen.cyrillic
+        textDocumentProxy.insertText(chosen.mongolian + " ")
         refreshPreview()
     }
 }

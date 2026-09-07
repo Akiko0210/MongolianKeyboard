@@ -25,7 +25,10 @@ final class MongolKeyUITests: XCTestCase {
     private let app = XCUIApplication()
     private var shotIndex = 0
     private var shotPrefix = "shot"
-    private static let sampleWords = ["mongol", "sain", "aavdaa"]
+    /// Typed on MongolKey, in order. `nohoy` is the informal spelling of
+    /// nohoi (нохой) and must find the same word; the last word's commit
+    /// must be followed by next-word predictions (сайн → сайхан, байна …).
+    private static let sampleWords = ["mongol", "aavdaa", "nohoy", "sain"]
 
     override func setUp() {
         super.setUp()
@@ -108,7 +111,27 @@ final class MongolKeyUITests: XCTestCase {
             pause(0.6)
             if i == 0 { snap("committed-\(word)") }
         }
-        snap("typed-both-words")
+        snap("typed-all-words")
+
+        // After a committed word the bar predicts what usually follows it;
+        // tapping a prediction commits it (plus a space). The cells are
+        // exposed as buttons only when the extension's elements reach the
+        // test process (same condition as the keys themselves).
+        let elementsExposed = key("a").exists
+        let prediction = app.descendants(matching: .any)
+            .matching(identifier: "mk.candidate.prediction").firstMatch
+        let predicted = prediction.waitForExistence(timeout: 4)
+        log("next-word prediction shown after 'sain': \(predicted) (keys exposed as elements: \(elementsExposed))")
+        snap("predictions")
+        if elementsExposed {
+            XCTAssertTrue(predicted, "next-word predictions should appear after committing 'sain'")
+        }
+        if predicted {
+            log("first prediction: \(prediction.label) = \((prediction.value as? String) ?? "")")
+            prediction.tap()
+            pause(0.6)
+            snap("prediction-tapped")
+        }
 
         // Numbers layer, then back.
         tapMongolKey("numbers")
@@ -123,6 +146,10 @@ final class MongolKeyUITests: XCTestCase {
         XCTAssertTrue(value.contains("ᠮᠣᠩᠭᠣᠯ"), "mongol should commit the dictionary spelling")
         XCTAssertTrue(value.contains("ᠰᠠᠶᠢᠨ"), "sain should commit the dictionary spelling")
         XCTAssertTrue(value.contains("ᠠᠪᠤ\u{202F}ᠳᠤ\u{202F}ᠪᠠᠨ"), "aavdaa should commit ᠠᠪᠤ ᠳᠤ ᠪᠠᠨ (corpus spelling)")
+        XCTAssertTrue(value.contains("ᠨᠣᠬᠠᠢ"), "nohoy (informal spelling of nohoi) should commit нохой's dictionary spelling")
+        if predicted {
+            XCTAssertTrue(value.contains("ᠰᠠᠶᠢᠬᠠᠨ"), "tapping the first prediction after сайн should insert сайхан (ᠰᠠᠶᠢᠬᠠᠨ)")
+        }
         snap("final")
     }
 

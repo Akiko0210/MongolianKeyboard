@@ -18,7 +18,9 @@ let package = Package(
             name: "MongolEngine",
             path: "Sources/MongolEngine",
             resources: [
-                .copy("Resources/lexicon.tsv")
+                .copy("Resources/lexicon.tsv"),
+                .copy("Resources/bigrams.tsv"),
+                .copy("Resources/orthography.tsv")
             ]
         ),
         .testTarget(

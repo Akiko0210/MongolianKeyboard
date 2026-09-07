@@ -23,7 +23,7 @@ Verified by unit tests and by running the app + keyboard in the iOS Simulator
 
 - **Transliteration engine** — longest-match tokenizer, digraph detection
   (`ng kh gh ch sh ts oe ue`), composing buffer with token-level backspace.
-- **Word suggestions** — dictionary-backed candidates from a 48,444-entry
+- **Word suggestions** — dictionary-backed candidates from a 52,324-entry
   lexicon (27k dictionary words plus 20k corpus-verified inflected forms),
   ranked by usage frequency, with deterministic spelling-variant folding, a
   rule engine for unseen case suffixes and verb forms, and every rule checked
@@ -44,67 +44,108 @@ Verified by unit tests and by running the app + keyboard in the iOS Simulator
 ## Word suggestions (pinyin-style)
 
 Letter-by-letter transliteration cannot produce correct _mongol bichig_: the
-script's orthography is historical, so сайн is spelled ᠰᠠᠶᠢᠨ (sayin) and
-өдөр is spelled ᠡᠳᠦᠷ (edür) — spellings you cannot reach by typing the
+script's orthography is historical, so сайн is spelled ᠰᠠᠶᠢᠨ (sayin), аав is
+ᠠᠪᠤ (abu) and өдөр is ᠡᠳᠦᠷ (edür) — spellings you cannot reach by typing the
 modern sounds one letter at a time. The keyboard therefore works like a
-pinyin IME: the Latin buffer is looked up in a bundled **27,957-word lexicon**
-of real traditional-script spellings indexed by modern pronunciation, and the
-candidate bar offers the words you probably mean.
+pinyin IME: the Latin buffer is looked up in a bundled lexicon of **52,324
+verified spellings for 44,915 Cyrillic word forms**, and the candidate bar
+offers the words you probably mean, ranked by how Mongolians actually write
+(23.7 million words of news plus 79k lines of lyrics).
 
 **How candidates are ordered (accuracy first):**
 
 1. **Exact dictionary matches** — words pronounced exactly like the buffer,
-   most frequent first (homophones such as уруу/өрөө/үрүү all appear, each
-   captioned with its Cyrillic form so you can confirm the word).
-2. **The verbatim transliteration** — always present, so out-of-vocabulary
-   words can still be typed letter by letter; captioned with the raw Latin.
-3. **Completions** — dictionary words the buffer is a prefix of. These are
-   tap-only predictions: **Space never auto-commits a completion**, because
-   committing a word you didn't finish typing would trade accuracy for
-   convenience.
-
-**Space** (or any punctuation/return) commits the highlighted default — the
-best exact match, else the verbatim buffer. **Tapping** any candidate commits
-that word plus a space.
-
-4. **Inflected words and conjugated verbs by rule** — for anything the
-   lexicon does not carry, the keyboard spells `<dictionary stem> + <suffix>`
-   itself: nouns with case, plural, possessive and stacked suffixes
-   (`nomd`, `mongolyn`, `usand`, `nohoinuud`, `aavynhaa`…), written detached
-   with a narrow no-break space and shaped by vowel harmony and the stem's
-   last written letter (`ᠶᠢᠨ` after a vowel, bare `ᠤ/ᠦ` after `ᠨ`, `ᠲᠤ/ᠲᠦ`
-   after hard consonants, the restored hidden n in модонд); and verbs with
+   most frequent first; homophones such as уг/үг/өг all appear, each
+   captioned with its Cyrillic form so you can confirm the word. When the
+   previous word is known, the words that usually follow it come first
+   (after монгол, typing `uls` puts улсын before улс).
+2. **Dictionary stem + suffix** — nouns with case, plural, possessive and
+   stacked suffixes (`nomd`, `mongolyn`, `usand`, `nohoinuud`, `aavynhaa`…),
+   written detached with a narrow no-break space and shaped by vowel harmony
+   and the stem's last written letter (`ᠶᠢᠨ` after a vowel, bare `ᠤ/ᠦ` after
+   `ᠨ`, `ᠲᠤ/ᠲᠦ` after hard consonants, the restored hidden n in модонд, the
+   vowel Cyrillic drops in бодол → бодлын put back: ᠪᠣᠳᠣᠯ ᠤᠨ); and verbs with
    tense, converb and mood suffixes attached to the infinitive's stem
    (`yavsan` → ᠶᠠᠪᠤᠭᠰᠠᠨ, `avna` → ᠠᠪᠤᠨ᠎ᠠ, `garch` → ᠭᠠᠷᠴᠤ). Every rule in
    `SuffixEngine.swift` / `VerbEngine.swift` cites the corpus table that
    supports it; `python3 tools/verify_corpus.py` regenerates those tables.
-5. **Loose spelling** — only when nothing above matched: ө typed as `o`
-   (`odor` → ᠡᠳᠦᠷ) is found through a secondary o/u-merged index.
+3. **Loose spelling** — fills the dictionary tier up to three candidates:
+   ө typed as `o` (`odor` → ᠡᠳᠦᠷ; `hol` shows хол, then хөл) and long
+   vowels typed single (`uchlaarai` → уучлаарай), closest spelling first.
+4. **Rule-based spelling** for a word the dictionary lacks (a name, a rare
+   or new word): a known suffix is split off and attached by the suffix
+   rules above, and the stem is spelled by rules *learned from the lexicon*
+   (`tools/learn_orthography.py` aligns all 37k stem spellings with their
+   typed keys and extracts how each letter is written in context). This
+   candidate is captioned with the typed Latin, never with a Cyrillic word,
+   because it is a best guess: on held-out dictionary words it spells 34% of
+   whole words exactly (most letters right in the rest) — far better than
+   letter by letter, but not dictionary quality.
+5. **The verbatim transliteration** — always present, so anything can be
+   typed exactly as intended; captioned with the raw Latin.
+6. **Completions** — dictionary words the buffer is a prefix of, most
+   frequent first (and usual next words first when the previous word is
+   known). Tap-only: **Space never auto-commits a completion**.
 
-Spelling-variant tolerance is deterministic, not fuzzy: `khaan`, `haan`,
-`xaan` and `qaan` all find ᠬᠠᠭᠠᠨ; `tsag` and `cag` both find ᠴᠠᠭ;
-`oedoer` and `udur` both find ᠡᠳᠦᠷ; `sayn` finds сайн. Both the lexicon keys and the typed
-buffer are folded with the same rules (`LatinKey.fold`), each verified
-collision-free against the dataset.
+**Space** (or any punctuation/return) commits the highlighted default — the
+first dictionary-backed candidate, else the rule spelling, else the verbatim
+buffer. **Tapping** any candidate commits that word plus a space.
+
+**Next-word prediction.** Right after a word is committed the bar offers the
+three words that most often follow it in the corpora (сайн → сайхан, байна,
+мэдэх; монгол → улсын, улс, улсад), each with its verified spelling; tapping
+one commits it and the bar moves on. Punctuation, a newline or deleting into
+the host text ends the phrase.
+
+### Typing variants that are recognized
+
+Mongolians have no single Latin spelling convention, so every word is
+indexed under every key people plausibly type for it, and the typed buffer
+is folded with the same rules (`LatinKey.fold` ⇄ `fold_key`/`typed_keys` in
+`tools/generate_lexicon.py`):
+
+| Cyrillic | Typed as | Example |
+| -------- | -------- | ------- |
+| х | `h`, `kh`, `x`, `q` | `hair`, `xair`, `khair` → ᠬᠠᠶᠢᠷ᠎ᠠ |
+| ц / ч / ш / ж | `ts` or `c`; `ch`; `sh`; `j` | `cag`, `tsag` → ᠴᠠᠭ |
+| в | `v`, `w` | `wan` = `van` |
+| ө, ү | `u`, `ö`/`ü`, `oe`/`ue`; `o` for ө via the loose tier | `udur`, `ödör`, `odor` → ᠡᠳᠦᠷ |
+| й, ы, ь, ъ | `i` or `y`; ы also `ii`; ь/ъ also dropped | `sayn` = `sain`, `nohoy` = `nohoi`, `amdral` = `amidral`, `han` → хан + хань |
+| я, ё, ю, е | `ya`, `yo`, `yu`, `ye`; long forms both ways; е also `e` | `yuu` = `yu` → юу, `erunhii` = `yerunhii` |
+| long vowels | doubled, or single via the loose tier | `uchlaarai` → уучлаарай |
+
+Folding is deterministic, not fuzzy: each fold was checked against the
+dataset to be collision-free (`kh`, `q`, `x`, `w`, standalone `c` and
+`y`-before-consonant never occur in the lexicon's own keys), and the loose
+tier, which does merge distinct words, always ranks below exact matches.
 
 ### Data sources (open datasets)
 
-The lexicon (48,444 entries, 1.4 MB) is generated by `tools/generate_lexicon.py`
-into `Packages/MongolEngine/Sources/MongolEngine/Resources/lexicon.tsv`
-(committed, so builds are reproducible offline) from:
+`tools/generate_lexicon.py` builds `lexicon.tsv` (52,324 entries, 2.9 MB) and
+`bigrams.tsv` (29,237 next-word rows for 11,066 words, 1.4 MB);
+`tools/learn_orthography.py` then learns `orthography.tsv` (5,904 rules) from
+the lexicon. All three live in `Packages/MongolEngine/Sources/MongolEngine/Resources/`
+and are committed, so builds are reproducible offline.
 
 | Source | What it provides | License |
 | ------ | ---------------- | ------- |
 | [`written-mongol-keyboard`](https://www.npmjs.com/package/written-mongol-keyboard) npm package ([repo](https://github.com/sura0111/writtenMongolianKeyboard)) | ~28k entries of {Cyrillic word, typed romanization, traditional-script spelling} | MIT |
-| [`tugstugi/mongolian-nlp`](https://github.com/tugstugi/mongolian-nlp) `most_frequent_words.csv` | Corpus frequencies (670M-word news/books/Wikipedia corpus) used to rank candidates | see repo |
-| [`tugstugi/mongolian-nlp`](https://github.com/tugstugi/mongolian-nlp) `bichig2cyrillic/lyrics.txt.gz` | ~79k lines of Cyrillic lyrics converted to traditional script by Inner Mongolia University's converter; word-aligned, so ~20k inflected forms (аавдаа, явсан, надад…) join the lexicon with usage counts, and every suffix rule is checked against it | see repo |
+| [`tugstugi/mongolian-nlp`](https://github.com/tugstugi/mongolian-nlp) `bichig2cyrillic/lyrics.txt.gz` | ~79k lines of Cyrillic lyrics converted to traditional script by Inner Mongolia University's converter; word-aligned, so ~22k inflected forms (аавдаа, явсан, надад…) join the lexicon, and every suffix rule is checked against it | see repo |
+| [`tugstugi/mongolian-nlp`](https://github.com/tugstugi/mongolian-nlp) `datasets/eduge.csv.gz` | 75,661 Mongolian news articles (23.7M words): the frequency of every word form (ranks homophones and completions) and the word-pair counts behind next-word prediction | see repo |
 
 The generator drops ~290 defective source rows (entries whose
 traditional-script column contains Latin/CJK/replacement characters — leftover
-converter errors) rather than ship wrong spellings: a missing word falls back
-to verbatim transliteration, a wrong suggestion would teach wrong spelling.
+converter errors) and 265 lyrics misspellings that had been converted letter
+by letter (баина, хаиртаи…), rather than ship wrong spellings.
 
-Everything stays on-device: the lexicon is a build-time resource inside the
+What "correct" means here: a dictionary-backed candidate is exactly the
+spelling of its source (the dictionary, or Inner Mongolia University's
+converter over the lyrics); suffix rules are only those the corpus supports;
+rule-spelled and verbatim candidates make no such claim and are captioned
+with Latin. A native-speaker review of the sources' own errors is still the
+right final step before a wide release.
+
+Everything stays on-device: the tables are build-time resources inside the
 app bundle, so the keyboard still needs **no network and no Full Access**.
 
 ---
@@ -327,20 +368,19 @@ vertically); one scheme.
 
 Suggestion-specific limitations:
 
-- Corpus frequency covers only the ~190 most frequent words that appear in
-  the lexicon; other homophones are ranked by word length, not real usage.
-- A few very common words (e.g. бид) were dropped because their
-  traditional-script column in the source dataset was defective — they fall
-  back to verbatim transliteration until a curated patch list is added.
-- The rule engine handles one case suffix (optionally followed by the
-  reflexive) and one verb suffix. Vowel-dropping stems (хүүхэд → хүүхдийн),
-  irregular pronouns (би → надад) and irregular verbs (өгөх → ᠥᠭᠭᠦᠭᠰᠡᠨ) are
-  covered only where the corpus supplied the form; otherwise the verbatim
-  transliteration is offered.
-- The corpus is song lyrics: its spellings are machine-converted (Inner
-  Mongolia University's converter) and frequencies reflect colloquial usage.
-- Word suggestions are per word; there is no next-word prediction yet
-  (it needs a traditional-script corpus, which the open datasets lack).
+- A Cyrillic word absent from both sources (the dictionary and the lyrics
+  corpus) has no verified spelling: it gets the rule spelling (34% exact on
+  held-out words) and the verbatim transliteration, both captioned in Latin.
+- A few very common words (e.g. бид in some forms) were dropped because
+  their traditional-script column in the source dataset was defective.
+- The suffix engine handles one case suffix (optionally followed by the
+  reflexive), one verb suffix, and one dropped stem vowel. Irregular
+  pronouns (би → надад) and irregular verbs (өгөх → ᠥᠭᠭᠦᠭᠰᠡᠨ) are covered
+  only where the corpus supplied the form.
+- Corpus spellings are machine-converted (Inner Mongolia University's
+  converter); frequencies mix news (formal) and lyrics (colloquial) usage.
+- Next-word prediction looks at one previous word (bigrams) and only at
+  words the lexicon can spell.
 
 ---
 

@@ -74,7 +74,9 @@ its own romanizer and reference tabs.
 
 | Piece | Size | Notes |
 | --- | --- | --- |
-| Lexicon (`lexicon.tsv`) | 1.5 MB | 27,957 words, loaded once per keyboard session on a background queue |
+| Lexicon (`lexicon.tsv`) | 2.9 MB | 52,324 entries, loaded once per keyboard session on a background queue |
+| Next-word table (`bigrams.tsv`) | 1.4 MB | 29,237 rows, loaded the same way |
+| Spelling rules (`orthography.tsv`) | 0.1 MB | 5,904 rules for words outside the lexicon |
 | Noto Sans Mongolian | 0.3 MB | bundled in both app and extension |
 | Extension binary | ~1 MB | pure Swift, no dependencies |
 

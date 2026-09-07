@@ -54,10 +54,21 @@ public enum LatinKey {
         return out
     }
 
-    /// A looser key for the fallback tier: Mongolians write ө as either `u`
-    /// or `o` (udur / odor for өдөр), so `o` and `u` are merged. Not used for
-    /// the primary lookup because it does create homographs (зос/зус).
+    /// A looser key for the fallback tier. Two habits the primary key cannot
+    /// absorb without creating homographs: ө is written as either `u` or `o`
+    /// (udur / odor for өдөр), and long vowels are often typed single
+    /// (uchlaarai for уучлаарай). So `o` and `u` are merged and repeated
+    /// vowels collapsed. Loose matches rank below every exact match.
     public static func loose(_ key: String) -> String {
-        key.replacingOccurrences(of: "o", with: "u")
+        var out = String()
+        out.reserveCapacity(key.count)
+        var last: Character? = nil
+        for original in key {
+            let ch: Character = original == "o" ? "u" : original
+            if ch == last && "aeiu".contains(ch) { continue }
+            out.append(ch)
+            last = ch
+        }
+        return out
     }
 }

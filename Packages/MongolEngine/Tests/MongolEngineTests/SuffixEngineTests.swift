@@ -201,3 +201,56 @@ final class SuffixEngineTests: XCTestCase {
         XCTAssertEqual(SuffixEngine.gender(ofCyrillic: "ямар"), .masculine)
     }
 }
+
+// MARK: - Unknown and vowel-dropping stems
+
+final class SuffixEngineStemTests: XCTestCase {
+
+    private let sep = SuffixEngine.suffixSeparator
+
+    func testElidedVowelIsRestoredForTheStemLookup() {
+        // бодол + ын → бодлын: Cyrillic drops the о, the script keeps it.
+        let lexicon = Lexicon(entries: [
+            .init(key: "bodol", traditional: "ᠪᠣᠳᠣᠯ", cyrillic: "бодол", frequency: 10),
+        ])
+        let readings = SuffixEngine.inflections(forKey: "bodlin", lexicon: lexicon)
+        XCTAssertEqual(readings.first?.mongolian, "ᠪᠣᠳᠣᠯ\(sep)ᠤᠨ")
+        XCTAssertEqual(readings.first?.cyrillic, "бодлын")
+        XCTAssertEqual(readings.first?.stem.cyrillic, "бодол")
+    }
+
+    func testRestorationNeverSplitsADigraph() {
+        let lexicon = Lexicon(entries: [
+            .init(key: "bachi", traditional: "ᠪᠠᠴᠢ", cyrillic: "бачи", frequency: 10),
+        ])
+        // "bch" + "in": the stem ends in the digraph ch, which is one consonant.
+        XCTAssertTrue(SuffixEngine.inflections(forKey: "bchin", lexicon: lexicon).isEmpty)
+    }
+
+    func testElidedCyrillicStem() {
+        XCTAssertEqual(SuffixEngine.elided("бодол"), "бодл")
+        XCTAssertEqual(SuffixEngine.elided("гурав"), "гурв")
+        XCTAssertEqual(SuffixEngine.elided("ах"), "ах")
+        XCTAssertEqual(SuffixEngine.elided("хайр"), "хайр", "й is not a droppable vowel")
+    }
+
+    func testRuleBasedInflectionSplitsAKnownSuffix() {
+        // A stem the dictionary lacks, spelled by a stand-in for the rules;
+        // the suffix is attached by the verified suffix rules.
+        let spell: (String) -> String? = { $0 == "batbold" ? "ᠪᠠᠲᠤᠪᠣᠯᠳ" : nil }
+        XCTAssertEqual(SuffixEngine.ruleBased(forKey: "batboldiin", spell: spell),
+                       "ᠪᠠᠲᠤᠪᠣᠯᠳ\(sep)ᠤᠨ")
+        XCTAssertEqual(SuffixEngine.ruleBased(forKey: "batboldiig", spell: spell),
+                       "ᠪᠠᠲᠤᠪᠣᠯᠳ\(sep)ᠢ")
+        XCTAssertEqual(SuffixEngine.ruleBased(forKey: "batboldtai", spell: spell),
+                       "ᠪᠠᠲᠤᠪᠣᠯᠳ\(sep)ᠲᠠᠢ")
+        XCTAssertNil(SuffixEngine.ruleBased(forKey: "batbold", spell: spell), "no suffix, nothing to split")
+        XCTAssertNil(SuffixEngine.ruleBased(forKey: "xyzin", spell: spell), "stem the rules cannot spell")
+    }
+
+    func testLatinKeyGender() {
+        XCTAssertEqual(SuffixEngine.gender(ofLatinKey: "batbold"), .masculine)
+        XCTAssertEqual(SuffixEngine.gender(ofLatinKey: "erdene"), .feminine)
+        XCTAssertEqual(SuffixEngine.gender(ofLatinKey: "ug"), .feminine)
+    }
+}
