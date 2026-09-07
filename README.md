@@ -315,11 +315,14 @@ done once by hand through the Settings app on the simulator or device.
   before, delete the app from the simulator/device first, then reinstall.
 - **Nothing happens when typing** — make sure you actually switched keyboards
   with 🌐; the system keyboard is very similar in outline and easy to miss.
-- **The app (or the keyboard) crashes** — run `tools/crashlog.sh`: it prints
-  the newest simulator crash report for MongolKey / MongolKeyboard (exception,
-  termination reason, top frames). `tools/simulate.sh` also warns when the app
-  is gone four seconds after launch. A keyboard that vanishes without a report
-  was killed by iOS for memory (keyboard extensions get ~50 MB).
+- **The app (or the keyboard) crashes** — `tools/simulate.sh` checks that the
+  app is still running four seconds after launch and, if it is not, prints the
+  newest crash report itself (exception, fatal-error message, top frames) and
+  exits with status 70. For a crash later on (say, the keyboard while typing)
+  run `tools/crashlog.sh` (`--all` lists every report). A keyboard that
+  vanishes without a report was killed by iOS for memory (keyboard extensions
+  get ~50 MB); CI's "Plain launch" step runs the same install + `simctl launch`
+  path on every push.
 
 ---
 
