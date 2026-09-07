@@ -177,38 +177,65 @@ public struct SuffixEngine {
                                    lexicon: Lexicon,
                                    limit: Int = 4) -> [Inflection] {
         guard key.count >= 3 else { return [] }
-        var results: [(Inflection, Int, Int)] = []   // inflection, stem length, stem frequency
-        var seen = Set<String>()
+        var readings = Self.readings(forKey: key, lexicon: lexicon, restoreVowel: false)
+        readings += VerbEngine.conjugations(forKey: key, lexicon: lexicon)
+            .map { Reading(inflection: $0, stem: $0.stem) }
+        if readings.isEmpty {
+            // Only when nothing else parses: the stem may have lost a vowel
+            // in Cyrillic (бодол → бодлын); restore it and look again.
+            readings = Self.readings(forKey: key, lexicon: lexicon, restoreVowel: true)
+        }
 
+        readings.sort { a, b in
+            // A stem that is itself a suffixed corpus form (аавынх) explains
+            // the typing worse than a base word (аав + ынхаа).
+            if a.plainStem != b.plainStem { return a.plainStem }
+            // Frequent base words over rare ones (монгол+чууд, not монголч+ууд).
+            if a.stem.frequency != b.stem.frequency { return a.stem.frequency > b.stem.frequency }
+            // Then the reading that explains more of the typing by dictionary.
+            if a.stem.key.count != b.stem.key.count { return a.stem.key.count > b.stem.key.count }
+            return a.inflection.mongolian < b.inflection.mongolian
+        }
+
+        // Two readings with the same caption (хаан+ы vs хаа+ны) would look
+        // identical in the bar while spelling different words: keep the best.
+        var captions = Set<String>()
+        return readings.map { $0.inflection }
+            .filter { captions.insert($0.cyrillic).inserted }
+            .prefix(limit).map { $0 }
+    }
+
+    private struct Reading {
+        let inflection: Inflection
+        let stem: Lexicon.Entry
+        /// False when the stem's spelling already contains a detached suffix.
+        var plainStem: Bool { !stem.traditional.contains(SuffixEngine.suffixSeparator) }
+    }
+
+    /// Nominal readings: every suffix the key ends in, with every dictionary
+    /// stem the remainder matches (exactly, or with a dropped vowel restored).
+    private static func readings(forKey key: String, lexicon: Lexicon, restoreVowel: Bool) -> [Reading] {
+        var result: [Reading] = []
+        var seen = Set<String>()
         for suffix in suffixes where key.hasSuffix(suffix.typed) {
             let stemKey = String(key.dropLast(suffix.typed.count))
             guard stemKey.count >= 2, !irregularStems.contains(stemKey) else { continue }
 
-            for (stem, cyrillicStem) in Self.stems(forKey: stemKey, lexicon: lexicon) {
+            let stems = restoreVowel
+                ? Self.restoredStems(forKey: stemKey, lexicon: lexicon)
+                : lexicon.exactMatches(forKey: stemKey).map { ($0, $0.cyrillic) }
+            for (stem, cyrillicStem) in stems {
                 let gender = Self.gender(ofCyrillic: stem.cyrillic)
                 if let required = suffix.gender, required != gender { continue }
                 if suffix.vowelStemOnly, !Self.endsInVowel(stem.traditional) { continue }
                 guard let text = Self.nominal(suffix.parts, stem: stem.traditional, gender: gender) else { continue }
                 guard seen.insert(text).inserted else { continue }
                 let caption = cyrillicStem + (gender == .masculine ? suffix.masculine : suffix.feminine)
-                results.append((Inflection(stem: stem, mongolian: text, cyrillic: caption),
-                                stemKey.count, stem.frequency))
+                result.append(Reading(inflection: Inflection(stem: stem, mongolian: text, cyrillic: caption),
+                                      stem: stem))
             }
         }
-
-        results += VerbEngine.conjugations(forKey: key, lexicon: lexicon)
-            .map { ($0, $0.stem.key.count, $0.stem.frequency) }
-
-        results.sort { a, b in
-            if a.1 != b.1 { return a.1 > b.1 }          // longest stem first: more of the typing is dictionary-backed
-            if a.2 != b.2 { return a.2 > b.2 }          // then frequent stems (homophones of equal length)
-            return a.0.mongolian < b.0.mongolian
-        }
-
-        // Two readings with the same caption (хаан+ы vs хаа+ны) would look
-        // identical in the bar while spelling different words: keep the best.
-        var captions = Set<String>()
-        return results.map { $0.0 }.filter { captions.insert($0.cyrillic).inserted }.prefix(limit).map { $0 }
+        return result
     }
 
     /// A suffixed reading of a key whose stem the dictionary lacks: the stem
@@ -235,18 +262,15 @@ public struct SuffixEngine {
         key.contains("a") || key.contains("o") ? .masculine : .feminine
     }
 
-    /// Dictionary stems for a typed stem key, each with the Cyrillic stem as
-    /// it appears before the suffix.
+    /// Dictionary stems for a typed stem key that lost a vowel, each with the
+    /// Cyrillic stem as it appears before the suffix.
     ///
     /// Cyrillic drops a short vowel before a vowel-initial suffix
     /// (бодол → бодлын, гурав → гурван) while the script keeps it
-    /// (ᠪᠣᠳᠣᠯ ᠤᠨ, ᠭᠤᠷᠪᠠᠨ — verified in the corpus). So when the typed stem is
-    /// unknown and ends in two consonants, the vowel is restored before the
-    /// last one and the dictionary consulted again.
-    static func stems(forKey stemKey: String, lexicon: Lexicon) -> [(Lexicon.Entry, String)] {
-        let exact = lexicon.exactMatches(forKey: stemKey)
-        if !exact.isEmpty { return exact.map { ($0, $0.cyrillic) } }
-
+    /// (ᠪᠣᠳᠣᠯ ᠤᠨ, ᠭᠤᠷᠪᠠᠨ — verified in the corpus). So when a typed stem ends
+    /// in two consonants, the vowel is restored before the last one and the
+    /// dictionary consulted with that.
+    static func restoredStems(forKey stemKey: String, lexicon: Lexicon) -> [(Lexicon.Entry, String)] {
         let chars = Array(stemKey)
         guard chars.count >= 3 else { return [] }
         let last = chars[chars.count - 1]

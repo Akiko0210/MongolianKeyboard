@@ -139,16 +139,24 @@ public struct SuggestionEngine {
         //    dictionary tier: `hol` shows хол first and хөл right after it.
         //    A word that differs only in o/u (same length) is a closer match
         //    than one that also differs in vowel length (hol → хоол).
+        //    A spelling seen a handful of times next to a common one
+        //    (уучларай beside уучлаарай in the lyrics) is a misspelling of
+        //    it and ranks last, whatever its closeness.
         let room = Self.dictionaryTierSize - result.count
         if room > 0 {
+            let loose = lexicon.looseMatches(forKey: key)
+            let topFrequency = loose.map(\.frequency).max() ?? 0
             let typedLength = key.count
             let fuzzyRank: (Lexicon.Entry, Lexicon.Entry) -> Bool = { a, b in
+                let ra = a.frequency * 50 >= topFrequency
+                let rb = b.frequency * 50 >= topFrequency
+                if ra != rb { return ra }
                 let da = abs(a.key.count - typedLength)
                 let db = abs(b.key.count - typedLength)
                 if da != db { return da < db }
                 return Self.exactRank(a, b)
             }
-            for e in Self.top(room, of: lexicon.looseMatches(forKey: key), by: inContext(fuzzyRank)) {
+            for e in Self.top(room, of: loose, by: inContext(fuzzyRank)) {
                 add(Candidate(mongolian: e.traditional, cyrillic: e.cyrillic, latin: e.key, source: .fuzzy))
             }
         }

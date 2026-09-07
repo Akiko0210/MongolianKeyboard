@@ -46,9 +46,16 @@ jobs:
       - name: Engine unit tests (SwiftPM, macOS host)
         working-directory: Packages/MongolEngine
         run: |
-          set -o pipefail
-          swift test 2>&1 | tee ../../build-swift-test.log | grep -E "error:|Test Suite|Executed|passed|failed" || true
-          test "${PIPESTATUS[0]}" -eq 0
+          # Run the tests, keep the full log, show the interesting lines, and
+          # fail on the tests' own exit status (a `|| true` after a pipe would
+          # reset PIPESTATUS and hide failures — that is what the earlier
+          # version of this step did).
+          set +e
+          swift test > ../../build-swift-test.log 2>&1
+          status=$?
+          grep -E "error:|Test Suite|Executed|passed|failed" ../../build-swift-test.log || true
+          echo "swift test exit status: $status"
+          exit $status
 
       - name: Build universal simulator app (arm64 + x86_64)
         run: tools/simulate.sh --build-only --universal
@@ -179,6 +186,12 @@ jobs:
               echo "- Appetize upload skipped: add an \`APPETIZE_API_TOKEN\` repository secret to get a browser-playable iPhone 13 Pro link here."
             fi
           } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Fail the job if the UI tests failed
+        if: steps.uitests.outcome == 'failure'
+        run: |
+          echo "::error::UI tests failed — see the 'UI tests + screenshots on the simulator' step and the uploaded screenshots"
+          exit 1
 
       - name: Shut down simulator
         if: always()

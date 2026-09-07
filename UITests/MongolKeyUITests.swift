@@ -84,7 +84,14 @@ final class MongolKeyUITests: XCTestCase {
             log("home-screen launch failed; falling back to XCTest launch")
             app.launch()
         }
-        XCTAssertTrue(app.tabBars.buttons["Try It"].waitForExistence(timeout: 15))
+        if !app.tabBars.buttons["Try It"].waitForExistence(timeout: 15) {
+            // The home-screen launch occasionally leaves the test's proxy
+            // detached from the app (kAXErrorServerNotFound): bring the app
+            // to the foreground through XCTest and continue.
+            log("app not reachable after the home-screen launch; activating it via XCTest")
+            app.activate()
+            XCTAssertTrue(app.tabBars.buttons["Try It"].waitForExistence(timeout: 20), "MongolKey did not come up")
+        }
         app.tabBars.buttons["Try It"].tap()
 
         let tester = inputField(index: 1)
