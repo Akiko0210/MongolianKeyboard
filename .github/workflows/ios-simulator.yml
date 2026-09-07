@@ -60,11 +60,10 @@ jobs:
       - name: CoreText shaping probe (both faces, with rendered previews)
         run: |
           swift tools/ShapeProbe.swift Shared/Fonts build/shape-probe
-          for f in build/shape-probe/*.png; do
-            echo "@@IMG $f"
-            base64 -b 100 -i "$f"
-            echo "@@END"
-          done
+          # Keep the renderings with the screenshots: they are previewed at the
+          # end of the job (the end of the log is what stays readable).
+          mkdir -p build/screenshots/probe
+          cp build/shape-probe/*.png build/screenshots/probe/
 
       - name: Build universal simulator app (arm64 + x86_64)
         run: tools/simulate.sh --build-only --universal
@@ -135,7 +134,14 @@ jobs:
                    build/screenshots/pass1/*switched*.png \
                    build/screenshots/pass1/*composing-mongol*.png \
                    build/screenshots/pass1/*committed-mongol*.png \
+                   build/screenshots/pass1/*composing-nohoy*.png \
+                   build/screenshots/pass1/*predictions*.png \
+                   build/screenshots/pass1/*prediction-tapped*.png \
+                   build/screenshots/pass1/*face-*.png \
                    build/screenshots/pass1/*numbers-layer*.png \
+                   build/screenshots/probe/*baina*.png \
+                   build/screenshots/probe/*baga*.png \
+                   build/screenshots/probe/*abu-du-ban*.png \
                    build/screenshots/zz-simulator-final.png; do
             sips -Z 420 "$f" --out build/preview.png >/dev/null 2>&1 || continue
             echo "@@IMG $f"
