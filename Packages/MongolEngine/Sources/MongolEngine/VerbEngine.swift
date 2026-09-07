@@ -125,11 +125,11 @@ enum VerbEngine {
             guard base.count >= 2 else { continue }
             for ending in infinitiveEndings {
                 for lemma in lexicon.exactMatches(forKey: base + ending) {
-                    guard let stem = stem(ofInfinitive: lemma.traditional),
+                    guard let verbStem = Self.stem(ofInfinitive: lemma.traditional),
                           lemma.cyrillic.hasSuffix("х") else { continue }
                     let gender = SuffixEngine.gender(ofCyrillic: lemma.cyrillic)
                     if let required = suffix.gender, required != gender { continue }
-                    guard let text = conjugate(suffix.kind, stem: stem, infinitive: lemma.traditional, gender: gender)
+                    guard let text = conjugate(suffix.kind, stem: verbStem, infinitive: lemma.traditional, gender: gender)
                     else { continue }
                     guard seen.insert(text).inserted else { continue }
                     // Caption: the Cyrillic stem (infinitive minus its ending) + the suffix.
