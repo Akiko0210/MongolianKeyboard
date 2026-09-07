@@ -20,7 +20,7 @@ struct ReferenceView: View {
             List {
                 Section {
                     VStack(alignment: .leading, spacing: 8) {
-                        Text("Type the Latin sequence on the left to produce the letter on the right. Digraphs (two letters) are always matched before single letters.")
+                        Text("Whole words are spelled from the keyboard's dictionary of real Mongol bichig spellings (сайн is ᠰᠠᠶᠢᠨ, аав is ᠠᠪᠤ). The letters below are what the verbatim candidate uses when a word is unknown: type the Latin on the left to get the letter on the right; digraphs (two letters) match before single letters.")
                             .font(.footnote)
                             .foregroundStyle(.secondary)
                     }

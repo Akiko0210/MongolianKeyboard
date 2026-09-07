@@ -25,10 +25,12 @@ struct TryItView: View {
     }
     @FocusState private var keyboardFieldFocused: Bool
 
-    private let transliterator = PhraseTransliterator(scheme: .v1)
+    /// Spells words exactly as the keyboard commits them (dictionary, then
+    /// rules, then letter by letter), so this card never contradicts it.
+    private let speller = PhraseSpeller()
 
     private var romanOutput: String {
-        transliterator.transliterate(romanInput)
+        speller.spell(romanInput)
     }
 
     var body: some View {
@@ -73,7 +75,7 @@ struct TryItView: View {
         VStack(alignment: .leading, spacing: 12) {
             Text("Live romanizer")
                 .font(.headline)
-            Text("Type romanized Mongolian. The script is composed instantly and shown vertically.")
+            Text("Type romanized Mongolian. Each word is spelled the way the keyboard would commit it (dictionary first) and shown vertically.")
                 .font(.footnote)
                 .foregroundStyle(.secondary)
 

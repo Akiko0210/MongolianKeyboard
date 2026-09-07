@@ -232,6 +232,17 @@ public final class VerticalMongolianView: UIView {
         }
     }
 
+    // MARK: Appearance
+
+    /// `textColor` is a dynamic colour; redraw when light/dark changes so
+    /// candidates do not keep the old colour after the switch.
+    public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+            setNeedsDisplay()
+        }
+    }
+
     // MARK: Sizing
 
     /// The block size the current text needs when columns may be at most

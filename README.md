@@ -24,7 +24,8 @@ Verified by unit tests and by running the app + keyboard in the iOS Simulator
 - **Transliteration engine** — longest-match tokenizer, digraph detection
   (`ng kh gh ch sh ts oe ue`), composing buffer with token-level backspace.
 - **Word suggestions** — dictionary-backed candidates from a 52,324-entry
-  lexicon (27k dictionary words plus 20k corpus-verified inflected forms),
+  lexicon (28k dictionary words plus 22k corpus-verified inflected forms, each
+  indexed under every spelling people type for it),
   ranked by usage frequency, with deterministic spelling-variant folding, a
   rule engine for unseen case suffixes and verb forms, and every rule checked
   against a 79k-line corpus (see “Word suggestions” below).
@@ -353,7 +354,9 @@ done once by hand through the Settings app on the simulator or device.
 | -------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Add/change a Latin → Mongolian mapping                         | `Packages/MongolEngine/Sources/MongolEngine/TransliterationScheme.swift` — add a `SchemeEntry(...)`; it automatically appears in the keyboard and the in-app Reference tab, and should be covered by `testEveryEntryRoundTrips()` in the test target                                                                                            |
 | Change tokenizing/digraph rules                                | `Packages/MongolEngine/Sources/MongolEngine/Tokenizer.swift`                                                                                                                                                                                                                                                                                    |
-| Change composing-buffer / backspace behavior                   | `Packages/MongolEngine/Sources/MongolEngine/TransliterationEngine.swift`                                                                                                                                                                                                                                                                        |
+| Change what a key does: composing, committing, predictions, when the "previous word" context is kept | `Packages/MongolEngine/Sources/MongolEngine/InputSession.swift` — the keyboard's whole state machine, unit-tested in `InputSessionTests.swift`; `Keyboard/KeyboardViewController.swift` only applies its commands to the host field |
+| Change composing-buffer / backspace (token) behavior           | `Packages/MongolEngine/Sources/MongolEngine/TransliterationEngine.swift`                                                                                                                                                                                                                                                                        |
+| Change how the app's live romanizer spells words               | `Packages/MongolEngine/Sources/MongolEngine/PhraseSpeller.swift` — it reuses the keyboard's candidate pipeline so the app and the keyboard always agree                                                                                                                                                                                          |
 | Add/rearrange keyboard keys or layers                          | `Keyboard/KeyCap.swift` (layout data) → `Keyboard/KeyboardView.swift` (layout math) → `Keyboard/KeyButton.swift` (per-key rendering/behavior)                                                                                                                                                                                                   |
 | Change candidate ranking or the default-commit rule            | `Packages/MongolEngine/Sources/MongolEngine/SuggestionEngine.swift`                                                                                                                                                                                                                                                                             |
 | Change spelling-variant folding (kh/h/x, c/ts, ö/ü/oe/ue…)     | `LatinKey.swift` **and** `fold_key()` in `tools/generate_lexicon.py` — they must stay in sync; regenerate `lexicon.tsv` after changing                                                                                                                                                                                                          |
@@ -367,13 +370,14 @@ done once by hand through the Settings app on the simulator or device.
 
 1. `cd Packages/MongolEngine && swift test` — must stay green; add a test next
    to the existing ones in `Packages/MongolEngine/Tests/MongolEngineTests/` for
-   any new mapping, tokenizer rule, folding rule, or ranking change
-   (`SuggestionEngineTests.swift` covers the suggestion pipeline).
+   any new mapping, tokenizer rule, folding rule, ranking change, or key
+   behaviour (`SuggestionEngineTests.swift` covers the suggestion pipeline,
+   `InputSessionTests.swift` the keyboard's key-by-key behaviour).
 2. Rebuild and reinstall (see the command-line recipe above), re-enable the
    keyboard if this is a fresh install, and manually type a few words in the
    **Try It** tab and in another app (e.g. Notes) — the engine tests don't
    cover UIKit wiring or the `UITextDocumentProxy` bridge in
-   `Keyboard/KeyboardViewController.swift`.
+   `Keyboard/KeyboardViewController.swift`; CI's simulator UI test does.
 3. Check both light and dark mode if you touched `Keyboard/KeyboardColors.swift`
    or any view's colors.
 
