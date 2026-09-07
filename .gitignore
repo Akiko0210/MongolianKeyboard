@@ -21,3 +21,6 @@ Packages/*/.build/
 *.mobileprovision
 *.p12
 .lexicon-cache/
+
+# Python bytecode from the data tools
+__pycache__/
