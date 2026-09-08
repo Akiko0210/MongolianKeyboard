@@ -120,6 +120,10 @@ dataset to be collision-free (`kh`, `q`, `x`, `w`, standalone `c` and
 `y`-before-consonant never occur in the lexicon's own keys), and the loose
 tier, which does merge distinct words, always ranks below exact matches.
 
+The full Cyrillic → script logic (letter correspondences, every suffix rule
+with corpus counts, verbs, stacked suffixes, the learned rules) is written up
+in [`docs/ORTHOGRAPHY.md`](docs/ORTHOGRAPHY.md).
+
 ### Data sources (open datasets)
 
 `tools/generate_lexicon.py` builds `lexicon.tsv` (52,324 entries, 2.9 MB) and
