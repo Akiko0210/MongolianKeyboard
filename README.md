@@ -309,8 +309,13 @@ done once by hand through the Settings app on the simulator or device.
 ### Troubleshooting
 
 - **`xcodebuild: error: … MongolKey.xcodeproj … does not exist`** — you skipped
-  `xcodegen generate`. The project file is git-ignored on purpose so
-  `project.yml` stays the single source of truth.
+  `xcodegen generate`. The project file and both `Info.plist`s are generated
+  from `project.yml` and git-ignored on purpose, so `project.yml` stays the
+  single source of truth and `xcodegen generate` never dirties the tree.
+- **`git checkout` says local changes to `App/MongolKey/Info.plist` would be
+  overwritten** — an older checkout tracked the generated plists. Discard them
+  (`git checkout -- App/MongolKey/Info.plist Keyboard/Info.plist`) or
+  `git stash`, then switch branches.
 - **Keyboard doesn't show up under "Add New Keyboard…"** — rebuild and reinstall
   the app (the extension ships inside the app bundle); if it was installed
   before, delete the app from the simulator/device first, then reinstall.
