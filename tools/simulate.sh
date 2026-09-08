@@ -8,6 +8,7 @@
 #   tools/simulate.sh --build-only --universal   # CI: arm64+x86_64 .app for Appetize.io
 #   tools/simulate.sh --prepare-sim        # CI: create+boot the simulator, print its UDID
 #   tools/simulate.sh --fresh              # uninstall the app first (stale install / keyboard cache)
+#   tools/simulate.sh --reset              # erase the simulator (factory state), then build+install+run
 #
 set -euo pipefail
 
@@ -21,6 +22,7 @@ PREPARE_SIM_ONLY=0
 OPEN_SIMULATOR=1
 SKIP_GENERATE=0
 FRESH=0
+RESET=0
 CONFIGURATION=Debug
 
 while [[ $# -gt 0 ]]; do
@@ -32,7 +34,8 @@ while [[ $# -gt 0 ]]; do
     --no-open)       OPEN_SIMULATOR=0; shift ;;
     --skip-generate) SKIP_GENERATE=1; shift ;;
     --fresh)         FRESH=1; shift ;;
-    -h|--help)       sed -n '2,13p' "$0"; exit 0 ;;
+    --reset)         RESET=1; shift ;;
+    -h|--help)       sed -n '2,14p' "$0"; exit 0 ;;
     *) echo "unknown option: $1" >&2; exit 2 ;;
   esac
 done
@@ -108,6 +111,18 @@ prepare_simulator() {
   SIM_DEVICE_NAME="$chosen"
   SIM_RUNTIME="$runtime"
   echo "simulator: $sim_name ($SIM_UDID) on ${runtime##*.}" >&2
+
+  if [[ "$RESET" == 1 ]]; then
+    echo "erasing the simulator (factory state)…" >&2
+    xcrun simctl shutdown "$SIM_UDID" >/dev/null 2>&1 || true
+    xcrun simctl erase "$SIM_UDID"
+  fi
+  # With "Connect Hardware Keyboard" on, the simulator never shows a software
+  # keyboard (ours included); typing is expected from the Mac's keyboard.
+  # Turn it off for this device before Simulator.app starts (⇧⌘K toggles it).
+  defaults write com.apple.iphonesimulator ConnectHardwareKeyboard -bool false 2>/dev/null || true
+  defaults write com.apple.iphonesimulator "DevicePreferences" -dict-add "$SIM_UDID" \
+    '{ ConnectHardwareKeyboard = 0; }' 2>/dev/null || true
 
   xcrun simctl boot "$SIM_UDID" 2>/dev/null || true   # "already booted" is fine
   xcrun simctl bootstatus "$SIM_UDID" -b >/dev/null
@@ -192,6 +207,8 @@ MongolKey is running on "$SIM_DEVICE_NAME".
 Enable the keyboard once per install (cannot be scripted):
   Settings ▸ General ▸ Keyboard ▸ Keyboards ▸ Add New Keyboard… ▸ MongolKey
 then in the app's Try It tab hold 🌐 and pick MongolKey.
+No keyboard at all when you tap a field? The Simulator's hardware keyboard is
+connected: press ⇧⌘K in the Simulator (I/O ▸ Keyboard ▸ Connect Hardware Keyboard).
 If the app or the keyboard crashes later, run: tools/crashlog.sh
 MSG
 else

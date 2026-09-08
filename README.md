@@ -319,6 +319,13 @@ done once by hand through the Settings app on the simulator or device.
 - **Keyboard doesn't show up under "Add New Keyboard…"** — rebuild and reinstall
   the app (the extension ships inside the app bundle); if it was installed
   before, delete the app from the simulator/device first, then reinstall.
+- **No keyboard appears at all when you tap a field (not even Apple's)** — the
+  Simulator's "Connect Hardware Keyboard" is on, so it expects your Mac's
+  keyboard. Press ⇧⌘K in the Simulator (I/O ▸ Keyboard) to toggle it off;
+  `tools/simulate.sh` turns it off for its device on every run.
+- **Start over from a factory-fresh simulator** — `tools/simulate.sh --reset`
+  erases the device, then builds, installs and launches; enable the keyboard
+  in Settings again afterwards.
 - **Nothing happens when typing** — make sure you actually switched keyboards
   with 🌐; the system keyboard is very similar in outline and easy to miss.
 - **The app (or the keyboard) crashes** — `tools/simulate.sh` checks that the
