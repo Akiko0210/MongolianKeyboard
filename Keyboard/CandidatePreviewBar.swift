@@ -10,8 +10,9 @@
 //  caption so the user can confirm they are picking the right word.
 //
 //  Cell order mirrors SuggestionEngine: exact dictionary matches, then the
-//  verbatim letter-by-letter transliteration (captioned with the raw Latin),
-//  then predictions. The default candidate (what Space will commit) is
+//  verbatim letter-by-letter transliteration (captioned with the raw Latin;
+//  an ambiguous o/u word's feminine spelling is captioned with ö/ü, e.g.
+//  "üdür" next to "udur"), then predictions. The default candidate (what Space will commit) is
 //  highlighted.
 //
 

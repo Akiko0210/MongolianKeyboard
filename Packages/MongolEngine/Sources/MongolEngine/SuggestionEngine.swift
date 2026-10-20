@@ -41,8 +41,10 @@ public struct Candidate: Equatable {
     /// Cyrillic form, shown as a caption so the user can confirm the word.
     /// `nil` for the verbatim candidate.
     public let cyrillic: String?
-    /// The romanization this candidate answers (folded key, or the raw
-    /// buffer for the verbatim candidate).
+    /// The romanization this candidate answers: the folded key, or the raw
+    /// buffer for the verbatim candidate. The feminine verbatim spelling of
+    /// an ambiguous o/u word writes the turned vowels as ö/ü (üdür), so the
+    /// two verbatims are captioned apart.
     public let latin: String
     public let source: Source
 
@@ -89,9 +91,10 @@ public struct SuggestionEngine {
         if !verbatim.isEmpty {
             for spelling in VowelHarmony.verbatimSpellings(of: verbatim)
             where !result.contains(where: { $0.mongolian == spelling }) {
+                let caption = spelling == verbatim ? latin : VowelHarmony.feminineLatin(of: latin)
                 result.append(Candidate(mongolian: spelling,
                                         cyrillic: nil,
-                                        latin: latin,
+                                        latin: caption,
                                         source: .verbatim))
             }
         }
