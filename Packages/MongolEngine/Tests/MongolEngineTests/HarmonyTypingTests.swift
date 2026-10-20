@@ -164,4 +164,29 @@ final class HarmonyTypingTests: XCTestCase {
         XCTAssertEqual(c.filter { $0.source == .verbatim }.map(\.mongolian),
                        [Mongolian.haa + Mongolian.ue + Mongolian.ra + Mongolian.e + Mongolian.haa])
     }
+
+    // MARK: Captions (issue #14)
+
+    func testFeminineVerbatimIsCaptionedWithUmlauts() {
+        let verbatims = candidates("udur").filter { $0.source == .verbatim }
+        XCTAssertEqual(verbatims.map(\.latin), ["udur", "üdür"])
+    }
+
+    func testFeminineCaptionTurnsBothOAndU() {
+        let c = SuggestionEngine(lexicon: Lexicon(entries: []))
+            .candidates(forLatin: "orin", verbatim: typed("orin").mongolianOutput)
+        XCTAssertEqual(c.map(\.latin), ["orin", "örin"])
+    }
+
+    func testDecidedWordKeepsRawCaption() {
+        let verbatims = candidates("hureh").filter { $0.source == .verbatim }
+        XCTAssertEqual(verbatims.map(\.latin), ["hureh"])
+    }
+
+    func testFeminineLatinLeavesDigraphsAndCase() {
+        XCTAssertEqual(VowelHarmony.feminineLatin(of: "Udur"), "Üdür")
+        XCTAssertEqual(VowelHarmony.feminineLatin(of: "ULUS"), "ÜLÜS")
+        XCTAssertEqual(VowelHarmony.feminineLatin(of: "oedoer"), "oedoer")
+        XCTAssertEqual(VowelHarmony.feminineLatin(of: "khoto"), "khötö")
+    }
 }

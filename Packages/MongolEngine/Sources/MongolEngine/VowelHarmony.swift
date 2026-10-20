@@ -119,7 +119,7 @@ public enum VowelHarmony {
     /// a bare `o`/`u` typed for ö/ü is up to `harmonized(_:)`, not here.
     public static func harmony(ofLatin latin: String,
                                scheme: TransliterationScheme = .v1) -> WordHarmony {
-        harmony(ofMongolian: PhraseTransliterator(scheme: scheme).transliterate(latin))
+        harmony(ofMongolian: PhraseTransliterator(scheme: scheme).literal(latin))
     }
 }
 
@@ -177,6 +177,19 @@ public extension VowelHarmony {
             .replacingOccurrences(of: Mongolian.o, with: Mongolian.oe)
             .replacingOccurrences(of: Mongolian.u, with: Mongolian.ue)
         return [verbatim, front]
+    }
+
+    /// `latin` with every bare o/u written ö/ü, i.e. the romanization of the
+    /// feminine spelling `verbatimSpellings` offers (udur → üdür). Used to
+    /// caption that candidate apart from the masculine one. Tokens are read
+    /// through `scheme`, so digraphs such as `oe` are left as typed.
+    static func feminineLatin(of latin: String,
+                              scheme: TransliterationScheme = .v1) -> String {
+        Tokenizer(scheme: scheme).tokenize(latin).map { token in
+            guard feminine(of: token.mongolian) != nil else { return token.latin }
+            let front = token.mongolian == Mongolian.o ? "ö" : "ü"
+            return token.latin == token.latin.uppercased() ? front.uppercased() : front
+        }.joined()
     }
 
     /// ᠥ for ᠣ and ᠦ for ᠤ; `nil` for anything else.
