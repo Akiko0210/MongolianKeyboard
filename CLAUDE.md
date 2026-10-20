@@ -20,7 +20,19 @@ to `main`.
    e.g. `feat/12-vowel-harmony`.
 3. **Open a PR for the change** with `gh pr create`. Put `Closes #<issue>`
    in the body so merging closes the issue. Keep one concern per PR.
-4. **Run CI and keep it green.**
+4. **Explain what changed, with evidence screenshots**, in the PR body (or a
+   comment for anything added later):
+   - A short "What changed" list, and the before/after behaviour.
+   - **UI or typing-behaviour changes** (keyboard, app, transliteration
+     output): before and after iOS Simulator screenshots of the *same*
+     input. Build "before" from the base commit and "after" from the PR head.
+   - **Engine-only, tooling or docs changes**: a screenshot of the green CI
+     job, plus the relevant test-output lines (e.g. `Executed 84 tests, with
+     0 failures`).
+   - Store images on the orphan branch `pr-evidence` as
+     `pr-<number>/<name>.png`, never on `main`. Embed them with
+     `https://github.com/Akiko0210/MongolianKeyboard/blob/pr-evidence/pr-<number>/<name>.png?raw=true`.
+5. **Run CI and keep it green.**
    - Locally, before pushing: `cd Packages/MongolEngine && swift test`.
    - On GitHub, the workflow in `.github/workflows/` runs on every PR. Check
      it with `gh pr checks`, and fix any failure before asking for review

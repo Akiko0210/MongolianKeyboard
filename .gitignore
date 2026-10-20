@@ -21,3 +21,6 @@ Packages/*/.build/
 *.mobileprovision
 *.p12
 .lexicon-cache/
+
+# Browser-tool screenshot scratch (PR evidence lives on the pr-evidence branch)
+.playwright-mcp/
