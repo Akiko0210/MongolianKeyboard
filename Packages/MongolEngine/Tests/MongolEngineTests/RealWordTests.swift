@@ -32,7 +32,9 @@ final class RealWordTests: XCTestCase {
         ("bagsh",   Mongolian.ba + Mongolian.a + Mongolian.ga + Mongolian.sha),
         ("ere",     Mongolian.e + Mongolian.ra + Mongolian.e),
         ("modo",    Mongolian.ma + Mongolian.o + Mongolian.da + Mongolian.o),
-        ("temur",   Mongolian.ta + Mongolian.e + Mongolian.ma + Mongolian.u + Mongolian.ra),
+        // Temür (төмөр/тэмүр) is feminine: the typed e makes the bare u
+        // a ü under vowel harmony (Poppe §§32–34), so ᠲᠡᠮᠦᠷ, not ᠲᠡᠮᠤᠷ.
+        ("temur",   Mongolian.ta + Mongolian.e + Mongolian.ma + Mongolian.ue + Mongolian.ra),
         ("shine",   Mongolian.sha + Mongolian.i + Mongolian.na + Mongolian.e),
         ("tsag",    Mongolian.tsa + Mongolian.a + Mongolian.ga),
         ("jil",     Mongolian.ja + Mongolian.i + Mongolian.la),
