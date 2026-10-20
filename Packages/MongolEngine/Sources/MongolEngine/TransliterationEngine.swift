@@ -65,14 +65,18 @@ public final class MongolianTransliterator: TransliterationEngine {
 
     // MARK: TransliterationEngine
 
-    public var tokens: [Token] { tokenBuffer }
+    /// The buffer with vowel harmony applied: a bare o/u in a word that
+    /// also has a feminine vowel comes out as ö/ü (`VowelHarmony.harmonized`).
+    /// Harmony is recomputed from the literal tokens on every read, so
+    /// deleting the feminine vowel turns the o/u back to masculine.
+    public var tokens: [Token] { VowelHarmony.harmonized(tokenBuffer) }
 
     public var latinBuffer: String {
         tokenBuffer.map(\.latin).joined()
     }
 
     public var mongolianOutput: String {
-        tokenBuffer.map(\.mongolian).joined()
+        tokens.map(\.mongolian).joined()
     }
 
     public var hasComposition: Bool { !tokenBuffer.isEmpty }

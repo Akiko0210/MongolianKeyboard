@@ -12,7 +12,10 @@
 //       so the first one is the default that Space commits.
 //    2. The verbatim transliteration of the buffer — always available, so
 //       out-of-vocabulary words (names, dialect, old orthography) can still
-//       be typed letter by letter. Never silently dropped.
+//       be typed letter by letter. Never silently dropped. When the word's
+//       only gendered vowels are o/u (udur), its harmony is ambiguous and
+//       both readings are offered, masculine first, then feminine
+//       (VowelHarmony.verbatimSpellings; Poppe §§32–34).
 //    3. Completions — lexicon words the buffer is a prefix of. Tappable
 //       predictions only; they are never auto-committed by Space, because
 //       committing a word the user did not finish typing would trade
@@ -56,7 +59,7 @@ public struct SuggestionEngine {
     private let lexicon: Lexicon
 
     /// Upper bound on candidates returned (exact matches and the verbatim
-    /// candidate are always included even if that exceeds the bound —
+    /// candidates are always included even if that exceeds the bound —
     /// completions are what get trimmed).
     public let maxCandidates: Int
 
@@ -69,7 +72,9 @@ public struct SuggestionEngine {
     /// - Parameters:
     ///   - latin: the raw Latin buffer as typed.
     ///   - verbatim: the letter-by-letter transliteration of that buffer
-    ///     (the `TransliterationEngine`'s output).
+    ///     (the `TransliterationEngine`'s output, already harmonized). An
+    ///     ambiguous o/u word also gets its feminine spelling as a second
+    ///     verbatim candidate.
     public func candidates(forLatin latin: String, verbatim: String) -> [Candidate] {
         guard !latin.isEmpty else { return [] }
         let key = LatinKey.fold(latin)
@@ -81,11 +86,14 @@ public struct SuggestionEngine {
                              latin: $0.key,
                              source: .lexicon) }
 
-        if !verbatim.isEmpty && !result.contains(where: { $0.mongolian == verbatim }) {
-            result.append(Candidate(mongolian: verbatim,
-                                    cyrillic: nil,
-                                    latin: latin,
-                                    source: .verbatim))
+        if !verbatim.isEmpty {
+            for spelling in VowelHarmony.verbatimSpellings(of: verbatim)
+            where !result.contains(where: { $0.mongolian == spelling }) {
+                result.append(Candidate(mongolian: spelling,
+                                        cyrillic: nil,
+                                        latin: latin,
+                                        source: .verbatim))
+            }
         }
 
         let room = maxCandidates - result.count

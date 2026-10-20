@@ -116,9 +116,80 @@ public enum VowelHarmony {
 
     /// The harmony of a Latin buffer, read literally through `scheme`. In v1,
     /// `o`/`u` are masculine and `oe`/`ue`/`ö`/`ü` are feminine. Resolving
-    /// a bare `o`/`u` typed for ö/ü is up to harmony-aware typing, not here.
+    /// a bare `o`/`u` typed for ö/ü is up to `harmonized(_:)`, not here.
     public static func harmony(ofLatin latin: String,
                                scheme: TransliterationScheme = .v1) -> WordHarmony {
         harmony(ofMongolian: PhraseTransliterator(scheme: scheme).transliterate(latin))
+    }
+}
+
+// MARK: - Harmony-aware letter-by-letter typing
+
+//  v1 has no separate keys for ö/ü beyond `oe`/`ue`/`ö`/`ü`, and most people
+//  type ө/ү as a bare `o`/`u` (LatinKey folds them the same way). Since a
+//  native word keeps to one harmony class (Poppe §§32–34), a typed feminine
+//  vowel tells us a bare `o`/`u` in the same word must be ö/ü:
+//
+//    hureh  → ᠾᠦᠷᠡᠾ  (e is feminine, so u is ü)
+//    oedoer → ᠥᠳᠥᠷ   (explicit, kept)
+//    bolad  → ᠪᠣᠯᠠᠳ   (a is masculine, so o stays o)
+//
+//  A word whose only gendered vowels are o/u (udur: өдөр or одор?) cannot
+//  be decided letter by letter, so it stays masculine and the feminine
+//  spelling is offered as an alternative candidate.
+//
+//  Known limit: in a compound mixing classes (Dorjsüren), every bare o/u is
+//  turned feminine, including the masculine member's. Such words are better
+//  served by the lexicon, or by typing them explicitly.
+
+public extension VowelHarmony {
+
+    /// `tokens` with every bare o/u turned into ö/ü when the word also holds
+    /// a feminine vowel (e, ö, ü). Explicit ö/ü and every other token are
+    /// left as they are, and token boundaries never change, so token-level
+    /// backspace still removes exactly what was typed.
+    static func harmonized(_ tokens: [Token]) -> [Token] {
+        let hasFeminine = tokens.contains { isVowel($0.mongolian, of: .feminine) }
+        guard hasFeminine else { return tokens }
+        return tokens.map { token in
+            guard let front = feminine(of: token.mongolian) else { return token }
+            return Token(latin: token.latin, mongolian: front, isMapped: token.isMapped)
+        }
+    }
+
+    /// The letter-by-letter spellings of a verbatim (already harmonized)
+    /// word, most likely first: just `verbatim`, or, when its only gendered
+    /// vowels are o/u, the masculine reading followed by the feminine one
+    /// (ᠤᠳᠤᠷ, then ᠦᠳᠦᠷ). A word with a, or with any feminine vowel, is
+    /// already decided and has a single spelling.
+    static func verbatimSpellings(of verbatim: String) -> [String] {
+        var hasRounded = false
+        for scalar in verbatim.unicodeScalars {
+            switch scalar.value {
+            case 0x1823, 0x1824: hasRounded = true           // ᠣ o, ᠤ u
+            case 0x1820:         return [verbatim]           // ᠠ a: masculine
+            default:
+                if vowelClass(of: scalar) == .feminine { return [verbatim] }
+            }
+        }
+        guard hasRounded else { return [verbatim] }
+        let front = verbatim
+            .replacingOccurrences(of: Mongolian.o, with: Mongolian.oe)
+            .replacingOccurrences(of: Mongolian.u, with: Mongolian.ue)
+        return [verbatim, front]
+    }
+
+    /// ᠥ for ᠣ and ᠦ for ᠤ; `nil` for anything else.
+    private static func feminine(of mongolian: String) -> String? {
+        switch mongolian {
+        case Mongolian.o: return Mongolian.oe
+        case Mongolian.u: return Mongolian.ue
+        default:          return nil
+        }
+    }
+
+    private static func isVowel(_ mongolian: String, of cls: VowelClass) -> Bool {
+        let scalars = mongolian.unicodeScalars
+        return scalars.count == 1 && vowelClass(of: scalars.first!) == cls
     }
 }
