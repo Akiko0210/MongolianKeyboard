@@ -99,6 +99,7 @@ def load_authority(path):
     with open(path, encoding="utf-8") as fh:
         for line in fh:
             cols = line.rstrip("\n").split("\t")
+            if line.startswith("#"): continue
             if len(cols) >= 2 and cols[0] and cols[1]:
                 out.setdefault(cols[0].strip().lower(), set()).add(cols[1].strip())
     return out
