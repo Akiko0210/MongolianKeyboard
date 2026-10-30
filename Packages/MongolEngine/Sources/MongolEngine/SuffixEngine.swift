@@ -176,7 +176,7 @@ public struct SuffixEngine {
     public static func inflections(forKey key: String,
                                    lexicon: Lexicon,
                                    limit: Int = 4) -> [Inflection] {
-        guard key.count >= 3 else { return [] }
+        guard key.count >= 3, limit > 0 else { return [] }
         var readings = Self.readings(forKey: key, lexicon: lexicon, restoreVowel: false)
         readings += VerbEngine.conjugations(forKey: key, lexicon: lexicon)
             .map { Reading(inflection: $0, stem: $0.stem) }
@@ -225,7 +225,7 @@ public struct SuffixEngine {
                 ? Self.restoredStems(forKey: stemKey, lexicon: lexicon)
                 : lexicon.exactMatches(forKey: stemKey).map { ($0, $0.cyrillic) }
             for (stem, cyrillicStem) in stems {
-                let gender = Self.gender(ofCyrillic: stem.cyrillic)
+                let gender = Self.gender(ofTraditional: stem.traditional, fallbackCyrillic: stem.cyrillic)
                 if let required = suffix.gender, required != gender { continue }
                 if suffix.vowelStemOnly, !Self.endsInVowel(stem.traditional) { continue }
                 guard let text = Self.nominal(suffix.parts, stem: stem.traditional, gender: gender) else { continue }
@@ -240,7 +240,7 @@ public struct SuffixEngine {
 
     /// A suffixed reading of a key whose stem the dictionary lacks: the stem
     /// is spelled by `spell` (the learned orthography rules) and the suffix
-    /// attached by the same corpus-verified rules as for dictionary stems.
+    /// attached by the same corpus-derived heuristics as for dictionary stems.
     /// Nil when the key ends in no known suffix or the stem cannot be spelled.
     public static func ruleBased(forKey key: String, spell: (String) -> String?) -> String? {
         guard key.count >= 4 else { return nil }
@@ -304,11 +304,26 @@ public struct SuffixEngine {
 
     // MARK: - Vowel harmony and letter classes
 
-    /// Cyrillic vowel harmony: any back vowel (а о у, and я ё ю) makes the
-    /// word masculine; words with only э ө ү е и are feminine.
+    /// Fallback harmony from the first deciding Cyrillic vowel. ю and и
+    /// alone do not establish masculine harmony. Written stems take priority.
     public static func gender(ofCyrillic word: String) -> Gender {
-        for ch in word where "аоуяёю".contains(ch) { return .masculine }
+        for ch in word.lowercased() {
+            if "аоуяё".contains(ch) { return .masculine }
+            if "эөүе".contains(ch) { return .feminine }
+        }
         return .feminine
+    }
+
+    /// Harmony belongs to the historical written stem, not a lossy Latin key
+    /// or a blanket assumption that Cyrillic ю is always masculine. Neutral
+    /// ᠢ does not decide the class; stop before detached suffixes.
+    static func gender(ofTraditional text: String, fallbackCyrillic: String) -> Gender {
+        for scalar in text.unicodeScalars {
+            if scalar.value == 0x202F { break }
+            if [0x1820, 0x1823, 0x1824].contains(scalar.value) { return .masculine }
+            if [0x1821, 0x1825, 0x1826, 0x1827].contains(scalar.value) { return .feminine }
+        }
+        return gender(ofCyrillic: fallbackCyrillic)
     }
 
     static let vowels: ClosedRange<UInt32> = 0x1820...0x1827

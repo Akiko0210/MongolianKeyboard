@@ -115,13 +115,13 @@ final class InputSessionTests: XCTestCase {
         XCTAssertEqual(session.space(), [.insert("ᠠᠪᠤ\u{202F}ᠳᠤ\u{202F}ᠪᠠᠨ"), .insert(" ")])
     }
 
-    func testUnknownWordCommitsARuleSpellingAndPredictsNothing() {
+    func testUnknownWordPreservesInputAndPredictsNothing() {
         type("zzz")
         let commands = session.space()
         XCTAssertEqual(commands.count, 2)
         if case .insert(let text) = commands[0] {
             XCTAssertFalse(text.isEmpty)
-            XCTAssertTrue(text.unicodeScalars.allSatisfy { (0x1800...0x18AF).contains(Int($0.value)) })
+            XCTAssertEqual(text, "zzz")
         } else {
             XCTFail("expected an insert, got \(commands[0])")
         }
@@ -129,9 +129,10 @@ final class InputSessionTests: XCTestCase {
         XCTAssertTrue(session.candidates.isEmpty)
     }
 
-    func testHostChangeCommitsTheComposedWord() {
+    func testHostChangeCancelsWithoutWritingIntoAnotherField() {
         type("mongol")
-        XCTAssertEqual(session.hostWillChange(), [.insert("ᠮᠣᠩᠭᠣᠯ")])
+        XCTAssertEqual(session.hostWillChange(), [])
+        XCTAssertNil(session.lastCommitted)
         XCTAssertFalse(session.isComposing)
         XCTAssertEqual(session.hostWillChange(), [], "nothing composed, nothing committed")
     }
@@ -156,8 +157,8 @@ final class InputSessionTests: XCTestCase {
                                     converter: OrthographyConverter(rules: [:]))
         let session = InputSession(suggester: bare)
         for ch in "gar" { _ = session.insertLetter(String(ch)) }
-        XCTAssertEqual(session.candidates.map(\.source), [.verbatim])
-        XCTAssertEqual(session.space(), [.insert("ᠭᠠᠷ"), .insert(" ")])
+        XCTAssertEqual(session.candidates.map(\.source), [.verbatim, .unchanged])
+        XCTAssertEqual(session.selectCandidate(at: 0), [.insert("ᠭᠠᠷ ")])
         XCTAssertTrue(session.candidates.isEmpty)
     }
 }

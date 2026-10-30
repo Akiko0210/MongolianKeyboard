@@ -23,7 +23,7 @@ public enum LatinKey {
 
     /// Canonical lookup key for a typed Latin buffer.
     public static func fold(_ latin: String) -> String {
-        var s = latin.lowercased()
+        var s = latin.precomposedStringWithCanonicalMapping.lowercased()
         s = s.replacingOccurrences(of: "ö", with: "u")
         s = s.replacingOccurrences(of: "ü", with: "u")
         s = s.replacingOccurrences(of: "oe", with: "u")

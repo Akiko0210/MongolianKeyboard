@@ -24,14 +24,14 @@ final class PhraseSpellerTests: XCTestCase {
         XCTAssertEqual(speller.spell("..."), "...")
     }
 
-    func testUnknownWordsStillProduceMongolianScript() {
+    func testUnknownWordsArePreservedForReview() {
         let out = speller.spell("zzz")
         XCTAssertFalse(out.isEmpty)
-        XCTAssertTrue(out.unicodeScalars.allSatisfy { (0x1800...0x18AF).contains(Int($0.value)) })
+        XCTAssertEqual(out, "zzz")
     }
 
-    func testDigitsAndCyrillicPassThrough() {
-        XCTAssertEqual(speller.spell("2026 он"), "2026 он")
+    func testDigitsPassThroughAndCyrillicIsConverted() {
+        XCTAssertEqual(speller.spell("2026 он"), "2026 ᠣᠨ")
     }
 
     func testAgreesWithTheKeyboardSession() {

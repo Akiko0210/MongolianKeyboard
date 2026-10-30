@@ -6,7 +6,7 @@
 //  (явах = ᠶᠠᠪᠤᠬᠤ); the typed word is <stem> + <tense/converb/mood suffix>
 //  (явсан, явна, явж, яваад…). The stem is the infinitive minus ᠬᠤ/ᠬᠦ.
 //
-//  Rules and counts are from the corpus tables in tools/verify_corpus.py
+//  Heuristics and counts are from the corpus tables in tools/verify_corpus.py
 //  (Inner Mongolia University's converter over ~79k lines):
 //   • Vowel-final stems attach the suffix directly:
 //       явсан ᠶᠠᠪᠤᠭᠰᠠᠨ (6,349)  явна ᠶᠠᠪᠤᠨ᠎ᠠ (8,154)  явж ᠶᠠᠪᠤᠵᠤ (7,250)
@@ -15,11 +15,12 @@
 //     -ᠭᠰᠠᠨ, -ᠨ᠎ᠠ, -ᠭᠠᠳ, -ᠯ᠎ᠠ, -ᠶ᠎ᠠ, -ᠮᠠᠷ, -ᠭᠠᠷᠠᠢ: авсан ᠠᠪᠤᠭᠰᠠᠨ, болно ᠪᠣᠯᠤᠨ᠎ᠠ.
 //   • The converb after a consonant is ᠵᠤ after ᠨ ᠩ ᠮ ᠯ and ᠴᠤ otherwise:
 //     олж ᠣᠯᠵᠤ, авч ᠠᠪᠴᠤ, гарч ᠭᠠᠷᠴᠤ (same split for -жээ: ᠵᠠᠢ / ᠴᠠᠢ).
-//   • -даг never takes the connective or the ᠲ form: авдаг ᠠᠪᠳᠠᠭ, гардаг ᠭᠠᠷᠳᠠᠭ.
+//   • This model attaches -даг without a connective: авдаг ᠠᠪᠳᠠᠭ, гардаг ᠭᠠᠷᠳᠠᠭ.
 //   • -в attaches directly except after ᠪ/ᠭ: болов ᠪᠣᠯᠪᠠ, гарав ᠭᠠᠷᠪᠠ, авав ᠠᠪᠤᠪᠠ.
 //   • Negation is the infinitive + detached ᠦᠭᠡᠢ: явахгүй ᠶᠠᠪᠤᠬᠤ ᠦᠭᠡᠢ (2,962).
 //  Irregular verbs (гэх → ᠭᠡᠰᠡᠨ, өгөх → ᠥᠭᠭᠦ-, байх → байжээ ᠪᠠᠶᠢᠴᠠᠢ) are
-//  covered by the corpus-derived lexicon entries, which always rank first.
+//  represented in the corpus-derived lexicon rank first when present.
+//  These patterns are not a complete official grammar; generated forms are tap-only.
 //
 
 import Foundation
@@ -127,7 +128,7 @@ enum VerbEngine {
                 for lemma in lexicon.exactMatches(forKey: base + ending) {
                     guard let verbStem = Self.stem(ofInfinitive: lemma.traditional),
                           lemma.cyrillic.hasSuffix("х") else { continue }
-                    let gender = SuffixEngine.gender(ofCyrillic: lemma.cyrillic)
+                    let gender = SuffixEngine.gender(ofTraditional: verbStem, fallbackCyrillic: lemma.cyrillic)
                     if let required = suffix.gender, required != gender { continue }
                     guard let text = conjugate(suffix.kind, stem: verbStem, infinitive: lemma.traditional, gender: gender)
                     else { continue }

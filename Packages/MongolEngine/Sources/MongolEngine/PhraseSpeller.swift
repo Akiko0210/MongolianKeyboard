@@ -25,10 +25,15 @@ public struct PhraseSpeller {
     public func spell(_ text: String) -> String {
         var output = ""
         var word = ""
+        var previous: String?
 
         func flushWord() {
             guard !word.isEmpty else { return }
-            output += spellWord(word)
+            let verbatim = tokenizer.tokenize(word).map(\.mongolian).joined()
+            let candidates = suggester.candidates(forLatin: word, verbatim: verbatim, previous: previous)
+            let chosen = SuggestionEngine.defaultCandidate(in: candidates)
+            output += chosen?.mongolian ?? word
+            previous = chosen?.cyrillic
             word = ""
         }
 
@@ -38,6 +43,7 @@ public struct PhraseSpeller {
             } else {
                 flushWord()
                 output.append(character)
+                if character != " " { previous = nil }
             }
         }
         flushWord()
@@ -53,6 +59,6 @@ public struct PhraseSpeller {
 
     /// Letters people type Mongolian with: ASCII letters plus ö/ü.
     static func isWordCharacter(_ character: Character) -> Bool {
-        character.isLetter && (character.isASCII || "öüÖÜ".contains(character))
+        character.isLetter
     }
 }

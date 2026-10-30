@@ -26,7 +26,8 @@ let package = Package(
         .testTarget(
             name: "MongolEngineTests",
             dependencies: ["MongolEngine"],
-            path: "Tests/MongolEngineTests"
+            path: "Tests/MongolEngineTests",
+            resources: [.process("Fixtures")]
         )
     ]
 )

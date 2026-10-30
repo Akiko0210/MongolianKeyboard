@@ -1,0 +1,24 @@
+{
+  "reviewed": "2026-09-19",
+  "source": "https://www.nccd.gov.mn/stat/file/u/Surgalt/mongolbichig.pdf",
+  "title": "Монгол бичгийн гарын авлага - I (2023)",
+  "scope": "Small independent regression sample, not certification of the full dictionary. Page numbers are PDF pages, one-based. Unicode strings are our transcription of the printed examples; source uses shaped glyphs.",
+  "examples": [
+    {"cyrillic":"аав", "latin":"aav", "traditional":"ᠠᠪᠤ", "page":49},
+    {"cyrillic":"агаар", "latin":"agaar", "traditional":"ᠠᠭᠠᠷ", "page":49},
+    {"cyrillic":"ээж", "latin":"eej", "traditional":"ᠡᠵᠢ", "page":49},
+    {"cyrillic":"хиймэл", "latin":"hiimel", "traditional":"ᠬᠢᠮᠡᠯ", "page":49},
+    {"cyrillic":"уурга", "latin":"uurga", "traditional":"ᠤᠷᠭ᠎ᠠ", "page":49},
+    {"cyrillic":"сүү", "latin":"suu", "traditional":"ᠰᠦᠨ", "page":49, "replace":true, "note":"Use the handbook's explicit sun form; do not claim all n-less usage is invalid."},
+    {"cyrillic":"мөөг", "latin":"muug", "traditional":"ᠮᠥᠭᠦ", "page":49, "replace":true, "note":"Handbook transliterates mögü, with final ü, not ö."},
+    {"cyrillic":"одоо", "latin":"odoo", "traditional":"ᠣᠳᠤ", "page":49, "replace":true, "note":"Handbook transliterates odu, with final u, not o."},
+    {"cyrillic":"мэдээ", "latin":"medee", "traditional":"ᠮᠡᠳᠡᠭᠡ", "page":44},
+    {"cyrillic":"үүл", "latin":"uul", "traditional":"ᠡᠭᠦᠯᠡ", "page":44},
+    {"cyrillic":"хууль", "latin":"huuli", "traditional":"ᠬᠠᠤᠯᠢ", "page":48},
+    {"cyrillic":"түүх", "latin":"tuuh", "traditional":"ᠲᠡᠦᠬᠡ", "page":48},
+    {"cyrillic":"хүүхэд", "latin":"huuhed", "traditional":"ᠬᠡᠦᠬᠡᠳ", "page":48},
+    {"cyrillic":"шуудан", "latin":"shuudan", "traditional":"ᠰᠢᠤᠳᠠᠨ", "page":48},
+    {"cyrillic":"ууган", "latin":"uugan", "traditional":"ᠤᠤᠭᠠᠨ", "page":48},
+    {"cyrillic":"ноорог", "latin":"noorog", "traditional":"ᠨᠣᠣᠷᠠᠭ", "page":48}
+  ]
+}

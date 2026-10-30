@@ -217,7 +217,7 @@ final class SuggestionEngineTests: XCTestCase {
         XCTAssertEqual(c.first?.source, .spelled)
         XCTAssertNil(c.first?.cyrillic, "a rule spelling makes no dictionary claim")
         XCTAssertEqual(c.first?.latin, "zzz")
-        XCTAssertEqual(SuggestionEngine.defaultCandidate(in: c)?.source, .spelled)
+        XCTAssertEqual(SuggestionEngine.defaultCandidate(in: c)?.source, .unchanged)
     }
 
     func testOutOfVocabularyStemWithSuffixUsesSuffixRules() {
@@ -242,12 +242,12 @@ final class SuggestionEngineTests: XCTestCase {
         XCTAssertEqual(c.first?.cyrillic, "аавдаа")
     }
 
-    func testInflectedWordIsDefaultWhenNoExactMatch() {
+    func testGeneratedInflectionRequiresSelection() {
         let c = candidates("nomd")
         XCTAssertEqual(c.first?.source, .inflected)
         XCTAssertEqual(c.first?.mongolian, "ᠨᠣᠮ\u{202F}ᠳᠤ")
         XCTAssertEqual(c.first?.cyrillic, "номд")
-        XCTAssertEqual(SuggestionEngine.defaultCandidate(in: c)?.source, .inflected)
+        XCTAssertEqual(SuggestionEngine.defaultCandidate(in: c)?.source, .unchanged)
     }
 
     func testLooseSpellingFindsTheWordWhenNothingElseDoes() {

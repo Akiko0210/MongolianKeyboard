@@ -12,7 +12,7 @@
 //  renders `latinBuffer` / `candidates` / `highlightedIndex`.
 //
 //  Composition model, inspired by CJK input methods: while the user types
-//  Latin letters they compose in the buffer (shown in the bar); any other
+//  Latin or Cyrillic letters they compose in the buffer (shown in the bar); a
 //  action (space, return, punctuation, number) flushes the composed word into
 //  the host first. Nothing reaches the host mid-word.
 //
@@ -50,12 +50,13 @@ public final class InputSession {
     /// Index of the candidate Space would commit; -1 when there is none
     /// (predictions are tap-only, an empty bar has nothing).
     public var highlightedIndex: Int {
-        candidates.firstIndex { $0.source != .completion && $0.source != .prediction } ?? -1
+        guard let chosen = SuggestionEngine.defaultCandidate(in: candidates) else { return -1 }
+        return candidates.firstIndex(of: chosen) ?? -1
     }
 
     // MARK: Keys
 
-    /// A QWERTY letter composes; nothing reaches the host.
+    /// A Latin or Cyrillic letter composes; nothing reaches the host.
     public func insertLetter(_ text: String) -> [Command] {
         engine.insert(text)
         refresh()
@@ -106,15 +107,22 @@ public final class InputSession {
         guard candidates.indices.contains(index) else { return [] }
         let chosen = candidates[index]
         engine.reset()
-        lastCommitted = chosen.cyrillic
+        lastCommitted = chosen.source == .inflected || chosen.source == .spelled ? nil : chosen.cyrillic
         refresh()
         return [.insert(chosen.mongolian + " ")]
     }
 
-    /// The host is about to change selection or text on its own: commit any
-    /// composed word so it lands where the user was typing, not elsewhere.
+    /// A host callback is not a user commit. The old insertion point may
+    /// already be invalid, so discard composition without mutating host text.
     public func hostWillChange() -> [Command] {
+        reset()
+        return []
+    }
+
+    /// Explicit keyboard-switch action while the insertion point is still known.
+    public func commitComposition() -> [Command] {
         let commands = flush()
+        lastCommitted = nil
         refresh()
         return commands
     }
@@ -129,7 +137,7 @@ public final class InputSession {
     // MARK: Internals
 
     /// Commit the composing word: the default candidate (best dictionary
-    /// match, else the rule spelling, else the verbatim transliteration).
+    /// match, otherwise the original input).
     private func flush() -> [Command] {
         guard engine.hasComposition else { return [] }
         let chosen = SuggestionEngine.defaultCandidate(in: candidates)

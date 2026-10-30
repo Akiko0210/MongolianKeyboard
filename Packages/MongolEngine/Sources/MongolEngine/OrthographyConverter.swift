@@ -2,22 +2,19 @@
 //  OrthographyConverter.swift
 //  MongolEngine
 //
-//  Rule-based spelling for words the dictionary does not have. Cyrillic (and
-//  the Latin typed for it) is phonetic; traditional-script spelling is
-//  historical — long vowels are written with a hidden ᠭ (аа → ᠠᠭᠠ),
-//  diphthongs with ᠶᠢ (ай → ᠠᠶᠢ), в is ᠪ, ц and ч are both ᠴ, and vowels
-//  Cyrillic dropped are kept (амьдрал → ᠠᠮᠢᠳᠤᠷᠠᠯ). A letter-by-letter
-//  transliteration therefore misspells almost every real word.
+//  Statistical guesses for Latin input the dictionary does not have.
+//  Traditional spelling preserves historical distinctions; modern long vowels
+//  have multiple written patterns, not a universal аа → ᠠᠭᠠ substitution.
+//  See docs/ORTHOGRAPHY.md for the independently reviewed examples and limits.
 //
 //  The rules here were not written by hand: tools/learn_orthography.py
-//  aligns every dictionary word's typed key with its verified spelling
+//  aligns every dictionary word's typed key with its stored spelling
 //  (48k pairs) and extracts, for each typed letter in context (neighbouring
 //  letters, vowel harmony), what it is written as. Resources/orthography.tsv
 //  is the resulting decision list. Measured on held-out words the rules
-//  spell about a third of whole words exactly and most letters correctly
-//  — far better than letter-by-letter, but NOT dictionary quality, which is
-//  why candidates from here are captioned with the typed Latin, never with
-//  a Cyrillic word, and rank below every dictionary-backed candidate.
+//  reproduced about a third of held-out legacy spellings exactly. This is
+//  not an independent linguistic accuracy measurement. Generated candidates
+//  have no Cyrillic claim, are labeled for review and require an explicit tap.
 //
 //  The decoder here MUST mirror the decoder in tools/learn_orthography.py:
 //  same symbol tokenization, same harmony class, same context order.
@@ -84,12 +81,9 @@ public struct OrthographyConverter {
                 "\(c)|\(harmony)",
                 "\(c)",
             ]
-            for pattern in patterns {
-                if let spelling = rules[pattern] {
-                    out += spelling
-                    break
-                }
-            }
+            // Missing rules must not silently delete part of the input.
+            guard let spelling = patterns.compactMap({ rules[$0] }).first else { return nil }
+            out += spelling
         }
         return out.isEmpty ? nil : out
     }
