@@ -20,10 +20,26 @@ struct ReferenceView: View {
             List {
                 Section {
                     VStack(alignment: .leading, spacing: 8) {
-                        Text("Whole words are spelled from the keyboard's dictionary of real Mongol bichig spellings (сайн is ᠰᠠᠶᠢᠨ, аав is ᠠᠪᠤ). The letters below are what the verbatim candidate uses when a word is unknown: type the Latin on the left to get the letter on the right; digraphs (two letters) match before single letters.")
+                        Text("Whole words are looked up in the bundled dictionary (сайн is ᠰᠠᠶᠢᠨ, аав is ᠠᠪᠤ). Generated spellings need review and are tap-only. Space keeps unknown input. The letters below describe the letter-by-letter candidate: type the Latin on the left to get the letter on the right; digraphs (two letters) match before single letters.")
                             .font(.footnote)
                             .foregroundStyle(.secondary)
                     }
+                }
+
+                Section("Spelling decisions") {
+                    NavigationLink("Full conversion guide and sources") {
+                        ScrollView {
+                            Text(Self.spellingGuide)
+                                .font(.callout)
+                                .textSelection(.enabled)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .padding()
+                        }
+                        .navigationTitle("Spelling guide")
+                        .navigationBarTitleDisplayMode(.inline)
+                    }
+                    Text("Cyrillic lookup keeps у, ү and ө distinct. Latin typing can represent several words; read the Cyrillic captions before choosing. Font shapes do not change stored spelling.")
+                        .font(.footnote)
                 }
 
                 ForEach(orderedCategories, id: \.self) { category in
@@ -36,6 +52,14 @@ struct ReferenceView: View {
             }
             .navigationTitle("Reference")
         }
+    }
+
+    private static var spellingGuide: String {
+        guard let url = Bundle.main.url(forResource: "ORTHOGRAPHY", withExtension: "md"),
+              let text = try? String(contentsOf: url, encoding: .utf8) else {
+            return "The conversion guide could not be loaded."
+        }
+        return text
     }
 
     private func row(for entry: SchemeEntry) -> some View {

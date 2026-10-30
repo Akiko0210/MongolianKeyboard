@@ -17,7 +17,7 @@ struct TryItView: View {
     @State private var romanInput: String = "mongol"
     @State private var keyboardInput: String = ""
     /// The typeface, remembered across launches (the keyboard extension has
-    /// its own copy of this setting and its own font key).
+    /// its own copy of this setting and its own font picker).
     @AppStorage(MongolFont.defaultsKey) private var faceRaw: String = MongolFont.current.rawValue
     private var face: MongolFont.Face {
         get { MongolFont.Face(rawValue: faceRaw) ?? MongolFont.current }
@@ -25,8 +25,7 @@ struct TryItView: View {
     }
     @FocusState private var keyboardFieldFocused: Bool
 
-    /// Spells words exactly as the keyboard commits them (dictionary, then
-    /// rules, then letter by letter), so this card never contradicts it.
+    /// Uses the same dictionary-or-unchanged default as the keyboard.
     private let speller = PhraseSpeller()
 
     private var romanOutput: String {
@@ -60,7 +59,7 @@ struct TryItView: View {
                 }
             }
             .pickerStyle(.segmented)
-            Text(face.familyName)
+            Text("Preview: \(face.familyName). Other apps choose the font for sent text.")
                 .font(.footnote)
                 .foregroundStyle(.secondary)
         }
@@ -69,21 +68,22 @@ struct TryItView: View {
         .background(RoundedRectangle(cornerRadius: 16).fill(Color(.secondarySystemBackground)))
     }
 
-    // MARK: Live romanizer (engine-powered, no keyboard needed)
+    // MARK: Latin / Cyrillic converter (engine-powered, no keyboard needed)
 
     private var romanizerCard: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Live romanizer")
+            Text("Latin / Cyrillic converter")
                 .font(.headline)
-            Text("Type romanized Mongolian. Each word is spelled the way the keyboard would commit it (dictionary first) and shown vertically.")
+            Text("Type or paste Latin or Cyrillic Mongolian. Dictionary matches are converted. Unknown words stay unchanged; use the keyboard to review alternatives.")
                 .font(.footnote)
                 .foregroundStyle(.secondary)
 
-            TextField("e.g. gar, mori, sain", text: $romanInput, axis: .vertical)
+            TextField("e.g. sain or сайн", text: $romanInput, axis: .vertical)
                 .textInputAutocapitalization(.never)
                 .autocorrectionDisabled()
                 .textFieldStyle(.roundedBorder)
                 .font(.body.monospaced())
+                .accessibilityIdentifier("mk.converterInput")
 
             verticalOutput(text: romanOutput.trimmingCharacters(in: .whitespacesAndNewlines))
         }
@@ -106,6 +106,9 @@ struct TryItView: View {
                 .textFieldStyle(.roundedBorder)
                 .focused($keyboardFieldFocused)
                 .font(.custom(face.postScriptName, size: 22))
+                .autocorrectionDisabled()
+                .textInputAutocapitalization(.never)
+                .accessibilityIdentifier("mk.testerInput")
 
             verticalOutput(text: keyboardInput)
 
@@ -145,7 +148,7 @@ struct TryItView: View {
                 VStack(spacing: 8) {
                     Text(text)
                         .font(.title3)
-                    Text("This is not Mongolian script. Hold 🌐 below the keyboard and pick MongolKey.")
+                    Text("Unrecognized words stay unchanged. Use MongolKey to review spelling candidates.")
                         .font(.footnote)
                         .foregroundStyle(.secondary)
                         .multilineTextAlignment(.center)

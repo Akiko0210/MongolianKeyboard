@@ -25,6 +25,7 @@ enum KeyAction: Equatable {
     case nextKeyboard
     /// Cycle the keyboard's Mongolian typeface (Dashitseden ⇄ Noto Sans).
     case switchFont
+    case switchAlphabet
     /// Non-interactive layout filler (keeps a row centered).
     case spacer
 }
@@ -66,6 +67,7 @@ struct KeyCap {
 /// The two layers the keyboard switches between.
 enum KeyboardLayer {
     case letters
+    case cyrillic
     case numbers
 
     /// - Parameter showsGlobe: whether to include a 🌐 key. iPhones with the
@@ -74,12 +76,23 @@ enum KeyboardLayer {
     func rows(showsGlobe: Bool) -> [[KeyCap]] {
         switch self {
         case .letters:  return KeyCap.letterRows(showsGlobe: showsGlobe)
+        case .cyrillic: return KeyCap.cyrillicRows(showsGlobe: showsGlobe)
         case .numbers:  return KeyCap.numberRows(showsGlobe: showsGlobe)
         }
     }
 }
 
 extension KeyCap {
+
+    static func cyrillicRows(showsGlobe: Bool) -> [[KeyCap]] {
+        [
+            Array("фцужэнгшүзкъ").map { .letter(String($0)) },
+            Array("йыбөахролдпе").map { .letter(String($0)) },
+            Array("ячёсмитьвющ").map { .letter(String($0)) }
+                + [KeyCap(label: "⌫", action: .backspace, width: .fill, style: .secondary)],
+            bottomRow(layerSwitchLabel: "123", layerSwitchAction: .switchToNumbers, showsGlobe: showsGlobe),
+        ]
+    }
 
     // MARK: Letters layer (QWERTY)
 
@@ -132,7 +145,7 @@ extension KeyCap {
                               width: .multiple(1.2), style: .secondary))
         }
         row += [
-            fontKey,
+            KeyCap(label: "A/Б", action: .switchAlphabet, width: .multiple(1.4), style: .secondary),
             KeyCap(label: "space", action: .space, width: .fill, style: .primary),
             KeyCap(label: "return", action: .newline,
                    width: .multiple(2.0), style: .secondary),

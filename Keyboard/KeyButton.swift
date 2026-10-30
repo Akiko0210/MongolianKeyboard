@@ -25,6 +25,8 @@ final class KeyButton: UIControl {
     private let label = UILabel()
     private var popup: UIView?
     private var repeatTimer: Timer?
+    private var didAutoRepeat = false
+    var inputModeListHandler: ((UIControl, UIEvent) -> Void)?
 
     init(cap: KeyCap, fontBundle: Bundle) {
         self.cap = cap
@@ -72,6 +74,9 @@ final class KeyButton: UIControl {
         addTarget(self, action: #selector(touchUpInside), for: .touchUpInside)
         addTarget(self, action: #selector(touchCancelled),
                   for: [.touchUpOutside, .touchCancel, .touchDragExit])
+        if cap.action == .nextKeyboard {
+            addTarget(self, action: #selector(showInputModes(_:event:)), for: .allTouchEvents)
+        }
     }
 
     /// Expose every key to VoiceOver and to UI tests (`UITests/`) with a stable
@@ -102,6 +107,7 @@ final class KeyButton: UIControl {
         case .switchToLetters:    return "letters"
         case .nextKeyboard:       return "next keyboard"
         case .switchFont:         return "font"
+        case .switchAlphabet:     return "alphabet"
         case .spacer:             return "spacer"
         }
     }
@@ -120,6 +126,24 @@ final class KeyButton: UIControl {
         default:
             return .systemFont(ofSize: 20, weight: .regular)
         }
+    }
+
+    func updateReturnTitle(_ type: UIReturnKeyType) {
+        guard cap.action == .newline else { return }
+        let title: String
+        switch type {
+        case .go: title = "go"
+        case .google, .yahoo, .search: title = "search"
+        case .send: title = "send"
+        case .done: title = "done"
+        case .next: title = "next"
+        case .join: title = "join"
+        case .route: title = "route"
+        case .continue: title = "continue"
+        default: title = "return"
+        }
+        label.text = title
+        accessibilityLabel = title
     }
 
     // MARK: Colours
@@ -148,6 +172,7 @@ final class KeyButton: UIControl {
     // MARK: Touch handling
 
     @objc private func touchDown() {
+        didAutoRepeat = false
         applyPressed()
         if cap.showsPopup { showPopup() }
         if cap.action == .backspace { startAutoRepeat() }
@@ -155,7 +180,21 @@ final class KeyButton: UIControl {
 
     @objc private func touchUpInside() {
         finishTouch()
+        if cap.action != .nextKeyboard && !didAutoRepeat { delegate?.keyButtonDidTap(self) }
+    }
+
+    @objc private func showInputModes(_ sender: UIControl, event: UIEvent) {
+        inputModeListHandler?(sender, event)
+    }
+
+    override func accessibilityActivate() -> Bool {
         delegate?.keyButtonDidTap(self)
+        return true
+    }
+
+    override func didMoveToWindow() {
+        super.didMoveToWindow()
+        if window == nil { finishTouch() }
     }
 
     @objc private func touchCancelled() {
@@ -177,6 +216,7 @@ final class KeyButton: UIControl {
             guard let self else { return }
             self.repeatTimer = Timer.scheduledTimer(withTimeInterval: 0.09, repeats: true) { [weak self] _ in
                 guard let self else { return }
+                self.didAutoRepeat = true
                 self.delegate?.keyButtonDidTap(self)
             }
         }

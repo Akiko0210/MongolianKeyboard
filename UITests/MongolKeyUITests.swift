@@ -2,7 +2,7 @@
 //  MongolKeyUITests.swift
 //  MongolKeyUITests
 //
-//  Drives the container app — and, best effort, the keyboard extension — on a
+//  Drives the container app and the actual keyboard extension on a
 //  simulator and saves a screenshot at every step. This is what lets the app be
 //  checked on an iPhone 13 Pro-sized screen from a machine without Xcode: the
 //  GitHub Actions workflow (.github/workflows/ios-simulator.yml) runs these
@@ -14,8 +14,8 @@
 //
 //  Enabling a third-party keyboard is a Settings-app action that Apple offers
 //  no API for, so `enableKeyboardInSettings()` automates the Settings UI. It is
-//  deliberately tolerant: if any step of that flow cannot be found the test
-//  still records what it saw so a human can look at the screenshots.
+//  records screenshots for diagnosis and fails if setup or switching cannot
+//  reach the extension; system QWERTY keys are not evidence of MongolKey.
 //
 
 import XCTest
@@ -34,6 +34,12 @@ final class MongolKeyUITests: XCTestCase {
         super.setUp()
         continueAfterFailure = true
         shotIndex = 0
+        XCUIDevice.shared.orientation = .portrait
+    }
+
+    override func tearDown() {
+        XCUIDevice.shared.orientation = .portrait
+        super.tearDown()
     }
 
     // MARK: - 1. Container app: every tab + the live romanizer
@@ -97,7 +103,15 @@ final class MongolKeyUITests: XCTestCase {
         let tester = inputField(index: 1)
         XCTAssertTrue(tester.waitForExistence(timeout: 10), "keyboard tester field")
         tester.tap()
-        pause(1.0)
+        // The first offscreen-field tap can scroll the SwiftUI container while
+        // the target moves. Refocus after scrolling has settled if needed.
+        if !app.keyboards.firstMatch.waitForExistence(timeout: 5) { tester.tap() }
+        guard app.keyboards.firstMatch.waitForExistence(timeout: 15) else {
+            snap("keyboard-not-visible")
+            XCTFail("onscreen keyboard must be visible before switching")
+            return
+        }
+        dismissSystemTips()
         snap("field-focused")
 
         guard enabled else {
@@ -106,6 +120,10 @@ final class MongolKeyUITests: XCTestCase {
         }
 
         let switched = switchToMongolKey()
+        guard switched else {
+            XCTFail("MongolKey must actually be selected")
+            return
+        }
         dismissSystemTips()
         snap("switched-to-mongolkey")
         log("MongolKey visible after switching: \(switched)")
@@ -140,27 +158,31 @@ final class MongolKeyUITests: XCTestCase {
             snap("prediction-tapped")
         }
 
-        // Font key (bottom-left, where the redundant 🌐 used to be): cycles
-        // the keyboard's typeface. Type a word first so the candidate bar
-        // shows the difference, and check the key reports the new face.
-        let fontKey = key("font")
-        if fontKey.exists {
-            let before = (fontKey.value as? String) ?? ""
-            typeOnMongolKey("baina")
-            pause(0.5)
-            snap("face-\(before.lowercased().replacingOccurrences(of: " ", with: "-"))")
-            fontKey.tap()
-            pause(0.8)
-            let after = (key("font").value as? String) ?? ""
-            log("font key: \(before) → \(after)")
-            snap("face-\(after.lowercased().replacingOccurrences(of: " ", with: "-"))")
-            XCTAssertNotEqual(before, after, "tapping the font key should switch the typeface")
-            XCTAssertFalse(after.isEmpty)
-            tapMongolKey("space")
-            pause(0.4)
-        } else {
-            log("font key not exposed as an element; skipping the typeface check")
+        // Both preview styles are directly selectable; neither changes the
+        // Unicode string committed to the host.
+        typeOnMongolKey("baina")
+        let picker = app.segmentedControls["mk.fontPicker"]
+        XCTAssertTrue(picker.waitForExistence(timeout: 5), "both font choices visible")
+        for face in ["Dashitseden", "Noto Sans"] {
+            let choice = picker.buttons[face]
+            XCTAssertTrue(choice.exists)
+            choice.tap()
+            XCTAssertTrue(choice.isSelected)
+            snap("face-" + face.replacingOccurrences(of: " ", with: "-"))
         }
+        tapMongolKey("space")
+        XCTAssertTrue(((tester.value as? String) ?? "").contains("ᠪᠠᠶᠢᠨ\u{180E}ᠠ"))
+
+        tapMongolKey("alphabet")
+        XCTAssertTrue(key("ү").exists)
+        XCTAssertTrue(key("ө").exists)
+        XCTAssertTrue(key("е").exists)
+        XCTAssertTrue(key("щ").exists)
+        typeOnMongolKey("үг")
+        tapMongolKey("space")
+        XCTAssertTrue(((tester.value as? String) ?? "").contains("ᠦᠭᠡ"), "Cyrillic үг must not become уг")
+        snap("cyrillic-committed")
+        tapMongolKey("alphabet")
 
         // Numbers layer, then back.
         tapMongolKey("numbers")
@@ -179,6 +201,24 @@ final class MongolKeyUITests: XCTestCase {
         if predicted {
             XCTAssertTrue(value.contains("ᠰᠠᠶᠢᠬᠠᠨ"), "tapping the first prediction after сайн should insert сайхан (ᠰᠠᠶᠢᠬᠠᠨ)")
         }
+        typeOnMongolKey("zzz")
+        tapMongolKey("space")
+        XCTAssertTrue(((tester.value as? String) ?? "").hasSuffix("zzz "), "unknown input must not silently become a guess")
+        tapMongolKey("delete")
+        XCTAssertTrue(((tester.value as? String) ?? "").hasSuffix("zzz"))
+        tapMongolKey("return")
+        XCTAssertTrue(((tester.value as? String) ?? "").hasSuffix("zzz\n"))
+
+        XCUIDevice.shared.orientation = .landscapeLeft
+        pause(1)
+        XCTAssertTrue(key("space").waitForExistence(timeout: 5))
+        typeOnMongolKey("aav")
+        tapMongolKey("space")
+        XCTAssertTrue(((tester.value as? String) ?? "").contains("ᠠᠪᠤ "))
+        snap("landscape")
+        XCUIDevice.shared.orientation = .portrait
+        pause(0.8)
+
         snap("final")
     }
 
@@ -247,6 +287,9 @@ final class MongolKeyUITests: XCTestCase {
         pause(1.0)
         snap("settings-app-page")
 
+        if settings.navigationBars["Apps"].exists {
+            _ = tapRow(in: settings, startingWith: "MongolKey")
+        }
         guard tapRow(in: settings, startingWith: "Keyboards") else {
             log("no Keyboards row on the app page; texts=\(settings.staticTexts.allElementsBoundByIndex.prefix(20).map { $0.label })")
             snap("settings-app-page-missing-keyboards")
@@ -255,7 +298,7 @@ final class MongolKeyUITests: XCTestCase {
         pause(0.8)
         snap("settings-app-keyboards")
 
-        let toggle = settings.switches.matching(NSPredicate(format: "label CONTAINS[c] 'mongol'")).firstMatch
+        let toggle = settings.switches.matching(NSPredicate(format: "label CONTAINS[c] 'MongolKey'")).firstMatch
         let anySwitch = toggle.exists ? toggle : settings.switches.firstMatch
         guard anySwitch.waitForExistence(timeout: 5) else {
             log("no switch on the Keyboards page; texts=\(settings.staticTexts.allElementsBoundByIndex.prefix(20).map { $0.label })")
@@ -281,20 +324,11 @@ final class MongolKeyUITests: XCTestCase {
         pause(1.0)
         snap("settings-root")
 
-        var atKeyboards = false
-        if #available(iOS 16.4, *), let url = URL(string: "App-prefs:General&path=Keyboard/KEYBOARDS") {
-            XCUIDevice.shared.system.open(url)
-            atKeyboards = row(in: settings, startingWith: "Add New Keyboard").waitForExistence(timeout: 6)
-            log("deep link to Keyboards screen worked: \(atKeyboards)")
-        }
-        if !atKeyboards {
-            settings.activate()
-            for title in ["General", "Keyboard", "Keyboards"] {
-                guard tapRow(in: settings, startingWith: title) else {
-                    snap("settings-missing-\(title.lowercased())")
-                    log("Settings row '\(title)' not found; hierarchy:\n\(settings.debugDescription.prefix(4000))")
-                    return false
-                }
+        for title in ["General", "Keyboard", "Keyboards"] {
+            guard tapRow(in: settings, startingWith: title) else {
+                snap("settings-missing-" + title.lowercased())
+                log("Settings navigation failed at " + title)
+                return false
             }
         }
         snap("settings-keyboards")
@@ -328,6 +362,8 @@ final class MongolKeyUITests: XCTestCase {
 
     private func row(in host: XCUIApplication, startingWith text: String) -> XCUIElement {
         let predicate = NSPredicate(format: "label BEGINSWITH[c] %@", text)
+        let buttons = host.buttons.matching(predicate)
+        if buttons.count > 0 { return buttons.firstMatch }
         let cells = host.cells.matching(predicate)
         if cells.count > 0 { return cells.firstMatch }
         return host.descendants(matching: .any).matching(predicate).firstMatch
@@ -336,10 +372,18 @@ final class MongolKeyUITests: XCTestCase {
     private func tapRow(in host: XCUIApplication, startingWith text: String) -> Bool {
         for _ in 0..<6 {
             let element = row(in: host, startingWith: text)
-            if element.waitForExistence(timeout: 2), element.isHittable {
-                element.tap()
-                pause(0.8)
-                return true
+            if element.waitForExistence(timeout: 2) {
+                // Settings can expose a valid visible frame while its AX
+                // activation point is invalid. Tap the visible frame directly.
+                let frame = element.frame
+                if frame.width > 1, frame.height > 1,
+                   host.frame.contains(CGPoint(x: frame.midX, y: frame.midY)) {
+                    host.coordinate(withNormalizedOffset: .zero)
+                        .withOffset(CGVector(dx: frame.midX - host.frame.minX,
+                                             dy: frame.midY - host.frame.minY)).tap()
+                    pause(1.2)
+                    return true
+                }
             }
             host.swipeUp()
         }
@@ -350,17 +394,13 @@ final class MongolKeyUITests: XCTestCase {
 
     /// The extension's keys carry `mk.key.<name>` identifiers (KeyButton.swift).
     private func key(_ name: String) -> XCUIElement {
-        app.descendants(matching: .any)["mk.key.\(name)"].firstMatch
+        app.keys["mk.key.\(name)"].firstMatch
     }
 
     private func mongolKeyVisible() -> Bool {
         if key("space").exists && key("m").exists { return true }
         if app.descendants(matching: .any)["mk.keyboard"].exists { return true }
-        // The candidate bar's placeholder (em dash distinguishes it from the app's own copy).
-        let hint = NSPredicate(format: "label BEGINSWITH 'Type romanized Mongolian —'")
-        if app.staticTexts.matching(hint).firstMatch.exists { return true }
-        // Lower-case letter keys only exist on MongolKey (the system keyboard uses upper case).
-        return app.keys["q"].exists && !app.keys["Q"].exists
+        return app.segmentedControls["mk.fontPicker"].exists
     }
 
     private func dumpKeyboardState(_ tag: String) {
@@ -382,7 +422,7 @@ final class MongolKeyUITests: XCTestCase {
     /// Anything on screen whose label mentions MongolKey (the keyboard picker's
     /// row label is not guaranteed to be exactly "MongolKey").
     private func pickerItem() -> XCUIElement? {
-        let pred = NSPredicate(format: "label CONTAINS[c] 'mongol'")
+        let pred = NSPredicate(format: "label CONTAINS[c] 'MongolKey'")
         let queries: [XCUIElementQuery] = [
             app.menuItems.matching(pred), app.buttons.matching(pred), app.cells.matching(pred),
             app.staticTexts.matching(pred), app.otherElements.matching(pred),
@@ -415,18 +455,8 @@ final class MongolKeyUITests: XCTestCase {
     /// it sits in the system bar below the keyboard (bottom-left, next to the
     /// microphone). Older iOS puts it inside the keyboard as "Next keyboard".
     private func globeKey() -> XCUIElement? {
-        let screenHeight = app.frame.height
-        let bottomBand = app.buttons.allElementsBoundByIndex.filter { $0.frame.minY > screenHeight - 90 && $0.frame.height > 1 }
-        log("buttons in the bottom band: " + bottomBand.map { "'\($0.label)'#\($0.identifier)@\(Int($0.frame.minX)),\(Int($0.frame.minY))" }.joined(separator: " "))
-        if let g = bottomBand.first(where: {
-            $0.label.localizedCaseInsensitiveContains("keyboard") || $0.label.localizedCaseInsensitiveContains("globe")
-                || $0.identifier.localizedCaseInsensitiveContains("globe") || $0.identifier.localizedCaseInsensitiveContains("keyboard")
-        }) { return g }
-        if let leftmost = bottomBand.min(by: { $0.frame.minX < $1.frame.minX }), leftmost.frame.minX < 80 { return leftmost }
-
-        let inKeyboard = [app.keyboards.buttons["Next keyboard"], app.keyboards.keys["Next keyboard"]]
-        if let g = inKeyboard.first(where: { $0.exists }) { return g }
-        return nil
+        let controls = [app.buttons["Next keyboard"], app.keys["Next keyboard"], key("next keyboard")]
+        return controls.first { $0.exists && $0.isHittable }
     }
 
     /// Screen point of the globe when no element is exposed (bottom-left of the
@@ -437,53 +467,25 @@ final class MongolKeyUITests: XCTestCase {
     }
 
     private func switchToMongolKey() -> Bool {
-        if mongolKeyVisible() { return true }
-        dumpKeyboardState("before-switch")
-
-        let globe = globeKey()
-        if let globe {
-            log("globe key: '\(globe.label)'#\(globe.identifier) frame=\(globe.frame)")
-        } else {
-            log("no globe element exposed; will tap the bottom-left of the system bar")
-        }
-
-        // Long-press shows the keyboard picker; choose MongolKey if listed.
-        if let globe { globe.press(forDuration: 1.5) } else { globeFallbackPoint().press(forDuration: 1.5) }
+        if key("space").waitForExistence(timeout: 3) { return true }
+        if let globe = globeKey() { globe.press(forDuration: 1.5) }
+        else { globeFallbackPoint().press(forDuration: 1.5) }
         pause(0.8)
         snap("keyboard-picker")
-        dumpPicker()
-        if let item = pickerItem() {
-            // The menu animates; an element captured from allElementsBoundByIndex
-            // can go stale before the tap. Re-resolve by label, else tap its frame.
-            let label = item.label
-            let frame = item.frame
-            log("picker offered '\(label)' frame=\(frame) — tapping")
-            let fresh = app.descendants(matching: .any).matching(NSPredicate(format: "label == %@", label)).firstMatch
-            if fresh.waitForExistence(timeout: 2), fresh.isHittable {
-                fresh.tap()
-            } else {
-                app.coordinate(withNormalizedOffset: .zero)
-                    .withOffset(CGVector(dx: frame.midX, dy: frame.midY)).tap()
-            }
+        let item = app.cells.matching(NSPredicate(format: "label CONTAINS[c] 'MongolKey'")).firstMatch
+        if item.waitForExistence(timeout: 4) {
+            item.tap()
+        } else if let item = pickerItem() {
+            item.tap()
         } else {
-            log("picker did not list MongolKey — dismissing")
             app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.25)).tap()
         }
-        pause(1.0)
-        snap("after-picker")
-        if mongolKeyVisible() { return true }
-        dumpKeyboardState("after-picker")
-
-        // Otherwise a plain tap on the globe cycles through the enabled keyboards.
-        for i in 0..<3 {
-            if let g = globeKey() { g.tap() } else { globeFallbackPoint().tap() }
-            pause(1.5)
-            dismissSystemTips()
-            snap("after-globe-tap-\(i)")
-            if mongolKeyVisible() { return true }
-            dumpKeyboardState("after-cycle-\(i)")
+        if key("space").waitForExistence(timeout: 15) { return true }
+        for _ in 0..<4 {
+            if let globe = globeKey() { globe.tap() } else { globeFallbackPoint().tap() }
+            if key("space").waitForExistence(timeout: 5) { return true }
         }
-        return mongolKeyVisible()
+        return false
     }
 
     /// iOS shows one-time keyboard tips (e.g. the QuickPath "slide to type"
@@ -529,6 +531,8 @@ final class MongolKeyUITests: XCTestCase {
 
     /// SwiftUI `TextField(axis: .vertical)` is backed by a text view.
     private func inputField(index: Int) -> XCUIElement {
+        let named = app.descendants(matching: .any)[index == 0 ? "mk.converterInput" : "mk.testerInput"]
+        if named.exists { return named }
         let views = app.textViews
         if views.count > index { return views.element(boundBy: index) }
         return app.textFields.element(boundBy: index)
@@ -572,7 +576,7 @@ final class MongolKeyUITests: XCTestCase {
 /// Pure re-implementation of KeyboardView's layout so a test can tap keys by
 /// position when the extension's accessibility tree is not reachable.
 enum KeyGeometry {
-    static let previewHeight: CGFloat = 132
+    static let previewHeight: CGFloat = 164
     static let rowsHeight: CGFloat = 230
     static let totalHeight: CGFloat = previewHeight + rowsHeight
 
@@ -598,7 +602,7 @@ enum KeyGeometry {
         // key sits in its place.
         let row4: [Key] = [
             (name: "numbers", width: .multiple(1.4)),
-            (name: "font", width: .multiple(1.2)),
+            (name: "alphabet", width: .multiple(1.4)),
             (name: "space", width: .fill),
             (name: "return", width: .multiple(2.0)),
         ]
@@ -611,7 +615,7 @@ enum KeyGeometry {
         row3.append((name: "delete", width: .fill))
         let row4: [Key] = [
             (name: "letters", width: .multiple(1.4)),
-            (name: "font", width: .multiple(1.2)),
+            (name: "alphabet", width: .multiple(1.4)),
             (name: "space", width: .fill),
             (name: "return", width: .multiple(2.0)),
         ]

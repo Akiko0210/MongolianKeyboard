@@ -146,7 +146,7 @@ public enum MongolFont {
 
     /// A Core Text font for custom vertical rendering.
     public static func ctFont(ofSize size: CGFloat, face: Face = current, in bundle: Bundle) -> CTFont {
-        register(face, in: bundle)
-        return CTFontCreateWithName(face.postScriptName as CFString, size, nil)
+        let resolved = uiFont(ofSize: size, face: face, in: bundle)
+        return CTFontCreateWithName(resolved.fontName as CFString, size, nil)
     }
 }

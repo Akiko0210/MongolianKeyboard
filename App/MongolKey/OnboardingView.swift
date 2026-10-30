@@ -14,7 +14,7 @@ struct OnboardingView: View {
         (2, "Go to General ▸ Keyboard ▸ Keyboards."),
         (3, "Tap “Add New Keyboard…”."),
         (4, "Choose “MongolKey” from the list."),
-        (5, "When typing anywhere, hold 🌐 (bottom-left, below the keyboard) and choose MongolKey."),
+        (5, "In an app that allows custom keyboards, hold 🌐 (bottom-left, below the keyboard) and choose MongolKey."),
     ]
 
     var body: some View {
@@ -23,6 +23,10 @@ struct OnboardingView: View {
                 VStack(alignment: .leading, spacing: 24) {
 
                     header
+
+                    Text("Other apps control the font and text direction. iOS uses its own keyboard in password and phone-number fields, and some apps disable custom keyboards.")
+                        .font(.footnote)
+                        .foregroundStyle(.secondary)
 
                     VStack(alignment: .leading, spacing: 16) {
                         Text("Enable the keyboard")
@@ -75,7 +79,7 @@ struct OnboardingView: View {
                 .clipped()
             Text("Type traditional Mongolian script")
                 .font(.headline)
-            Text("Type the sounds in Latin letters — like “gar” — and MongolKey composes the correct Mongol bichig, shown vertically as you type.")
+            Text("Type Latin or Cyrillic Mongolian and choose a traditional-script spelling. Tap A/Б to change the input alphabet. Choose Dashitseden or Noto Sans above the candidates.")
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)

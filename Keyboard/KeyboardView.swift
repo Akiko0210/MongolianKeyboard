@@ -13,6 +13,7 @@ import MongolEngine
 protocol KeyboardViewDelegate: AnyObject {
     func keyboardView(_ view: KeyboardView, didTap cap: KeyCap)
     func keyboardView(_ view: KeyboardView, didSelectCandidateAt index: Int)
+    func keyboardView(_ view: KeyboardView, didSelectFace face: MongolFont.Face)
 }
 
 final class KeyboardView: UIView, KeyButtonDelegate {
@@ -24,6 +25,20 @@ final class KeyboardView: UIView, KeyButtonDelegate {
 
     private(set) var layer_: KeyboardLayer = .letters
     private var rowsButtons: [[KeyButton]] = []
+    var inputModeListHandler: ((UIControl, UIEvent) -> Void)? {
+        didSet { rowsButtons.flatMap { $0 }.forEach { $0.inputModeListHandler = inputModeListHandler } }
+    }
+    private var letterLayer: KeyboardLayer = .letters
+    var returnKeyType: UIReturnKeyType = .default {
+        didSet { rowsButtons.flatMap { $0 }.forEach { $0.updateReturnTitle(returnKeyType) } }
+    }
+
+    func toggleAlphabet() {
+        letterLayer = letterLayer == .letters ? .cyrillic : .letters
+        setLayer(letterLayer)
+    }
+
+    func showLetters() { setLayer(letterLayer) }
 
     /// Whether the bottom row carries a 🌐 key (only when the system does
     /// not provide the input switcher itself). Set by the controller.
@@ -50,6 +65,10 @@ final class KeyboardView: UIView, KeyButtonDelegate {
         accessibilityIdentifier = "mk.keyboard"
         previewBar.accessibilityIdentifier = "mk.candidateBar"
         previewBar.delegate = self
+        previewBar.onSelectFace = { [weak self] face in
+            guard let self else { return }
+            self.delegate?.keyboardView(self, didSelectFace: face)
+        }
         addSubview(previewBar)
         buildButtons(for: layer_)
     }
@@ -78,6 +97,8 @@ final class KeyboardView: UIView, KeyButtonDelegate {
             row.map { cap -> KeyButton in
                 let button = KeyButton(cap: cap, fontBundle: fontBundle)
                 button.delegate = self
+                button.inputModeListHandler = inputModeListHandler
+                button.updateReturnTitle(returnKeyType)
                 addSubview(button)
                 return button
             }
@@ -106,7 +127,8 @@ final class KeyboardView: UIView, KeyButtonDelegate {
         let available = bounds.width - 2 * sideInset
         // Base unit is derived from a full 10-key row so every row shares the
         // same key width (the system-keyboard look).
-        let unit = (available - CGFloat(9) * keyGap) / 10
+        let columns: CGFloat = layer_ == .cyrillic ? 12 : 10
+        let unit = (available - (columns - 1) * keyGap) / columns
 
         var y = keysTop
         for row in rowsButtons {

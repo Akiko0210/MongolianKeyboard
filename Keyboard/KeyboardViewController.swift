@@ -15,9 +15,10 @@ final class KeyboardViewController: UIInputViewController {
 
     /// All composition logic lives in the engine (unit-tested there); this
     /// controller only applies its host commands and renders its state.
-    private let session = InputSession()
+    private lazy var session = InputSession()
     private var keyboardView: KeyboardView!
     private var heightConstraint: NSLayoutConstraint?
+    private var applyingCommands = false
 
     private var fontBundle: Bundle { Bundle(for: KeyboardViewController.self) }
 
@@ -26,11 +27,10 @@ final class KeyboardViewController: UIInputViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         MongolFont.registerAll(in: fontBundle)
-        MongolFont.restore()   // the typeface chosen last time with the font key
+        MongolFont.restore()   // the typeface chosen in the preview picker
 
-        // Parse the data tables off the main thread so the first keystroke
-        // never waits for them (the shared instances are thread-safe lazy
-        // statics).
+        // Warm the tables off the main thread. A keystroke arriving before
+        // loading finishes can still wait on the thread-safe lazy statics.
         DispatchQueue.global(qos: .userInitiated).async {
             _ = Lexicon.shared.count
             _ = Predictor.shared.count
@@ -39,6 +39,11 @@ final class KeyboardViewController: UIInputViewController {
 
         let kb = KeyboardView(fontBundle: fontBundle)
         kb.delegate = self
+        kb.inputModeListHandler = { [weak self] sender, event in
+            guard let self else { return }
+            self.apply(self.session.commitComposition())
+            self.handleInputModeList(from: sender, with: event)
+        }
         kb.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(kb)
         NSLayoutConstraint.activate([
@@ -48,23 +53,32 @@ final class KeyboardViewController: UIInputViewController {
             kb.bottomAnchor.constraint(equalTo: view.bottomAnchor),
         ])
         keyboardView = kb
-        // iOS 26 (and every Face ID iPhone) shows the input switcher in the
-        // bar below the keyboard, so a 🌐 key of our own would just be dead
-        // space; the font key takes that spot instead.
+        // iOS decides whether this keyboard must provide its own globe.
         keyboardView.showsGlobeKey = needsInputModeSwitchKey
         keyboardView.setLayer(.letters)
     }
 
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
+        keyboardView.showsGlobeKey = needsInputModeSwitchKey
         updateKeyboardHeight()
+    }
+
+    override func textDidChange(_ textInput: UITextInput?) {
+        super.textDidChange(textInput)
+        keyboardView?.returnKeyType = textDocumentProxy.returnKeyType ?? .default
+        switch textDocumentProxy.keyboardAppearance ?? .default {
+        case .dark: overrideUserInterfaceStyle = .dark
+        case .light: overrideUserInterfaceStyle = .light
+        default: overrideUserInterfaceStyle = .unspecified
+        }
     }
 
     /// Keyboard extensions must set their own height. Compact (landscape phone)
     /// gets a shorter keyboard and a slimmer preview bar.
     private func updateKeyboardHeight() {
         let isLandscapePhone = traitCollection.verticalSizeClass == .compact
-        let previewHeight: CGFloat = isLandscapePhone ? 64 : 132
+        let previewHeight: CGFloat = isLandscapePhone ? 108 : 164
         let rowsHeight: CGFloat = isLandscapePhone ? 160 : 230
         keyboardView.previewHeight = previewHeight
 
@@ -88,6 +102,8 @@ final class KeyboardViewController: UIInputViewController {
 
     /// Apply the session's host commands, then render its state.
     private func apply(_ commands: [InputSession.Command]) {
+        applyingCommands = true
+        defer { applyingCommands = false }
         for command in commands {
             switch command {
             case .insert(let text):  textDocumentProxy.insertText(text)
@@ -104,9 +120,19 @@ final class KeyboardViewController: UIInputViewController {
     }
 
     override func textWillChange(_ textInput: UITextInput?) {
-        // The host is about to change selection/context; don't leave a word
-        // dangling in the buffer that would land in the wrong place.
+        guard !applyingCommands else { return }
         apply(session.hostWillChange())
+    }
+
+    override func selectionWillChange(_ textInput: UITextInput?) {
+        guard !applyingCommands else { return }
+        apply(session.hostWillChange())
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        session.reset()
+        render()
     }
 }
 
@@ -122,15 +148,17 @@ extension KeyboardViewController: KeyboardViewDelegate {
         case .space:              apply(session.space())
         case .newline:            apply(session.newline())
         case .switchToNumbers:    keyboardView.setLayer(.numbers)
-        case .switchToLetters:    keyboardView.setLayer(.letters)
+        case .switchToLetters:    keyboardView.showLetters()
+        case .switchAlphabet:
+            apply(session.commitComposition())
+            keyboardView.toggleAlphabet()
         case .nextKeyboard:
-            apply(session.hostWillChange())
+            apply(session.commitComposition())
             advanceToNextInputMode()
         case .switchFont:
             // Cycle Dashitseden ⇄ Noto Sans for everything the keyboard draws
             // (the committed text is plain Unicode; host apps pick their own
-            // font). Rebuilding the keys redraws the font key's ᠠ in the new
-            // face, re-rendering the bar redraws the candidates.
+            // font). Re-rendering the bar redraws the candidates.
             MongolFont.current = MongolFont.next(after: MongolFont.current)
             keyboardView.reloadKeys()
             render()
@@ -141,5 +169,11 @@ extension KeyboardViewController: KeyboardViewDelegate {
 
     func keyboardView(_ view: KeyboardView, didSelectCandidateAt index: Int) {
         apply(session.selectCandidate(at: index))
+    }
+
+    func keyboardView(_ view: KeyboardView, didSelectFace face: MongolFont.Face) {
+        MongolFont.current = face
+        keyboardView.reloadKeys()
+        render()
     }
 }

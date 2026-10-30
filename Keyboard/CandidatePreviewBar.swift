@@ -32,6 +32,8 @@ final class CandidatePreviewBar: UIView {
     private let hintLabel = UILabel()
     private var cells: [CandidateCell] = []
     private let fontBundle: Bundle
+    private let facePicker = UISegmentedControl(items: MongolFont.Face.allCases.map(\.displayName))
+    var onSelectFace: ((MongolFont.Face) -> Void)?
 
     init(fontBundle: Bundle) {
         self.fontBundle = fontBundle
@@ -52,14 +54,19 @@ final class CandidatePreviewBar: UIView {
         scrollView.showsVerticalScrollIndicator = false
         scrollView.contentInsetAdjustmentBehavior = .never
 
-        hintLabel.text = "Type romanized Mongolian — e.g. “mongol”"
+        hintLabel.text = "Type mongol or монгол · A/Б changes keys"
         hintLabel.font = .systemFont(ofSize: 15)
-        hintLabel.textColor = .tertiaryLabel
+        hintLabel.numberOfLines = 2
+        hintLabel.textColor = .secondaryLabel
         hintLabel.textAlignment = .center
 
         addSubview(scrollView)
         addSubview(latinLabel)
         addSubview(hintLabel)
+        facePicker.accessibilityIdentifier = "mk.fontPicker"
+        facePicker.accessibilityLabel = "Preview typeface"
+        facePicker.addTarget(self, action: #selector(faceChanged), for: .valueChanged)
+        addSubview(facePicker)
 
         update(latin: "", candidates: [], highlightedIndex: 0)
     }
@@ -70,6 +77,7 @@ final class CandidatePreviewBar: UIView {
     ///   - candidates: suggestion-engine output, in display order.
     ///   - highlightedIndex: which candidate Space will commit.
     func update(latin: String, candidates: [Candidate], highlightedIndex: Int) {
+        facePicker.selectedSegmentIndex = MongolFont.Face.allCases.firstIndex(of: MongolFont.current) ?? 0
         let composing = !latin.isEmpty
         latinLabel.text = latin
         latinLabel.isHidden = !composing
@@ -93,15 +101,21 @@ final class CandidatePreviewBar: UIView {
         delegate?.candidatePreviewBar(self, didSelectCandidateAt: sender.tag)
     }
 
+    @objc private func faceChanged() {
+        guard MongolFont.Face.allCases.indices.contains(facePicker.selectedSegmentIndex) else { return }
+        onSelectFace?(MongolFont.Face.allCases[facePicker.selectedSegmentIndex])
+    }
+
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        hintLabel.frame = bounds.insetBy(dx: 12, dy: 0)
+        facePicker.frame = CGRect(x: 12, y: 4, width: max(0, bounds.width - 24), height: 36)
+        hintLabel.frame = CGRect(x: 12, y: 44, width: max(0, bounds.width - 24), height: max(0, bounds.height - 44))
 
         let latinHeight: CGFloat = latinLabel.isHidden ? 0 : 18
-        latinLabel.frame = CGRect(x: 14, y: 4, width: bounds.width - 28, height: latinHeight)
+        latinLabel.frame = CGRect(x: 14, y: 44, width: bounds.width - 28, height: latinHeight)
 
-        let top = 4 + latinHeight
+        let top = 44 + latinHeight
         scrollView.frame = CGRect(x: 0, y: top, width: bounds.width, height: bounds.height - top - 4)
 
         let cellHeight = scrollView.bounds.height
@@ -146,14 +160,15 @@ private final class CandidateCell: UIControl {
         isAccessibilityElement = true
         accessibilityTraits = .button
         accessibilityIdentifier = "mk.candidate.\(candidate.source)"
-        accessibilityLabel = candidate.cyrillic ?? candidate.latin
+        accessibilityLabel = "\(candidate.cyrillic ?? candidate.latin), \(candidate.sourceLabel)"
         accessibilityValue = candidate.mongolian
         verticalView.isUserInteractionEnabled = false
         addSubview(verticalView)
 
-        captionLabel.text = candidate.cyrillic ?? candidate.latin
+        captionLabel.text = "\(candidate.cyrillic ?? candidate.latin)\n\(candidate.sourceLabel)"
+        captionLabel.numberOfLines = 2
         captionLabel.font = .systemFont(ofSize: 10)
-        captionLabel.textColor = .tertiaryLabel
+        captionLabel.textColor = .secondaryLabel
         captionLabel.textAlignment = .center
         captionLabel.lineBreakMode = .byTruncatingTail
         addSubview(captionLabel)
@@ -178,13 +193,13 @@ private final class CandidateCell: UIControl {
     }
 
     /// Compact bars (landscape phone) drop the caption and shrink the script.
-    private var showsCaption: Bool { bounds.height >= 84 }
+    private var captionHeight: CGFloat { bounds.height >= 60 ? 26 : 14 }
 
     func preferredWidth(forHeight height: CGFloat) -> CGFloat {
-        let captionHeight: CGFloat = height >= 84 ? 14 : 0
+        let captionHeight: CGFloat = height >= 60 ? 26 : 14
         let scriptHeight = height - captionHeight - 6
         verticalView.fontSize = fontSize(forHeight: scriptHeight)
-        return max(44, verticalView.size(fittingHeight: scriptHeight).width + 16)
+        return max(88, verticalView.size(fittingHeight: scriptHeight).width + 16)
     }
 
     private func fontSize(forHeight height: CGFloat) -> CGFloat {
@@ -193,8 +208,11 @@ private final class CandidateCell: UIControl {
 
     override func layoutSubviews() {
         super.layoutSubviews()
-        let captionHeight: CGFloat = showsCaption ? 14 : 0
-        captionLabel.isHidden = !showsCaption
+        let captionHeight = self.captionHeight
+        captionLabel.numberOfLines = bounds.height >= 60 ? 2 : 1
+        let word = candidate.cyrillic ?? candidate.latin
+        let needsReview = candidate.source == .spelled || candidate.source == .inflected
+        captionLabel.text = bounds.height >= 60 ? "\(word)\n\(candidate.sourceLabel)" : word + (needsReview ? " · check" : "")
         verticalView.fontSize = fontSize(forHeight: bounds.height - captionHeight - 6)
         verticalView.frame = CGRect(x: 0, y: 2,
                                     width: bounds.width,
