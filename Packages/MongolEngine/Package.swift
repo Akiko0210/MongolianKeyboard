@@ -11,6 +11,10 @@ let package = Package(
         .library(
             name: "MongolEngine",
             targets: ["MongolEngine"]
+        ),
+        .executable(
+            name: "mongolgen",
+            targets: ["mongolgen"]
         )
     ],
     targets: [
@@ -22,6 +26,11 @@ let package = Package(
                 .copy("Resources/bigrams.tsv"),
                 .copy("Resources/orthography.tsv")
             ]
+        ),
+        .executableTarget(
+            name: "mongolgen",
+            dependencies: ["MongolEngine"],
+            path: "Sources/mongolgen"
         ),
         .testTarget(
             name: "MongolEngineTests",
