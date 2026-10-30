@@ -18,6 +18,9 @@
 //       matched: the best guess for a word the dictionary lacks.
 //    5. The verbatim letter-by-letter transliteration — always available, so
 //       anything can be typed exactly as intended. Never silently dropped.
+//       When the word's only gendered vowels are o/u (udur), its harmony is
+//       ambiguous and both readings are offered, masculine first, then
+//       feminine (VowelHarmony.verbatimSpellings; Poppe §§32–34).
 //    6. Completions — lexicon words the buffer is a prefix of. Tappable
 //       predictions only; they are never auto-committed by Space, because
 //       committing a word the user did not finish typing would trade
@@ -88,7 +91,7 @@ public struct SuggestionEngine {
     private let converter: OrthographyConverter
 
     /// Upper bound on candidates returned (exact matches and the verbatim
-    /// candidate are always included even if that exceeds the bound —
+    /// candidates are always included even if that exceeds the bound —
     /// completions are what get trimmed).
     public let maxCandidates: Int
 
@@ -109,7 +112,9 @@ public struct SuggestionEngine {
     /// - Parameters:
     ///   - latin: the raw Latin buffer as typed.
     ///   - verbatim: the letter-by-letter transliteration of that buffer
-    ///     (the `TransliterationEngine`'s output).
+    ///     (the `TransliterationEngine`'s output, already harmonized). An
+    ///     ambiguous o/u word also gets its feminine spelling as a second
+    ///     verbatim candidate.
     ///   - previous: Cyrillic form of the word committed just before, if
     ///     known; words that usually follow it are ranked first.
     public func candidates(forLatin latin: String,
@@ -195,9 +200,13 @@ public struct SuggestionEngine {
             }
         }
 
-        // 5. The verbatim transliteration — never dropped.
+        // 5. The verbatim transliteration — never dropped. An o/u-only word
+        //    is harmonically ambiguous, so both readings are offered,
+        //    masculine first (VowelHarmony.verbatimSpellings).
         if !verbatim.isEmpty {
-            add(Candidate(mongolian: verbatim, cyrillic: nil, latin: latin, source: .verbatim))
+            for spelling in VowelHarmony.verbatimSpellings(of: verbatim) {
+                add(Candidate(mongolian: spelling, cyrillic: nil, latin: latin, source: .verbatim))
+            }
         }
 
         if !result.contains(where: { $0.source == .lexicon || $0.source == .fuzzy }) {
