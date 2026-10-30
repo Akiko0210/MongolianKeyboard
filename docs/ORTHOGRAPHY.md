@@ -1,151 +1,278 @@
-# How MongolKey turns typed Latin (Cyrillic-based) into Mongol bichig
+# MongolKey spelling and conversion specification
 
-Cyrillic Mongolian is spelled by sound; traditional script (Mongol bichig)
-is spelled by history. A Cyrillic word and its script form differ letter by
-letter, so the keyboard never converts letter by letter when it can avoid it.
-The conversion runs through these layers, first hit wins:
+Reviewed 2026-09-19. This is the implementation specification, including its
+limits, and is bundled in the app under Reference → Full conversion guide.
+It describes orthographic conversion and candidate selection. It is not a
+complete Mongolian grammar or a sentence-level grammar checker.
 
-| Layer | What it knows | Where |
-| ----- | ------------- | ----- |
-| 1. Dictionary | 52,324 verified spellings for 44,915 Cyrillic word forms (28k dictionary words + 22k corpus forms: case-suffixed nouns, conjugated verbs) | `Resources/lexicon.tsv`, built by `tools/generate_lexicon.py` |
-| 2. Suffix and verb rules | how a case, plural, possessive or tense suffix is written after a known stem — every rule checked against 79k corpus lines | `SuffixEngine.swift`, `VerbEngine.swift`, checked by `tools/verify_corpus.py` |
-| 3. Learned letter rules | how each typed letter is written in context, for a stem the dictionary lacks (5,904 rules learned from the dictionary; 34% of held-out words exact) | `Resources/orthography.tsv`, `OrthographyConverter.swift`, built by `tools/learn_orthography.py` |
-| 4. Letter by letter | the plain transliteration table, always offered as the last candidate | `TransliterationScheme.swift` |
+## What was independently checked
 
-Layers 1 and 2 give *dictionary* candidates (captioned in Cyrillic). Layers
-3 and 4 give *guesses* (captioned in Latin) and never pose as a dictionary word.
+The 2023 **Монгол бичгийн гарын авлага - I**, hosted by a Mongolian government
+agency, distinguishes masculine а/о/у, feminine э/ө/ү and neutral и; neutral-only
+words inflect with feminine forms. Modern long vowels can correspond to
+vowel–consonant–vowel, adjacent vowels, or one historical vowel. Its diphthong
+chapter also gives more than one written pattern. These are reasons to look up
+whole words, not insert a fixed character between every doubled vowel.
+[Government handbook, PDF pages 31, 39–40, 44–50](https://www.nccd.gov.mn/stat/file/u/Surgalt/mongolbichig.pdf).
 
-## 1. Reading what the user typed
+Sixteen examples from PDF pages 44, 48 and 49 are transcribed into
+[the review fixture](../Packages/MongolEngine/Tests/MongolEngineTests/Fixtures/orthography-review.json).
+They test both Cyrillic conversion and availability among Latin candidates.
+Three stored spellings were aligned with the handbook: сүү → ᠰᠦᠨ (its explicit
+sun form), мөөг → ᠮᠥᠭᠦ, одоо → ᠣᠳᠤ. This does not establish that every alternative
+usage is invalid. Font glyphs cannot by themselves distinguish all vowel scalars;
+the handbook's accompanying transliterations were also consulted.
 
-People romanize Cyrillic inconsistently, so every dictionary word is indexed
-under every key people plausibly type, and the typed buffer is folded with the
-same rules (`LatinKey.fold` and `tools/generate_lexicon.py: typed_keys`):
+The government's [Cyrillic spelling rules](https://toli.gov.mn/r) cover Cyrillic
+orthography, including vowel loss and suffix attachment. They are not a
+character substitution specification for traditional script. The Academy's
+[description of its dictionary](https://mas.ac.mn/post/20440) establishes a useful
+institutional reference; this audit did not import that site's entire dictionary.
+The [government case-suffix lesson](https://burtgel.gov.mn/post/58575) embeds a
+video; its title alone was not treated as validation of our suffix tables.
 
-| Cyrillic | Recognized typings | Example |
-| -------- | ------------------ | ------- |
-| х | h, kh, x, q | hair = xair = khair → хайр |
-| ц / ч / ш / ж / з | ts or c / ch / sh / j / z | cag = tsag → цаг |
-| в | v, w | |
-| ө, ү, у | u; ö/ü/oe/ue; ө also as o (loose tier) | udur = ödör = odor → өдөр |
-| й, ы, ь, ъ | i or y; ы also ii; ь/ъ also dropped | sayn = sain; nohoy = nohoi; amdral = amidral; han → хан and хань |
-| я, ё, ю, е | ya, yo, yu, ye; long forms doubled or not; е also e | yuu = yu → юу; erunhii = yerunhii → ерөнхий |
-| long vowels | doubled, or single (loose tier) | uchlaarai → уучлаарай |
+The rest of this document describes **our code and existing data**. The 52,324
+lookup rows are not all government-verified. Legacy data includes an npm word
+list and machine-converted lyrics. Repeated converter output is evidence of
+consistency, not independent proof of correct spelling. Legacy statistical
+rules, arbitrary names, irregular forms and ambiguous words still require review.
 
-Loose matches (o/u merged, doubled vowels collapsed) always rank below exact
-ones, and a spelling seen only a few times next to a common one is treated as
-a misspelling of it.
+## The decision pipeline
 
-## 2. Why the script is not the Cyrillic letters
+1. Keep the typed word in memory. Nothing is inserted into the host mid-word.
+2. Normalize lookup keys to NFC and lowercase. Keep original input for fallback.
+3. If the token contains Cyrillic, require a wholly Mongolian-Cyrillic token and
+   search the **Cyrillic index directly**. Do not turn it into Latin first.
+4. Otherwise accept ASCII Latin plus ö/ü, and apply the Latin lookup folds below.
+5. Offer dictionary matches, generated inflections, loose Latin matches,
+   generated spellings, literal letter transliteration, then completions.
+   Equal script strings are displayed once. Cyrillic offers exact matches;
+   if absent, it offers only generated inflections whose Cyrillic caption
+   exactly equals the normalized input, plus unchanged input.
+6. Space, punctuation and Return commit the first dictionary or loose match.
+   If none exists, they preserve the input. Generated spellings and literal
+   transliterations require an explicit tap. Completions and predictions are
+   always tap-only. A candidate tap commits that candidate and one ordinary space.
+7. Tokens longer than 64 characters bypass suggestion work and stay unchanged.
+   Mixed alphabets and unsupported letters also stay unchanged.
 
-Correspondences the dictionary and the learned rules embody (Cyrillic → script,
-classical romanization in parentheses):
+A caption saying “Dictionary” means a stored spelling, **not official approval**.
+“Loose match” changes the lookup tolerance. “Generated · check” means an
+algorithm has constructed a spelling. “Letter by letter” means a mechanical
+mapping. “Keep input” preserves what was typed. These labels are shown in the
+candidate bar and read by VoiceOver.
 
-- **Long vowels are written with a silent ᠭ:** аа → ᠠᠭᠠ (aγa), оо → ᠣᠭᠣ, уу → ᠤᠭᠤ, ээ → ᠡᠭᠡ, өө → ᠥᠭᠡ, үү → ᠦᠭᠦ. But many long vowels are contractions of older syllables, which the script keeps: уул → ᠠᠭᠤᠯᠠ (aγula), сургууль → ᠰᠤᠷᠭᠠᠭᠤᠯᠢ (surγaγuli).
-- **Diphthongs take ᠶᠢ:** ай → ᠠᠶᠢ (сайн → ᠰᠠᠶᠢᠨ sayin), ой → ᠣᠶᠢ, уй → ᠤᠶᠢ, эй → ᠡᠶᠢ; but нохой → ᠨᠣᠬᠠᠢ (noqai), хайр → ᠬᠠᠶᠢᠷ᠎ᠠ.
-- **Vowels Cyrillic dropped are kept:** амьдрал → ᠠᠮᠢᠳᠤᠷᠠᠯ (amidural), ус → ᠤᠰᠤ (usu), мод → ᠮᠣᠳᠣ (modo), хот → ᠬᠣᠲᠠ (qota), аав → ᠠᠪᠤ (abu), хүн → ᠬᠦᠮᠦᠨ (kümün), өдөр → ᠡᠳᠦᠷ (edür). Which words carry such a vowel is not predictable from Cyrillic: this is exactly what the dictionary is for.
-- **Consonants:** в → ᠪ in native words (явах → ᠶᠠᠪᠤᠬᠤ), ᠸ only in loanwords; ц and ч → ᠴ; ж and з → ᠵ; ш → ᠰᠢ (багш → ᠪᠠᠭᠰᠢ, шинэ → ᠰᠢᠨ᠎ᠡ); х → ᠬ; г → ᠭ; нг → ᠩᠭ (монгол → ᠮᠣᠩᠭᠣᠯ mongγol); н before г/х/к → ᠩ (ерөнхий → ᠶᠡᠷᠦᠩᠬᠡᠢ).
-- **Iotated vowels:** я → ᠶᠠ, ё → ᠶᠣ, ю → ᠶᠤ/ᠶᠦ, е → ᠶᠡ (ерөнхий) or ᠡ after a consonant.
-- **Vowel harmony:** a word with а/о/у (я/ё/ю) is masculine and takes ᠠ/ᠤ suffix vowels; a word with only э/ө/ү (и) is feminine and takes ᠡ/ᠦ. In Unicode, ᠣ/ᠤ and ᠥ/ᠦ look identical after the first syllable; the dictionary carries the encoding the source used.
-- **Format characters:** the separated final a/e is `<consonant, U+180E MVS, ᠠ/ᠡ>` with no nirugu (байна → ᠪᠠᠶᠢᠨ᠎ᠠ, шинэ → ᠰᠢᠨ᠎ᠡ, бага → ᠪᠠᠭ᠎ᠠ); free variation selectors U+180B–D pick glyph variants where the source uses them; detached suffixes are joined to the stem with U+202F (narrow no-break space), which is what makes the font draw the suffix-initial forms.
+### Why direct Cyrillic lookup matters
 
-## 3. Noun suffixes (SuffixEngine, corpus-verified)
+The Latin key `ug` can name уг, үг or өг. Direct input `үг` selects only dictionary
+entries captioned үг, producing ᠦᠭᠡ. It must not become уг merely because уг has a
+higher corpus count. The same protection applies to у/ү/ө and long-vowel
+contrasts. Capitalization does not change the lookup; traditional output has no
+Cyrillic uppercase form. Unknown Cyrillic input is preserved in its original form.
 
-The written form depends on the stem's *last written letter* (vowel, ᠨ, the
-soft consonants ᠨ ᠩ ᠮ ᠯ, or another consonant) and on harmony. Counts in
-parentheses are corpus occurrences of the example.
+`CyrillicKey.foldedLatin` is used only to search for possible generated morphology.
+It merges у/ө/ү to `u`, й/ь/ъ to `i`, ы to `ii`, and maps я/ё/ю/е to ya/yo/yu/ye.
+That mapping is lossy and is never the exact Cyrillic lookup key.
 
-| Cyrillic suffix | After a vowel | After ᠨ | After ᠨ ᠩ ᠮ ᠯ | After other consonants | Examples |
-| --- | --- | --- | --- | --- | --- |
-| Genitive -ын/-ийн/-ы/-ий | ᠶᠢᠨ | ᠤ / ᠦ (bare) | ᠤᠨ / ᠦᠨ | ᠤᠨ / ᠦᠨ | аавын ᠠᠪᠤ ᠶᠢᠨ (188); хааны ᠬᠠᠭᠠᠨ ᠤ (11); хүний ᠬᠦᠮᠦᠨ ᠦ (756); монголын ᠮᠣᠩᠭᠣᠯ ᠤᠨ (139); гэрийн ᠭᠡᠷ ᠦᠨ (67); нохойн ᠨᠣᠬᠠᠢ ᠶᠢᠨ |
-| Accusative -ыг/-ийг/-г | ᠶᠢ | ᠢ | ᠢ | ᠢ | аавыг ᠠᠪᠤ ᠶᠢ; дүүг ᠳᠡᠭᠦᠦ ᠶᠢ; монголыг ᠮᠣᠩᠭᠣᠯ ᠢ; гэрийг ᠭᠡᠷ ᠢ |
-| Dative-locative -д/-т/-ад | ᠳᠤ / ᠳᠦ | ᠳᠤ / ᠳᠦ | ᠳᠤ / ᠳᠦ | ᠲᠤ / ᠲᠦ | аавд ᠠᠪᠤ ᠳᠤ; хаанд ᠬᠠᠭᠠᠨ ᠳᠤ; монголд ᠮᠣᠩᠭᠣᠯ ᠳᠤ (46); номд ᠨᠣᠮ ᠳᠤ; гэрт ᠭᠡᠷ ᠲᠦ (47); цагт ᠴᠠᠭ ᠲᠤ (221); улсад ᠤᠯᠤᠰ ᠲᠤ |
-| Ablative -аас/-ээс/-оос/-өөс | ᠠᠴᠠ / ᠡᠴᠡ | same | same | same | ааваас ᠠᠪᠤ ᠠᠴᠠ; гэрээс ᠭᠡᠷ ᠡᠴᠡ (17) |
-| Instrumental -аар/-ээр/-оор/-өөр | ᠪᠠᠷ / ᠪᠡᠷ | ᠢᠶᠠᠷ / ᠢᠶᠡᠷ | same | same | ааваар ᠠᠪᠤ ᠪᠠᠷ; монголоор ᠮᠣᠩᠭᠣᠯ ᠢᠶᠠᠷ; гэрээр ᠭᠡᠷ ᠢᠶᠡᠷ |
-| Comitative -тай/-тэй/-той | ᠲᠠᠢ / ᠲᠡᠢ | same | same | same | аавтай ᠠᠪᠤ ᠲᠠᠢ (13); гэртэй ᠭᠡᠷ ᠲᠡᠢ |
-| Reflexive -аа/-ээ/-оо/-өө | ᠪᠠᠨ / ᠪᠡᠨ | ᠢᠶᠠᠨ / ᠢᠶᠡᠨ | same | same | ааваа ᠠᠪᠤ ᠪᠠᠨ (81); гэрээ ᠭᠡᠷ ᠢᠶᠡᠨ (21); монголоо ᠮᠣᠩᠭᠣᠯ ᠢᠶᠠᠨ |
-| Plural -нууд | ᠨᠤᠭᠤᠳ / ᠨᠦᠭᠦᠳ | | | | нохойнууд ᠨᠣᠬᠠᠢ ᠨᠤᠭᠤᠳ |
-| Plural -ууд/-үүд | ᠨᠤᠭᠤᠳ / ᠨᠦᠭᠦᠳ | ᠤᠳ / ᠦᠳ | ᠤᠳ / ᠦᠳ | ᠤᠳ / ᠦᠳ | номууд ᠨᠣᠮ ᠤᠳ |
-| Plural -чууд | ᠴᠤᠳ / ᠴᠦᠳ, attached | | | | монголчууд ᠮᠣᠩᠭᠣᠯᠴᠤᠳ (40) |
-| Negation -гүй | ᠦᠭᠡᠢ, detached | same | same | same | аавгүй ᠠᠪᠤ ᠦᠭᠡᠢ |
+### Latin lookup conventions
 
-**Hidden n.** Many stems end in an n the Cyrillic nominative drops; the
-suffixed Cyrillic shows it (модны, усанд, уснаас) and the script restores it
-on the stem: модны → ᠮᠣᠳᠣᠨ ᠤ, усанд → ᠤᠰᠤᠨ ᠳᠤ (1,246 corpus cases), уснаас →
-ᠤᠰᠤᠨ ᠠᠴᠠ.
+These are keyboard input conventions, not government spelling rules.
 
-**Stacked suffixes** are two detached words, not a fused ending:
-
-| Cyrillic | Script | Example |
+| Typed sequence | Lookup fold | Consequence |
 | --- | --- | --- |
-| -даа / -тээ (dative + reflexive) | ᠳᠤ ᠪᠠᠨ / ᠲᠦ ᠪᠡᠨ (never ᠳᠠᠭᠠᠨ) | аавдаа ᠠᠪᠤ ᠳᠤ ᠪᠠᠨ (45); гэртээ ᠭᠡᠷ ᠲᠦ ᠪᠡᠨ (132) |
-| -ынхаа (genitive + reflexive) | ᠶᠢᠨ ᠢᠶᠠᠨ | аавынхаа ᠠᠪᠤ ᠶᠢᠨ ᠢᠶᠠᠨ (34) |
-| -тайгаа | ᠲᠠᠢ ᠪᠠᠨ | аавтайгаа ᠠᠪᠤ ᠲᠠᠢ ᠪᠠᠨ |
-| -аасаа | ᠠᠴᠠ ᠪᠠᠨ | ааваасаа ᠠᠪᠤ ᠠᠴᠠ ᠪᠠᠨ |
-| -аараа / -ээрээ | ᠢᠶᠠᠷ ᠢᠶᠠᠨ / ᠢᠶᠡᠷ ᠢᠶᠡᠨ | гэрээрээ ᠭᠡᠷ ᠢᠶᠡᠷ ᠢᠶᠡᠨ |
+| ö, ü, oe, ue | u | Multiple Cyrillic readings remain possible |
+| kh, q, x | h | Common ways to type х |
+| w | v | Common ways to type в |
+| c except before h | ts | ц; preserve ch as a unit |
+| y except before a/e/i/o/u | i | sayn = sain; nohoy = nohoi |
+| gh | unchanged | Can represent a real g+h boundary |
+| uppercase, decomposed ö/ü | lowercase NFC | Equivalent Unicode input matches |
 
-**Dropped stem vowel.** Cyrillic drops a short vowel before a vowel-initial
-suffix; the script keeps it: бодол → бодлын = ᠪᠣᠳᠣᠯ ᠤᠨ, гурав → гурван =
-ᠭᠤᠷᠪᠠᠨ. When a typed stem is unknown and ends in two consonants, the engine
-restores the vowel and looks the stem up again.
+The generator also stores alternate keys: dropped ь/ъ, one or two i letters,
+iotated long vowels, and е typed e or ye. Loose lookup then merges o/u and
+collapses repeated vowels. Loose results rank below exact matches. A loose
+candidate can still be the wrong word: its Cyrillic caption lets the user decide.
 
-**Pronouns** decline irregularly and come only from the dictionary: би → надад
-ᠨᠠᠳᠠ ᠳᠤ, чи → чамд ᠴᠢᠮ᠎ᠠ ᠳᠤ; the rules never touch би, чи, та, бид, энэ, тэр.
+## Which characters make the written word
 
-## 4. Verb suffixes (VerbEngine, corpus-verified)
+The dictionary selects an entire Unicode spelling. It does not derive the word
+from the shapes printed on the keys. Examples from the shipped conversion path:
 
-The stem is the infinitive minus ᠬᠤ/ᠬᠦ (явах ᠶᠠᠪᠤᠬᠤ → ᠶᠠᠪᠤ-). Vowel-final
-stems attach the suffix directly; consonant-final stems (ᠠᠪ-, ᠣᠯ-, ᠭᠠᠷ-)
-insert a connective ᠤ/ᠦ before most suffixes.
+| Input | Selected sequence, in logical order | Result |
+| --- | --- | --- |
+| aav / аав | A U+1820, BA U+182A, U U+1824 | ᠠᠪᠤ |
+| sain / сайн | SA U+1830, A U+1820, YA U+1836, I U+1822, NA U+1828 | ᠰᠠᠶᠢᠨ |
+| mongol / монгол | MA U+182E, O U+1823, ANG U+1829, GA U+182D, O U+1823, LA U+182F | ᠮᠣᠩᠭᠣᠯ |
+| baina / байна | BA, A, YA, I, NA, MVS U+180E, A | ᠪᠠᠶᠢᠨ᠎ᠠ |
 
-| Cyrillic | Script | Notes | Examples |
-| --- | --- | --- | --- |
-| -сан/-сэн/-сон/-сөн | ᠭᠰᠠᠨ / ᠭᠰᠡᠨ | + connective after a consonant | явсан ᠶᠠᠪᠤᠭᠰᠠᠨ (6,349); авсан ᠠᠪᠤᠭᠰᠠᠨ; ирсэн ᠢᠷᠡᠭᠰᠡᠨ |
-| -на/-нэ/-но/-нө | ᠨ᠎ᠠ / ᠨ᠎ᠡ (MVS) | + connective | явна ᠶᠠᠪᠤᠨ᠎ᠠ (8,154); авна ᠠᠪᠤᠨ᠎ᠠ; ирнэ ᠢᠷᠡᠨ᠎ᠡ; болно ᠪᠣᠯᠤᠨ᠎ᠠ |
-| -ж / -ч | ᠵᠤ / ᠵᠦ after a vowel or ᠨ ᠩ ᠮ ᠯ; ᠴᠤ / ᠴᠦ after other consonants | | явж ᠶᠠᠪᠤᠵᠤ (7,250); олж ᠣᠯᠵᠤ; авч ᠠᠪᠴᠤ; гарч ᠭᠠᠷᠴᠤ |
-| -даг/-дэг | ᠳᠠᠭ / ᠳᠡᠭ | never a connective, never ᠲ | явдаг ᠶᠠᠪᠤᠳᠠᠭ; авдаг ᠠᠪᠳᠠᠭ; гардаг ᠭᠠᠷᠳᠠᠭ |
-| -аад/-ээд | ᠭᠠᠳ / ᠭᠡᠳ | + connective | яваад ᠶᠠᠪᠤᠭᠠᠳ; аваад ᠠᠪᠤᠭᠠᠳ |
-| -лаа/-лээ | ᠯ᠎ᠠ / ᠯ᠎ᠡ (MVS) | + connective | явлаа ᠶᠠᠪᠤᠯ᠎ᠠ; авлаа ᠠᠪᠤᠯ᠎ᠠ |
-| -жээ/-чээ | ᠵᠠᠢ / ᠴᠠᠢ | same split as -ж/-ч | |
-| -в | ᠪᠠ / ᠪᠡ | connective only after ᠪ/ᠭ | болов ᠪᠣᠯᠪᠠ; авав ᠠᠪᠤᠪᠠ |
-| -ъя/-ье/-я | ᠶ᠎ᠠ / ᠶ᠎ᠡ (MVS) | + connective | явъя ᠶᠠᠪᠤᠶ᠎ᠠ (87) |
-| -маар/-мээр | ᠮᠠᠷ / ᠮᠡᠷ | + connective | явмаар ᠶᠠᠪᠤᠮᠠᠷ |
-| -гаа/-гээ | ᠭ᠎ᠠ / ᠭ᠎ᠡ (MVS) | vowel stems only | байгаа ᠪᠠᠶᠢᠭ᠎ᠠ (779) |
-| -аарай/-ээрэй | ᠭᠠᠷᠠᠢ / ᠭᠡᠷᠡᠢ | + connective | |
-| -хгүй | infinitive + ᠦᠭᠡᠢ (detached) | | явахгүй ᠶᠠᠪᠤᠬᠤ ᠦᠭᠡᠢ (2,962) |
-| -сангүй, -даггүй | ᠭᠰᠠᠨ ᠦᠭᠡᠢ, ᠳᠠᠭ ᠦᠭᠡᠢ | | |
+For `aav`, replacing a+a+v separately would miss the stored historical spelling.
+For `mongol`, the literal tokenizer consumes `ng` together and does not supply
+the following GA: the stored dictionary spelling supplies the full sequence.
+These are different paths with deliberately different output.
 
-Irregular verbs come from the dictionary and always rank first: гэсэн ᠭᠡᠰᠡᠨ,
-өгсөн ᠥᠭᠭᠦᠭᠰᠡᠨ, байжээ ᠪᠠᠶᠢᠴᠠᠢ.
+The first, middle and last **glyph shapes** are selected by Core Text and the
+font's shaping tables from the complete character sequence. The engine does
+not replace initial letters with private-use pictures or reverse the string.
 
-## 5. Learned letter rules for unknown stems
+### Format characters are part of the text
 
-For a stem the dictionary lacks (a name, a new word), each typed letter is
-written according to its neighbours and the word's harmony class, using rules
-extracted automatically from the 37,000 stem spellings in the dictionary
-(`tools/learn_orthography.py`). They reproduce the regular correspondences
-(sain → ᠰᠠᠶᠢᠨ, bagsh → ᠪᠠᠭᠰᠢ, amidral → ᠠᠮᠢᠳᠤᠷᠠᠯ, medeelel → ᠮᠡᠳᠡᠭᠡᠯᠡᠯ) and fail
-where the script keeps something Cyrillic does not show (aav → ᠠᠪᠤ, nohoi →
-ᠨᠣᠬᠠᠢ). Measured on held-out dictionary words: 34% exact whole words. A known
-suffix is split off first and attached by the verified rules of section 3, so
-batbold + ийн → ᠪᠠᠲᠤᠪᠣᠯᠣᠳᠠ ᠶᠢᠨ has a correct genitive even when the stem is a
-guess. These candidates are captioned with the typed Latin, never with a
-Cyrillic word.
+- U+180B–U+180D: free variation selectors present in existing dictionary data.
+- U+180E: Mongolian vowel separator before a separated final vowel.
+- U+202F: narrow no-break space between the stored stem and a detached suffix.
+- U+0020: ordinary space between words, including the space inserted on commit.
 
-## 6. Ranking and prediction
+They are preserved. Do not strip “invisible characters,” substitute ASCII spaces
+for all suffix boundaries, or add variation selectors just to imitate a font.
+The app rotates complete Core Text lines for vertical display. It wraps at word
+boundaries, keeps NNBSP groups intact, honors newlines, and scales an overlong
+word to fit its column. Font choice does not alter these Unicode strings.
 
-Homophones (уг / үг / өг all typed `ug`) are ordered by how often each form
-occurs in 23.7M words of news plus the lyrics corpus, and, once a word has been
-committed, by what usually follows it (after монгол, улсын comes first). The
-same counts drive the next-word predictions shown after each commit.
+## Generated noun forms: exact implemented decisions
 
-## 7. How this is verified
+These are limited heuristics in `SuffixEngine.swift`, not a certified complete
+morphological analyzer. All generated candidates are tap-only.
 
-- `python3 tools/verify_corpus.py` prints, for every suffix, how the corpus
-  writes it after each stem-final letter with counts; every rule above cites
-  those tables.
-- `SuffixEngineTests`, `SuggestionEngineTests`, `InputSessionTests` and
-  `PhraseSpellerTests` pin the examples in this document (133 tests, run on
-  every push).
-- Corpus spellings are machine-converted (Inner Mongolia University's
-  converter over song lyrics) and the dictionary is a community dataset; a
-  native speaker's review of their own errors is the remaining step.
+A typed suffix is split from the end of a Latin lookup key. The remaining key
+must identify a dictionary stem. Several possible splits can be offered.
+Harmony is taken from the first non-neutral vowel in the **written stem**:
+A/O/U → masculine; E/OE/UE/EE → feminine. Detached suffixes are excluded from
+that scan. If the stem supplies no deciding vowel, the Cyrillic spelling is
+consulted, with a feminine default for neutral-only input. Cyrillic ю by itself
+does not force masculine harmony. Loanwords and irregular words need lexical data.
+
+The final written letter ignores FVS, MVS and separators. Define V as a vowel,
+N as NA, and S as the set NA/ANG/MA/LA. Here M/F means the masculine/feminine
+choice; every separated piece is preceded by U+202F.
+
+| Kind | Selection implemented |
+| --- | --- |
+| Genitive | after V: ᠶᠢᠨ; after N: ᠤ/ᠦ; otherwise ᠤᠨ/ᠦᠨ |
+| Accusative | after V: ᠶᠢ; otherwise ᠢ |
+| Dative | after V or S: ᠳᠤ/ᠳᠦ; otherwise ᠲᠤ/ᠲᠦ |
+| Ablative | ᠠᠴᠠ/ᠡᠴᠡ |
+| Instrumental | after V: ᠪᠠᠷ/ᠪᠡᠷ; otherwise ᠢᠶᠠᠷ/ᠢᠶᠡᠷ |
+| Comitative | ᠲᠠᠢ/ᠲᠡᠢ |
+| Reflexive | after V: ᠪᠠᠨ/ᠪᠡᠨ; otherwise ᠢᠶᠠᠨ/ᠢᠶᠡᠨ |
+| nuud plural | ᠨᠤᠭᠤᠳ/ᠨᠦᠭᠦᠳ |
+| uud plural | after V: the nuud form; otherwise ᠤᠳ/ᠦᠳ |
+| chuud plural | attach ᠴᠤᠳ/ᠴᠦᠳ directly |
+| Negation | separated ᠦᠭᠡᠢ |
+
+The typed endings and allowed harmony classes are listed explicitly in the
+`suffixes` array, including forms such as giin/iin/in, iig/ig, d/t, aas/ees,
+aar/eer, tai/tei/toi, and their stacked forms.
+
+Hidden-n branches (`ni`, `nii`, `and`, `end`, `ond`, `und`, `naas` and related
+forms) can add NA to a vowel-final stem before choosing the suffix. This is a
+candidate-generating heuristic: the code lacks a complete lexical inventory of
+unstable-n nouns. It must not automatically invent an n for an unreviewed word.
+When no ordinary parse succeeds, it tries restoring a lost vowel before the last
+consonant and searches the dictionary again. That also lacks a complete Cyrillic
+morphophonological model and is not proof that a parse is correct.
+
+Stacked endings are processed in order. The next part uses the last letter of
+the preceding suffix: for the implemented dative + reflexive analysis, aavdaa
+becomes `ᠠᠪᠤ + NNBSP + ᠳᠤ + NNBSP + ᠪᠠᠨ`. Whole stored forms outrank such
+constructed forms. The heuristic pronoun exclusion list is bi/chi/ta/bid/ene/ter/uu;
+irregular forms must come from dictionary entries.
+
+## Generated verb forms: exact implemented decisions
+
+`VerbEngine.swift` proposes an infinitive by adding h/ah/eh/oh/uh/ih to the
+remainder of the typed key. The dictionary result must end in Cyrillic х and
+traditional ᠬᠤ or ᠬᠦ. Removing that traditional ending gives the written stem.
+This spelling check is only a heuristic for part of speech; it is not a full
+lexical verb classification.
+
+Let C be empty after a written vowel, otherwise ᠤ/ᠦ according to harmony.
+Let J be ᠵ after V or S (as above), otherwise ᠴ.
+
+| Kind | What is appended to the written stem |
+| --- | --- |
+| past san/sen/son/sun | C + ᠭᠰᠠᠨ/ᠭᠰᠡᠨ |
+| nonpast na/ne/no/nu | C + ᠨ + MVS + ᠠ/ᠡ |
+| converb j/ch | J + ᠤ/ᠦ |
+| habitual dag/deg/dog/dug | ᠳᠠᠭ/ᠳᠡᠭ, no C |
+| perfective aad/eed/ood/uud | C + ᠭᠠᠳ/ᠭᠡᠳ |
+| recent past laa/lee/loo/luu | C + ᠯ + MVS + ᠠ/ᠡ |
+| evidential jee/chee | J + ᠠᠢ/ᠡᠢ |
+| simple past v/av/ev/ov/uv | C only after BA/GA, then ᠪᠠ/ᠪᠡ |
+| voluntative ya/ye and variants | C + ᠶ + MVS + ᠠ/ᠡ |
+| desiderative maar/meer/moor/muur | C + ᠮᠠᠷ/ᠮᠡᠷ |
+| progressive gaa/gee/goo/guu | vowel stems only: ᠭ + MVS + ᠠ/ᠡ |
+| polite imperative aarai/eerei etc. | C + ᠭᠠᠷᠠᠢ/ᠭᠡᠷᠡᠢ |
+| negation | infinitive, past or habitual form + NNBSP + ᠦᠭᠡᠢ |
+
+Irregular verbs and exceptions to these patterns are not solved by counting
+corpus occurrences. The interface therefore asks the user to select a generated
+form deliberately. The previous documentation's absolute statements such as
+“never” a different connective or “every suffix verified” were too strong.
+
+## Learned spelling for unknown Latin stems
+
+`tools/learn_orthography.py` aligns existing dictionary keys with script strings
+and produces `orthography.tsv`. It is a statistical decision list, not a set of
+official grammar rules. The older reported 34% whole-word held-out accuracy was
+not rerun in this audit and should not be advertised as a current benchmark.
+
+At runtime ch/sh/ts become temporary symbols C/S/T. For each symbol, look for a
+rule using: symbol + previous + next + harmony + next-next; then progressively
+shorter contexts in the exact order in `OrthographyConverter.spell`. Start/end
+markers are ^/$. Harmony here is inferred from the lossy Latin key, so it is
+uncertain. The first matching rule contributes a string, possibly empty.
+If any symbol has no rule at all, conversion returns nil instead of silently
+dropping that symbol. The engine may try a known suffix with a learned stem
+first. All such output is labeled Generated · check and requires a tap.
+
+## Literal letter-by-letter mode
+
+This is an escape hatch for someone who knows the intended written spelling.
+It does not restore historical vowels or infer grammar. `Tokenizer` tries the
+longest mapping first; backspace removes the last complete token, including a
+digraph. Unmapped characters pass through. The in-app Reference table is generated
+from `TransliterationScheme.v1`, which is the source of truth.
+
+| Keys | Unicode output |
+| --- | --- |
+| a e i o u ö/oe ü/ue | 1820 1821 1822 1823 1824 1825 1826 |
+| ng kh gh ch sh ts | 1829 182C 182D 1834 1831 183C |
+| n b p q g m l s t d | 1828 182A 182B 182C 182D 182E 182F 1830 1832 1833 |
+| j y r w/v f k z h | 1835 1836 1837 1838 1839 183A 183D 183E |
+
+These numbers have the U+ prefix. Some keys intentionally represent foreign
+letters, so dictionary х versus literal h, or dictionary в versus literal v,
+can produce different characters. It is not a general Cyrillic transliterator.
+
+## Ranking, context and lifecycle
+
+Exact Latin matches sort by whether they are likely successors of the previous
+word, then stored frequency, Cyrillic length and script-string tie break. Generated
+inflections prefer plain stems over already-suffixed ones, then frequency and
+longer dictionary coverage. Loose matches fill the dictionary tier up to three,
+with frequency thresholds and length distance; completions fill remaining slots.
+The nominal candidate limit is eight, but exact matches and fallback choices can
+exceed it. Context can reorder existing candidates, not prove intended meaning.
+
+After committing a known word, up to three stored next-word predictions appear.
+Punctuation, newline, host deletion, field/selection changes, explicit keyboard
+switching and dismissal clear context. Space does not select a next-word
+prediction. The phrase converter uses the same context across ordinary spaces
+and resets it at other separators.
+
+Host callbacks cancel composition without inserting anything: the old insertion
+point may already be invalid. An explicit A/Б or globe action commits while the
+current insertion point is known. No composition is saved to disk.
+
+## Reproduction and scope
+
+Run `swift test --package-path Packages/MongolEngine`. The government fixture is
+independent of the original corpus; the other older word tests remain useful
+regressions but do not constitute external validation. `tools/apply_reviewed_spellings.py`
+applies the three reviewed choices to both lexicon and prediction data, and the
+generator calls it after regeneration. The learned table remains a legacy model.
+
+A full accuracy release needs a larger independently reviewed set, lexical
+exception data, contextual ambiguity evaluation and correction of the remaining
+legacy dictionary errors. See [release requirements](RELEASE.md) and
+[data provenance and rights](DATA_PROVENANCE.md). No claim of complete grammar,
+100% correct conversion, official endorsement or universal app support is made.

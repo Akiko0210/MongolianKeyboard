@@ -1,85 +1,89 @@
-# Shipping MongolKey so people can install it
+# App Store release review
 
-A keyboard extension can only reach other people's iPhones through Apple.
-There is no sideloading path for the general public. The steps below take the
-project from this repo to a keyboard anyone can enable under
-**Settings ▸ General ▸ Keyboard ▸ Keyboards** and use in every app.
+Reviewed against Apple documentation on 2026-09-19. Code changes and simulator
+tests are not App Store approval. This repository is **not yet cleared for submission**.
 
-## 1. Apple Developer Program (once)
+## Fixed in this audit
 
-- Enroll at <https://developer.apple.com/programs/> (US$99/year). This is
-  required for TestFlight and the App Store; nothing else works around it.
-- In Xcode ▸ Settings ▸ Accounts, sign in with that Apple ID.
+- Both executables bundle `PrivacyInfo.xcprivacy`: no tracking, no collected data,
+  and the UserDefaults reason CA92.1 for private font preferences. There is no
+  App Group or cross-app preferences access. Apple requires an API declaration
+  in each executable's bundle that uses a required-reason API.
+  [Required-reason API documentation](https://developer.apple.com/documentation/bundleresources/describing-use-of-required-reason-api),
+  [approved reasons](https://developer.apple.com/documentation/bundleresources/app-privacy-configuration/nsprivacyaccessedapitypes/nsprivacyaccessedapitype).
+- `RequestsOpenAccess` remains false. The keyboard provides actual input and a
+  next-keyboard mechanism, works offline, and contains no advertising or purchases.
+  The globe supports the system input-mode menu when iOS asks us to provide a key.
+  [App Review guideline 4.4.1](https://developer.apple.com/app-store/review/guidelines/#extensions).
+- `IsASCIICapable` is false: Latin keys compose Mongolian and are not an English
+  keyboard. Extension-safe APIs are enforced. The app's Settings button uses
+  `UIApplication.openSettingsURLString`; test-only Settings automation is not shipped.
+- Font notices are copied into app and extension bundles. Versions come from
+  `MARKETING_VERSION` and `CURRENT_PROJECT_VERSION`; iPad orientations are explicit.
+- Privacy and product copy describe host-app restrictions, preview-only typefaces,
+  generated spelling limits, stored preferences and a concrete support URL.
 
-## 2. Point the project at your team
+## Outstanding release requirements
 
-Edit `project.yml`: set `DEVELOPMENT_TEAM` to your 10-character Team ID
-(Membership page of the developer site) and, if you want, change the
-`bundleIdPrefix` from `com.mongolkey` to your own reverse-domain prefix.
-Then `xcodegen generate`.
+1. **Build toolchain.** This Mac has Xcode 16.4 / iOS 18.6 Simulator. Since
+   April 28, 2026, uploads require Xcode 26 or later with the iOS 26 SDK or later.
+   Install/select the required Xcode, rerun tests and archive with that SDK.
+   [Apple's SDK submission requirement](https://developer.apple.com/news/upcoming-requirements/).
+2. **Language-data rights.** Obtain the missing permissions/notices or replace
+   the affected language data. [DATA_PROVENANCE.md](DATA_PROVENANCE.md) identifies
+   the concrete gaps. Do not equate an available GitHub download with distribution
+   rights. Apple's IP requirements apply to included assets.
+   [Guideline 5.2](https://developer.apple.com/app-store/review/guidelines/#intellectual-property).
+3. **Physical-device testing.** Test supported iPhone/iPad versions and real
+   third-party apps using [COMPATIBILITY.md](COMPATIBILITY.md). Exercise low-memory
+   extension restarts, rotation, VoiceOver, font persistence and cursor changes.
+   No universal cross-app rendering or memory-limit guarantee is made.
+4. **Signing and metadata.** Set your Developer Team and identifiers, archive,
+   validate in Organizer, create the App Store Connect record, supply actual device
+   screenshots, support and publicly reachable privacy-policy URLs, complete the
+   current age-rating/privacy/export-compliance questionnaires, and submit for review.
+   Claim no data collected only while the implementation remains as documented.
+5. **Accuracy review.** Expand the independent spelling set and review ambiguous
+   entries and generated forms with a qualified reader before marketing broad
+   accuracy. Do not advertise “all words verified,” government endorsement,
+   guaranteed support in every app, or font styles that travel with sent text.
 
-Both targets (the app and the `MongolKeyboard` extension) sign with the same
-team automatically. Bump `MARKETING_VERSION` / `CURRENT_PROJECT_VERSION` in
-`project.yml` for every upload; App Store Connect rejects reused build numbers.
+The repository includes the 1024-pixel app icon. Deployment remains iOS 16+;
+Apple's SDK requirement concerns the build toolchain, not the minimum device OS.
+This environment has no configured signing team; no archive was submitted.
 
-## 3. Create the app record
-
-App Store Connect ▸ My Apps ▸ **+** ▸ New App. Bundle ID = the container app
-(`com.mongolkey.app` or your prefix + `.app`). The extension needs no separate
-record; it ships inside the app.
-
-Required metadata for a keyboard: a privacy policy URL (this repo's
-`PRIVACY.md` published anywhere public is enough), screenshots for the
-6.7-inch and 6.1-inch iPhone sizes, and the App Privacy answers
-("Data Not Collected" — the keyboard has no network access and never requests
-Full Access).
-
-## 4. Archive and upload
-
-In Xcode: select the **MongolKey** scheme, destination **Any iOS Device**,
-then Product ▸ **Archive**. In the Organizer window choose **Distribute App ▸
-App Store Connect ▸ Upload**. Xcode signs, validates and uploads.
-
-Command line equivalent, from the repo root:
+## Reproducible local checks
 
 ```sh
 xcodegen generate
-xcodebuild -project MongolKey.xcodeproj -scheme MongolKey -configuration Release \
-  -destination "generic/platform=iOS" -archivePath build/MongolKey.xcarchive archive
-xcodebuild -exportArchive -archivePath build/MongolKey.xcarchive \
-  -exportOptionsPlist tools/ExportOptions.plist -exportPath build/export
-# then upload build/export/MongolKey.ipa with Transporter.app or:
-xcrun altool --upload-app -f build/export/MongolKey.ipa -t ios --apiKey KEY --apiIssuer ISSUER
+swift test --package-path Packages/MongolEngine
+xcodebuild test -project MongolKey.xcodeproj -scheme MongolKey \
+  -destination 'platform=iOS Simulator,name=iPhone 16 Pro' \
+  -parallel-testing-enabled NO CODE_SIGN_IDENTITY=-
+python3 tools/release_preflight.py --app build/Audit/Build/Products/Debug-iphonesimulator/MongolKey.app
 ```
 
-`tools/ExportOptions.plist` needs `method` = `app-store-connect` and your
-`teamID`.
+The preflight checks the actual built bundles. `--submission` also checks the
+submission SDK and reports the unresolved data-rights block; a local build pass
+must not be presented as release clearance.
 
-## 5. TestFlight first
+For a signed archive after resolving the requirements:
 
-Once the build finishes processing (10–30 minutes), add it to a TestFlight
-group. Testers install the TestFlight app, accept the invite, and then enable
-MongolKey exactly like any App Store keyboard. Use this for the native-speaker
-orthography review before going public.
+```sh
+xcodebuild -project MongolKey.xcodeproj -scheme MongolKey -configuration Release \
+  -destination 'generic/platform=iOS' -archivePath build/MongolKey.xcarchive archive
+```
 
-## 6. App Store review notes
+Use Organizer → Validate App → Distribute App for TestFlight/App Store Connect.
+These steps require the account's team, certificates and completed metadata.
 
-Reviewers test keyboards manually. In the review notes say: no Full Access,
-no network, offline dictionary; how to enable it; and a few words to type
-(`mongol`, `sain`, `aavdaa`) with the expected script. Keyboards that offer
-nothing without the container app are rejected, which is why the app has
-its own romanizer and reference tabs.
+## Suggested reviewer notes
 
-## What ships inside
-
-| Piece | Size | Notes |
-| --- | --- | --- |
-| Lexicon (`lexicon.tsv`) | 2.9 MB | 52,324 entries, loaded once per keyboard session on a background queue |
-| Next-word table (`bigrams.tsv`) | 1.4 MB | 29,237 rows, loaded the same way |
-| Spelling rules (`orthography.tsv`) | 0.1 MB | 5,904 rules for words outside the lexicon |
-| Noto Sans Mongolian | 0.3 MB | bundled in both app and extension |
-| Extension binary | ~1 MB | pure Swift, no dependencies |
-
-The extension stays far under Apple's memory limit for keyboards; every
-keystroke does two binary searches and a bounded top-k scan, no allocation
-of the whole candidate list.
+MongolKey is an offline traditional Mongolian keyboard. Enable it under Settings →
+General → Keyboard → Keyboards → Add New Keyboard → MongolKey, then select it with
+the globe. Full Access is not requested. Type `mongol` and Space for ᠮᠣᠩᠭᠣᠯ; tap
+A/Б for Cyrillic input and type `үг` for ᠦᠭᠡ. The Dashitseden/Noto Sans controls
+change previews only. Unknown input stays unchanged unless a candidate is selected.
+The containing app independently converts Latin/Cyrillic phrases and includes an
+offline spelling guide and privacy information. Password and phone-pad fields
+use Apple's keyboard as required by iOS.

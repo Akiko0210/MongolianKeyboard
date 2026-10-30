@@ -23,8 +23,9 @@
 ## Noto Sans Mongolian — `NotoSansMongolian-Regular.ttf`
 
 - **Licence:** SIL Open Font License 1.1 — see `OFL.txt`.
-- Kept as the fallback face: OFL places no restrictions on redistribution,
-  modification, or bundling.
+- Kept as the fallback face: Redistribution and bundling are permitted subject
+  to the OFL conditions, including retaining copyright/license notices and any
+  applicable reserved-font-name requirements.
 
 ## Known rendering difference
 
