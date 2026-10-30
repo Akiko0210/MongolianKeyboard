@@ -4,8 +4,8 @@ Learn how typed Latin is spelled in traditional script, from the lexicon.
 
 Traditional-script spelling is historical, not phonetic: a typed key such as
 `amidral` is written ᠠᠮᠢᠳᠤᠷᠠᠯ (with a vowel Cyrillic dropped), `aav` is ᠠᠪᠤ,
-`sain` is ᠰᠠᠶᠢᠨ. For words the dictionary has, the keyboard uses the verified
-spelling. For words it lacks, it needs the best rule-based guess — and the
+`sain` is ᠰᠠᠶᠢᠨ. For words the dictionary has, the keyboard uses the stored
+spelling. For words it lacks, it offers a tap-only statistical guess — and the
 rules are learned here from the dictionary itself instead of being written
 by hand.
 
@@ -17,8 +17,8 @@ Method
    plausibility prior (a symbol should emit a letter it can stand for) and
    are re-estimated from the Viterbi alignments a few times.
    Suffixed noun forms (stem<NNBSP>suffix) are left out: SuffixEngine splits
-   a known suffix off a typed word and attaches it by its own verified
-   rules, so these rules only ever spell stems (and whole verb forms).
+   a known suffix off a typed word and attaches it by corpus-derived
+   heuristics, so these rules only spell stems (and whole verb forms).
 2. Rules: for each symbol in context — previous symbol, next symbol, the
    word's vowel-harmony class (masculine if it has a/o, feminine if e, else
    unknown, since u may be у/ө/ү), and the symbol after next — the most
@@ -26,7 +26,9 @@ Method
    a context is kept only where its spelling differs from the more general
    context's, so the shipped table is small.
 3. Evaluation: accuracy is measured on a held-out 10% of pairs BEFORE the
-   final table is built from all pairs, and printed.
+   final table is built from all pairs, and printed. Agreement with held-out
+   legacy data is not independent linguistic validation. See docs/ORTHOGRAPHY.md
+   and docs/DATA_PROVENANCE.md for review scope and unresolved data rights.
 
 Output: Packages/MongolEngine/Sources/MongolEngine/Resources/orthography.tsv
     pattern <TAB> spelling

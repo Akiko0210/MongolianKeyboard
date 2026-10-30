@@ -1,16 +1,17 @@
 #!/usr/bin/env python3
 """
-Generate the engine's data files from open datasets:
+Generate the engine's data files from legacy downloaded datasets.
+Redistribution rights remain unresolved; see docs/DATA_PROVENANCE.md.
 
   Packages/MongolEngine/Sources/MongolEngine/Resources/lexicon.tsv
   Packages/MongolEngine/Sources/MongolEngine/Resources/bigrams.tsv
 
 Sources
 -------
-1. Word dictionary — the `written-mongol-keyboard` npm package (MIT), which
+1. Word dictionary — the `written-mongol-keyboard` npm package (declares MIT), which
    bundles ~28k entries of {cyrillic, latin, traditional}: a Cyrillic Mongolian
    word, its pronunciation romanization (how Mongolians actually type on a
-   QWERTY keyboard), and the correct traditional-script (mongol bichig)
+   QWERTY keyboard), and a stored traditional-script (mongol bichig)
    spelling. https://www.npmjs.com/package/written-mongol-keyboard
    (repo: https://github.com/sura0111/writtenMongolianKeyboard)
 
@@ -35,8 +36,8 @@ Cleaning
 The dictionary contains a few hundred defective rows where the converter that
 produced it failed (traditional column contains Latin/Cyrillic/CJK text or
 U+FFFD instead of Mongolian script). Those are dropped: this keyboard's goal
-is accuracy, so a missing word (which falls back to rule-based spelling) is
-better than a wrong suggestion.
+is accuracy. Missing words now stay unchanged by default; generated spellings
+require a tap. Filtering malformed rows does not establish linguistic correctness.
 
 Typing variants
 ---------------
@@ -424,3 +425,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+    from apply_reviewed_spellings import apply
+    apply()

@@ -30,7 +30,15 @@ targets:
     platform: iOS
     sources:
       - App/MongolKey
+      - path: docs/ORTHOGRAPHY.md
+        buildPhase: resources
       - Shared/Rendering
+      - path: Shared/PrivacyInfo.xcprivacy
+        buildPhase: resources
+      - path: Shared/Fonts/OFL.txt
+        buildPhase: resources
+      - path: Shared/Fonts/LICENSES.md
+        buildPhase: resources
       - path: Shared/Fonts/NotoSansMongolian-Regular.ttf
         buildPhase: resources
       - path: Shared/Fonts/ClassicalMongolianDashitseden.ttf
@@ -48,7 +56,19 @@ targets:
       path: App/MongolKey/Info.plist
       properties:
         CFBundleDisplayName: MongolKey
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
         UILaunchScreen: {}
+        ITSAppUsesNonExemptEncryption: false
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+        UISupportedInterfaceOrientations~ipad:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationPortraitUpsideDown
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
         UIAppFonts:
           - NotoSansMongolian-Regular.ttf
           - ClassicalMongolianDashitseden.ttf
@@ -69,18 +89,27 @@ targets:
     sources:
       - Keyboard
       - Shared/Rendering
+      - path: Shared/PrivacyInfo.xcprivacy
+        buildPhase: resources
+      - path: Shared/Fonts/OFL.txt
+        buildPhase: resources
+      - path: Shared/Fonts/LICENSES.md
+        buildPhase: resources
       - path: Shared/Fonts/NotoSansMongolian-Regular.ttf
         buildPhase: resources
       - path: Shared/Fonts/ClassicalMongolianDashitseden.ttf
         buildPhase: resources
     settings:
       base:
+        APPLICATION_EXTENSION_API_ONLY: YES
         PRODUCT_BUNDLE_IDENTIFIER: com.mongolkey.app.keyboard
         INFOPLIST_KEY_CFBundleDisplayName: MongolKey
     info:
       path: Keyboard/Info.plist
       properties:
         CFBundleDisplayName: MongolKey
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
         UIAppFonts:
           - NotoSansMongolian-Regular.ttf
           - ClassicalMongolianDashitseden.ttf
@@ -88,7 +117,7 @@ targets:
           NSExtensionPointIdentifier: com.apple.keyboard-service
           NSExtensionPrincipalClass: $(PRODUCT_MODULE_NAME).KeyboardViewController
           NSExtensionAttributes:
-            IsASCIICapable: true
+            IsASCIICapable: false
             PrefersRightToLeftLayoutDirection: false
             PrimaryLanguage: mn
             RequestsOpenAccess: false
@@ -101,6 +130,14 @@ targets:
     platform: iOS
     sources:
       - Packages/MongolEngine/Tests/MongolEngineTests
+      - NativeTests
+      - path: Keyboard
+        excludes: [Info.plist]
+      - Shared/Rendering
+      - path: Shared/Fonts/NotoSansMongolian-Regular.ttf
+        buildPhase: resources
+      - path: Shared/Fonts/ClassicalMongolianDashitseden.ttf
+        buildPhase: resources
     dependencies:
       - package: MongolEngine
     settings:

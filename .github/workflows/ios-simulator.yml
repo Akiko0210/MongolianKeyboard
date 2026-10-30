@@ -71,6 +71,9 @@ jobs:
       - name: Build universal simulator app (arm64 + x86_64)
         run: tools/simulate.sh --build-only --universal
 
+      - name: Validate packaged privacy manifests and resources
+        run: python3 tools/release_preflight.py --app "$APP_PATH"
+
       - name: Zip .app for download / Appetize
         run: |
           mkdir -p build/dist
@@ -97,15 +100,18 @@ jobs:
           run_tests() {  # $1 = pass label, remaining args = xcodebuild test selectors
             local label="$1"; shift
             mkdir -p "build/screenshots/$label"
+            set +e
             TEST_RUNNER_MK_SCREENSHOT_DIR="$PWD/build/screenshots/$label" \
             xcodebuild test -project MongolKey.xcodeproj -scheme MongolKey \
-              -destination "id=$SIM_UDID" -derivedDataPath build/DerivedData \
+              -destination "id=$SIM_UDID" -derivedDataPath build/DerivedData -parallel-testing-enabled NO \
               "$@" -resultBundlePath "build/UITests-$label.xcresult" \
               CODE_SIGN_IDENTITY=- CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=YES \
-              2>&1 | tee "build/uitests-$label.log" | grep -E "MK:|Test (Case|Suite)|error|failed|passed|\*\*" || true
-            return "${PIPESTATUS[0]}"
+              2>&1 | tee "build/uitests-$label.log" | grep -E "MK:|Test (Case|Suite)|error|failed|passed|\*\*"
+            local test_exit_code="${PIPESTATUS[0]}"
+            set -e
+            return "$test_exit_code"
           }
-          run_tests pass1 -only-testing:MongolKeyUITests
+          run_tests pass1
 
       - name: Plain launch, the way tools/simulate.sh does it (install, simctl launch, still alive?)
         if: always() && env.APP_PATH != '' && env.SIM_UDID != ''
