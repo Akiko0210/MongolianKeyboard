@@ -90,8 +90,14 @@ final class LexiconTests: XCTestCase {
     func testExactMatchFindsDictionarySpellings() {
         XCTAssertEqual(Lexicon.shared.exactMatches(forKey: "mongol").map(\.traditional),
                        ["ᠮᠣᠩᠭᠣᠯ"])
-        XCTAssertEqual(Lexicon.shared.exactMatches(forKey: "sain").map(\.traditional),
-                       ["ᠰᠠᠶᠢᠨ"])
+        // The CC0 authority import spells the ai diphthong ᠠᠢ where our corpus
+        // data writes ᠠᠶᠢ, so a second spelling now exists. The attested one
+        // must still come first: imported rows carry frequency 0 precisely so
+        // they rank below every corpus-attested spelling instead of displacing
+        // it. Which convention is correct is open — see docs/authority.tsv.
+        let sain = Lexicon.shared.exactMatches(forKey: "sain").map(\.traditional)
+        XCTAssertEqual(sain.first, "ᠰᠠᠶᠢᠨ")
+        XCTAssertTrue(sain.contains("ᠰᠠᠶᠢᠨ"))
         XCTAssertEqual(Lexicon.shared.exactMatches(forKey: "bichig").map(\.traditional),
                        ["ᠪᠢᠴᠢᠭ"])
     }
@@ -223,8 +229,13 @@ final class SuggestionEngineTests: XCTestCase {
     func testOutOfVocabularyStemWithSuffixUsesSuffixRules() {
         // batbold + ийн: the stem is spelled by the rules, the genitive by
         // the corpus-verified suffix rules (ᠤᠨ after a consonant).
+        // batbold is a personal name, and the CC0 import is name-heavy, so the
+        // stem may now be found in the dictionary rather than spelled by rule.
+        // Either is fine — what this test is about is the genitive suffix
+        // rule, so both stem paths are accepted and the suffix is asserted.
         let c = candidates("batboldiin")
-        XCTAssertEqual(c.first?.source, .spelled)
+        XCTAssertTrue([.spelled, .inflected].contains(c.first?.source),
+                      "stem from rules or dictionary, got \(String(describing: c.first?.source))")
         let spelled = c.first?.mongolian ?? ""
         XCTAssertTrue(spelled.contains("\u{202F}"), "suffix must be detached: \(spelled)")
         XCTAssertTrue(spelled.hasSuffix("\u{202F}ᠤᠨ") || spelled.hasSuffix("\u{202F}ᠶᠢᠨ"), "genitive form: \(spelled)")

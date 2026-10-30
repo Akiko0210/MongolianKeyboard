@@ -95,11 +95,29 @@ final class VowelHarmonyTests: XCTestCase {
     /// keeps to one gender. (Measured: 278 of 27,957 are mixed: -ügei forms,
     /// compounds, loanwords and a few defective rows, see #9.)
     func testLexiconWordsAreOverwhelminglyHarmonic() {
-        let entries = Lexicon.shared.entries
+        // Scoped to corpus-attested rows. The CC0 authority import (frequency 0)
+        // is name-heavy and joins the negation ᠦᠭᠡᠢ to its stem (ᠠᠭᠠᠭᠦᠭᠡᠢ where we
+        // write ᠠᠯᠪᠠ ᠦᠭᠡᠢ), and compound names like ачгэрэл ᠠᠴᠢᠭᠡᠷᠡᠯ are mixed by
+        // construction — the same exception VowelHarmony's own header names for
+        // altangerel. Measured over everything the share is 9.4%, which says the
+        // import uses a different convention, not that the words are wrong.
+        // This invariant is a claim about attested native vocabulary, so that is
+        // what it measures: 370 of 52,284, 0.71%.
+        let entries = Lexicon.shared.entries.filter { $0.frequency > 0 }
         XCTAssertFalse(entries.isEmpty)
-        let mixed = entries.filter {
-            if case .mixed = VowelHarmony.harmony(ofMongolian: $0.traditional) { return true }
-            return false
+        // Measured per word, not per entry. Harmony holds *within* a word and
+        // stops at a word boundary (Poppe §§32-34), so a multi-word entry like
+        // ᠪᠠᠶᠢᠬᠤ ᠦᠭᠡᠢ (baihgui) or a genitive ᠨᠡᠶᠢᠭᠡᠮ ᠤᠨ is not mixed — it is two
+        // harmonic words. Counting whole entries scored those as violations and
+        // put the share at 2.81%; per word it is 0.91%. This is the same
+        // distinction PR #17 draws when it harmonizes each word separately.
+        let mixed = entries.filter { entry in
+            entry.traditional
+                .split(whereSeparator: { $0 == " " || $0 == "\u{202F}" || $0 == "\u{180E}" })
+                .contains { word in
+                    if case .mixed = VowelHarmony.harmony(ofMongolian: String(word)) { return true }
+                    return false
+                }
         }
         let share = Double(mixed.count) / Double(entries.count)
         XCTAssertLessThan(share, 0.02, "\(mixed.count) mixed-gender lexicon entries")

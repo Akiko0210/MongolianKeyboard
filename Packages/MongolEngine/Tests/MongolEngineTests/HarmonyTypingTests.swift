@@ -132,8 +132,21 @@ final class HarmonyTypingTests: XCTestCase {
         XCTAssertTrue(c.prefix(exact).allSatisfy { $0.source == .lexicon })
         XCTAssertEqual(c.first?.mongolian, "ᠡᠳᠦᠷ")
         XCTAssertEqual(SuggestionEngine.defaultCandidate(in: c)?.mongolian, "ᠡᠳᠦᠷ")
-        // The verbatims sit right after the exact matches, before completions.
-        XCTAssertEqual(c.dropFirst(exact).prefix(2).map(\.source), [.verbatim, .verbatim])
+        // The two verbatims stay adjacent and in masculine-then-feminine order,
+        // and still precede the completions. They no longer sit immediately
+        // after the exact matches: this branch ranks dictionary-backed
+        // inflections and loose matches above verbatim (accuracy first), so a
+        // .fuzzy candidate may come between. What the user must not lose is
+        // that both readings are offered and that neither is auto-committed.
+        let sources = c.map(\.source)
+        guard let firstVerbatim = sources.firstIndex(of: .verbatim) else {
+            return XCTFail("the verbatim readings must never be dropped")
+        }
+        XCTAssertEqual(Array(sources[firstVerbatim..<(firstVerbatim + 2)]),
+                       [.verbatim, .verbatim])
+        if let firstCompletion = sources.firstIndex(of: .completion) {
+            XCTAssertLessThan(firstVerbatim, firstCompletion)
+        }
     }
 
     func testInMemoryLexiconPlacesBothVerbatimsBeforeCompletions() {
