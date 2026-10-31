@@ -22,6 +22,7 @@ func emit(_ key: String, _ form: String, _ method: String) {
 let args = CommandLine.arguments
 let wantSpell = args.contains("--spell")
 let wantInflect = args.contains("--inflect")
+let wantType = args.contains("--type")
 var limit = Int.max
 if let i = args.firstIndex(of: "--limit"), i + 1 < args.count, let n = Int(args[i + 1]) {
     limit = n
@@ -73,7 +74,38 @@ if wantInflect {
     }
 }
 
-if !wantSpell && !wantInflect {
-    FileHandle.standardError.write(Data("usage: mongolgen [--spell] [--inflect] [--limit N]\n".utf8))
+
+// --type: drive InputSession exactly as the keyboard does — a letter at a
+// time, then Space to commit — and print what the host app would actually
+// receive, plus the next-word predictions offered afterwards. Unit tests
+// check pieces; this checks the path a user's thumbs take.
+if wantType {
+    while let line = readLine(strippingNewline: true) {
+        let word = line.trimmingCharacters(in: .whitespaces)
+        if word.isEmpty { continue }
+        let session = InputSession()
+        var host = ""
+        func apply(_ cmds: [InputSession.Command]) {
+            for c in cmds {
+                switch c {
+                case .insert(let s): host += s
+                case .deleteBackward: if !host.isEmpty { host.removeLast() }
+                }
+            }
+        }
+        for ch in word { apply(session.insertLetter(String(ch))) }
+        let shown = session.candidates.prefix(3)
+            .map { $0.mongolian }.joined(separator: " | ")
+        apply(session.space())
+        let predicted = session.candidates.prefix(3)
+            .map { $0.cyrillic ?? $0.mongolian }.joined(separator: ", ")
+        let committed = host.trimmingCharacters(in: .whitespaces)
+        print("\(word)\t\(committed)\t\(shown)\t\(predicted)")
+    }
+}
+
+if !wantSpell && !wantInflect && !wantType {
+    FileHandle.standardError.write(
+        Data("usage: mongolgen [--spell] [--inflect] [--type] [--limit N]\n".utf8))
     exit(2)
 }
