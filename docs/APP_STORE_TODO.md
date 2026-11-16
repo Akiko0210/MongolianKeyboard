@@ -36,21 +36,50 @@ Three of the four data sources have **no established redistribution grant**
 | `eduge.csv` news corpus | frequencies, bigrams | credited to Bolorsoft, no grant |
 | `suragch/mongolian-datasets` | 16,789 words | **CC0-1.0 — clean** |
 
-Pick one path:
+**All three paths were measured on 2026-11-16. Two are dead. Here is what is left.**
 
-- [ ] **Path A — go CC0-only.** Rebuild `lexicon.tsv` and `bigrams.tsv` from
-      the CC0 source alone. Clears the gate outright with no correspondence
-      and no waiting. Cost: coverage drops from ~45k distinct Cyrillic words
-      to ~17k, and the next-word table would need a licensed replacement
-      corpus, so predictions regress hardest. Measure before committing.
-- [ ] **Path B — obtain the notices.** Contact sura0111 and Bolorsoft for
-      written permission covering the dictionary and the news-derived tables.
-      Keeps today's coverage. Cost: open-ended, and the answer may be no.
-- [ ] **Path C — hybrid.** Ship CC0 data plus anything Path B secures in time,
-      and keep the rest out of the bundle. Most likely to actually ship.
-- [ ] Whichever path: update `DATA_PROVENANCE.md` and flip the preflight gate
-      only when it is genuinely resolved. Do not copy an unrelated MIT licence
-      onto these assets.
+- [x] ~~**Path A — go CC0-only.**~~ **Dead.** Measured: CC0 covers only
+      **39.4% of words actually typed**, and 89 of the 200 commonest words are
+      missing (ын, сарын, оны, төрийн, монголын, болж, хуулийн). The CC0 set
+      holds base forms; Mongolian is heavily suffixed and real text is mostly
+      inflected. A keyboard that misses three words in five is not shippable.
+      Rule-based inflection does not rescue it: монголын, газрын and болж come
+      out right, but оны becomes ᠣᠨᠢᠢ and хуулийн becomes ᠬᠤᠯ ᠦᠨ.
+- [x] ~~**Replace the corpora with Mongolian Wikipedia (CC BY-SA).**~~
+      **Rejected on quality, not licensing.** `tools/build_wikipedia_corpus.py`
+      builds it: 32,218 articles, 10.0M running words, 478,684 word pairs —
+      16x the current table, properly licensed. Frequencies are excellent
+      (**99.8%** coverage weighted by use, 0 of the top 200 missing). But the
+      next-word predictions get measurably worse, because an encyclopedia is
+      the wrong register for a keyboard:
+
+      | after | news+lyrics | Wikipedia |
+      | --- | --- | --- |
+      | сайн | сайхан, байна, мэдэх | **ноён**, сайхан, дураараа |
+      | байна | гэж, вэ, уу | **онд, оны**, энэ |
+
+      Nobody types "байна онд". It broke 8 prediction tests and was reverted.
+      The tool is kept: Wikipedia frequencies remain a viable licensed
+      replacement for the Eduge-derived counts if that becomes the sticking
+      point, and the finding is worth not rediscovering.
+
+- [ ] **Path B — ask for a licence. Do this first; it is one email.**
+      The rights picture is narrower than the September audit assumed:
+
+      | Source | Verified 2026-11-16 | Status |
+      | --- | --- | --- |
+      | npm `written-mongol-keyboard` 1.3.5 | registry metadata declares **MIT**, author sura0111 | likely fine; residual risk is upstream provenance |
+      | `suragch/mongolian-datasets` | **CC0-1.0** | clean |
+      | `tugstugi/mongolian-nlp` | GitHub API: **no licence, no LICENSE file** | all rights reserved — **the blocker** |
+
+      So one repository blocks submission, and it is a public collection
+      titled "Useful resources for Mongolian NLP". A licence grant costs its
+      author nothing and is plausibly a yes. Draft ready at
+      `docs/licence-request-draft.md` — send it before building anything else.
+- [ ] **Path C — fallback if the answer is no or never comes.** Keep the MIT
+      base dictionary and CC0 words, swap frequencies to Wikipedia, and
+      regenerate inflections with the suffix rules, accepting the measured
+      accuracy loss. Strictly worse than B, and only worth building if B fails.
 
 ## 3. Physical-device testing
 
