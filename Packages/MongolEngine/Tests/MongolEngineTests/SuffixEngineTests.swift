@@ -46,7 +46,9 @@ final class SuffixEngineTests: XCTestCase {
     }
 
     func testHiddenNGenitiveRestoresTheN() {
-        XCTAssertEqual(first("modny")?.mongolian, "ᠮᠣᠳᠣᠨ\(sep)ᠤ")           // модны (28)
+        // мод ranks ᠮᠣᠳᠤ first under the Mongolia convention (tools/prefer_mongolia_spellings.py,
+        // issue #21); the corpus converter writes ᠮᠣᠳᠣ. The hidden-n rule is unchanged.
+        XCTAssertEqual(first("modny")?.mongolian, "ᠮᠣᠳᠤᠨ\(sep)ᠤ")           // модны
         XCTAssertEqual(first("usny")?.mongolian, "ᠤᠰᠤᠨ\(sep)ᠤ")             // усны (75)
     }
 
@@ -76,7 +78,7 @@ final class SuffixEngineTests: XCTestCase {
 
     func testHiddenNDativeRestoresTheN() {
         XCTAssertEqual(first("usand")?.mongolian, "ᠤᠰᠤᠨ\(sep)ᠳᠤ")           // усанд (52)
-        XCTAssertEqual(first("modond")?.mongolian, "ᠮᠣᠳᠣᠨ\(sep)ᠳᠤ")         // модонд (14)
+        XCTAssertEqual(first("modond")?.mongolian, "ᠮᠣᠳᠤᠨ\(sep)ᠳᠤ")         // модонд: stem ᠮᠣᠳᠤ, see modny
         XCTAssertEqual(first("modond")?.cyrillic, "модонд")
     }
 

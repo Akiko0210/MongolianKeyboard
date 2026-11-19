@@ -14,7 +14,7 @@ Run, from the repo root:
 ```sh
 swift build --package-path Packages/MongolEngine --product mongolgen
 cut -f3 Packages/MongolEngine/Sources/MongolEngine/Resources/lexicon.tsv \
-  | grep -v '^$' | sort -u | awk 'BEGIN{srand(7)} {if (rand()<0.35) print}' > /tmp/words.txt
+  | grep -v '^$' | LC_ALL=C sort -u | awk 'BEGIN{srand(7)} {if (rand()<0.35) print}' > /tmp/words.txt
 swift run --package-path Packages/MongolEngine mongolgen --spell < /tmp/words.txt \
   | python3 tools/crosscheck_words.py --holdout --authority docs/authority.tsv
 ```
@@ -25,6 +25,10 @@ Rules for reading the result:
   by the pattern they share, with the generated and the evidence spelling.
 - **unattested** means no evidence exists. It is not a failure. 32% of the
   shipped lexicon is unattested and nearly all of it is real rare vocabulary.
+- Check the sample size first: it should be ~21k words. Without `LC_ALL=C`,
+  macOS `sort -u` collates every Cyrillic word as equal and keeps 7 of them.
+- `rejected-harmony` in mongolgen's method column means the keyboard withholds
+  that spelling; crosscheck counts it as `no-rule`, so also report how many.
 - Always pass `--holdout`. Without it the rules are scored on the corpus they
   were learned from and the number is circular and meaningless.
 - Quote the sample size with every percentage. The authority overlaps only part

@@ -38,6 +38,48 @@ table, single-source and unreviewed, at frequency 0 so they rank below attested 
 consistency, not independent proof of correct spelling. Legacy statistical
 rules, arbitrary names, irregular forms and ambiguous words still require review.
 
+## Reference standard: Mongolia
+
+The product follows Mongolia's spelling convention (issue #21). What that means in
+the data, measured on 2026-11-19:
+
+- **Both bulk spelling sources come from one Inner Mongolia converter.** The lyrics
+  corpus and the npm word list were both spelled by Inner Mongolia University's
+  trans.mglip.com; the npm package's own updater calls
+  `http://trans.mglip.com/CyrillicC2T.aspx`. Homographs were then ranked by
+  lyrics counts, so the converter's encoding won wherever two existed.
+- **The only Mongolia-side source here is the government handbook** above: 16
+  examples. Against them, the converter's commonest spelling matches 13, Greg
+  Eck's CC0 table 14, mazaalai 6 of the 7 it has.
+- **ᠣ/ᠤ and ᠥ/ᠦ after the first syllable.** The handbook transliterates одоо as
+  ᠣᠳᠤ and мөөг as ᠮᠥᠭᠦ; the converter gives ᠣᠳᠣ and ᠮᠥᠭᠥ; Eck gives the
+  handbook's spelling in both. So where a word already has both spellings in the
+  lexicon, differing only by ᠣ→ᠤ or ᠥ→ᠦ after the first vowel letter, and Eck
+  gives the ᠤ/ᠦ one, that one is ranked first
+  (`tools/prefer_mongolia_spellings.py`): 52 words, such as мөнгө ᠮᠥᠩᠭᠦ, том
+  ᠲᠣᠮᠤ, мод ᠮᠣᠳᠤ. The pairs share glyphs in running text, so this changes the
+  encoded text, not what is seen. The ᠣ/ᠥ spelling stays as an alternative.
+- **Not decided, and left for a native-speaker reviewer:** first-syllable
+  differences (охин ᠥᠬᠢᠨ/ᠦᠬᠢᠨ, бүрэн ᠪᠥᠷᠢᠨ/ᠪᠦᠷᠢᠨ), the visible ᠶᠢ/ᠢ difference
+  (сайн ᠰᠠᠶᠢᠨ/ᠰᠠᠢᠨ), and words where every source disagrees. No Mongolia-side
+  evidence in hand settles them, so the existing order stands.
+
+Precedence, highest first: the handbook corrections
+(`tools/apply_reviewed_spellings.py`), the Mongolia convention above, then corpus
+evidence. `docs/authority.tsv` records mazaalai and Eck side by side: 979 words in
+both, 717 agreeing.
+
+### Rows removed as stemless
+
+`tools/drop_stemless_rows.py` removes a row whose spelling starts with FVS, MVS or
+NNBSP (an FVS selects a variant of the *preceding* letter, and NNBSP separates a
+suffix from a preceding stem: Unicode Standard ch. 13.5, StandardizedVariants.txt),
+a detached suffix whose stem has no vowel letter, or a lone consonant. These were
+numeral and initial fragments such as 3-ны, 15-нд and "Б. Батболд": 39 rows,
+listed in `docs/removed-rows-2026-11-19.tsv`. Before the removal, typing ын and
+pressing Space committed U+180D U+202F ᠤᠨ. Vowel-less abbreviations (км, тв, нд)
+cannot be told apart mechanically and remain.
+
 ## The decision pipeline
 
 1. Keep the typed word in memory. Nothing is inserted into the host mid-word.
@@ -224,6 +266,14 @@ uncertain. The first matching rule contributes a string, possibly empty.
 If any symbol has no rule at all, conversion returns nil instead of silently
 dropping that symbol. The engine may try a known suffix with a learned stem
 first. All such output is labeled Generated · check and requires a tap.
+
+A suffix attached to a learned stem takes its class from the stem's written vowels,
+as on the dictionary path, not from the Latin key, which cannot see ө/ү. A learned
+spelling that mixes ᠠᠣᠤ with ᠡᠥᠦ inside one written word is not offered unless the
+typed key itself has both a/o and e, as a compound or loan can (Poppe, *Grammar of
+Written Mongolian*, §§32–34). Measured on 20,873 held-out words, this withheld 566
+spellings: 346 contradicted by evidence, 215 without evidence, 5 matching it (compound
+names whose key hides ү/ө, such as түвшиндалай).
 
 ## Literal letter-by-letter mode
 

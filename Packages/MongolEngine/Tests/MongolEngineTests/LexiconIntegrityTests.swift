@@ -66,6 +66,21 @@ final class LexiconIntegrityTests: XCTestCase {
         XCTAssertFalse(Lexicon.shared.exactMatches(forCyrillic: "ч").isEmpty)
     }
 
+    func testMongoliaConventionAfterTheFirstSyllable() {
+        // Where the lexicon holds both, ᠤ/ᠦ after the first syllable ranks
+        // first: the 2023 Mongolian government handbook transliterates
+        // одоо as ᠣᠳᠤ and мөөг as ᠮᠥᠭᠦ, and Greg Eck's CC0 table agrees for
+        // these words (tools/prefer_mongolia_spellings.py, issue #21). The
+        // pairs share glyphs, so only the encoding changes. The ᠣ spelling
+        // stays available as a second candidate.
+        let engine = SuggestionEngine()
+        for (word, expected, other) in [("мөнгө", "ᠮᠥᠩᠭᠦ", "ᠮᠥᠩᠭᠥ"), ("том", "ᠲᠣᠮᠤ", "ᠲᠣᠮᠣ"), ("мод", "ᠮᠣᠳᠤ", "ᠮᠣᠳᠣ")] {
+            let c = engine.candidates(forLatin: word, verbatim: "")
+            XCTAssertEqual(SuggestionEngine.defaultCandidate(in: c)?.mongolian, expected, word)
+            XCTAssertTrue(c.contains { $0.mongolian == other }, "\(word) keeps \(other) as an alternative")
+        }
+    }
+
     func testCommonParticleNiStillCommits() {
         // нь (key ni) shared its key with the dropped ны row; it must still
         // be the Space default.
