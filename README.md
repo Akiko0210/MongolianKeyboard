@@ -30,8 +30,9 @@ The engine uses whole-word lookup, with generated morphology and letter rules
 available as explicitly selected alternatives. Direct Cyrillic lookup preserves
 у/ү/ө distinctions that Latin keys can lose.
 
-The legacy lexicon contains 52,324 lookup rows, including machine-converted corpus
-forms. It is **not an entirely verified dictionary**. Sixteen examples were checked
+The lexicon contains 67,877 lookup rows: 52,284 legacy rows, including machine-converted
+corpus forms, and 15,593 rows imported from the CC0 `mazaalai` table. It is **not an
+entirely verified dictionary**. Sixteen examples were checked
 against a government-hosted teaching handbook, and three stored choices were
 aligned with that source. [The detailed specification](docs/ORTHOGRAPHY.md) explains
 every stage, character ordering, suffix tables, ranking, sources and limitations.

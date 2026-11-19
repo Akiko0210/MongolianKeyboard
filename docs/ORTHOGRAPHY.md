@@ -31,9 +31,10 @@ institutional reference; this audit did not import that site's entire dictionary
 The [government case-suffix lesson](https://burtgel.gov.mn/post/58575) embeds a
 video; its title alone was not treated as validation of our suffix tables.
 
-The rest of this document describes **our code and existing data**. The 52,324
-lookup rows are not all government-verified. Legacy data includes an npm word
-list and machine-converted lyrics. Repeated converter output is evidence of
+The rest of this document describes **our code and existing data**. The 67,877
+lookup rows are not all government-verified. Legacy data (52,284 rows) includes an
+npm word list and machine-converted lyrics; 15,593 rows come from the CC0 `mazaalai`
+table, single-source and unreviewed, at frequency 0 so they rank below attested forms. Repeated converter output is evidence of
 consistency, not independent proof of correct spelling. Legacy statistical
 rules, arbitrary names, irregular forms and ambiguous words still require review.
 
