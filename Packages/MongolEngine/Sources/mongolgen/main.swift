@@ -50,10 +50,14 @@ if wantSpell {
         let word = line.trimmingCharacters(in: .whitespaces)
         if word.isEmpty { continue }
         let key = CyrillicKey.isWord(word) ? CyrillicKey.foldedLatin(word) : word
-        if let spelled = SuffixEngine.ruleBased(forKey: key, spell: { converter.spell(key: $0) }) {
-            emit(word, spelled, "suffix-rule")
-        } else if let spelled = converter.spell(key: key) {
-            emit(word, spelled, "letter-rule")
+        // Exactly what the keyboard offers (SuffixEngine.ruleSpelling), with
+        // the method recorded so the two rule paths can be told apart.
+        let spell: (String) -> String? = { converter.spell(key: $0) }
+        if let spelled = SuffixEngine.ruleSpelling(forKey: key, spell: spell) {
+            let viaSuffix = SuffixEngine.ruleBased(forKey: key, spell: spell) == spelled
+            emit(word, spelled, viaSuffix ? "suffix-rule" : "letter-rule")
+        } else if (SuffixEngine.ruleBased(forKey: key, spell: spell) ?? spell(key)) != nil {
+            emit(word, "", "rejected-harmony")
         } else {
             emit(word, "", "no-rule")
         }

@@ -193,9 +193,7 @@ public struct SuggestionEngine {
         //    rules to the generated stem; otherwise the whole key is
         //    spelled by the rules.
         if !hasDictionaryMatch, !converter.isEmpty {
-            let spelled = SuffixEngine.ruleBased(forKey: key, spell: { converter.spell(key: $0) })
-                ?? converter.spell(key: key)
-            if let spelled {
+            if let spelled = SuffixEngine.ruleSpelling(forKey: key, spell: { converter.spell(key: $0) }) {
                 add(Candidate(mongolian: spelled, cyrillic: nil, latin: latin, source: .spelled))
             }
         }
