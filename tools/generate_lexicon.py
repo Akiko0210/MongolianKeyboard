@@ -425,5 +425,8 @@ def main():
 
 if __name__ == "__main__":
     main()
+    # Numeral/initial fragments and misaligned lyric tokens (ын -> U+180D ᠤᠨ).
+    from drop_stemless_rows import apply as drop_stemless
+    drop_stemless()
     from apply_reviewed_spellings import apply
     apply()

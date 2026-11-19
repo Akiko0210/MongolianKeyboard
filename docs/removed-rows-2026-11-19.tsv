@@ -1,0 +1,40 @@
+# reason	key	traditional	cyrillic	frequency  (removed by tools/drop_stemless_rows.py)
+lone-consonant	b	ᠪ	б	43817
+suffix-no-stem	biie	ᠪ ᠤᠧ	бые	2
+suffix-no-stem	biiye	ᠪ ᠤᠧ	бые	2
+lone-consonant	d	ᠳ	д	63585
+suffix-no-stem	duubi	ᠳ ᠢᠶᠡᠨᠪᠢᠢ	дөөбий	7
+suffix-no-stem	duubii	ᠳ ᠢᠶᠡᠨᠪᠢᠢ	дөөбий	7
+suffix-no-stem	fmeer	ᠹᠮ ᠢᠶᠡᠷ	фмээр	3
+lone-consonant	g	ᠭ	г	28888
+suffix-no-stem	goihon	ᠭ ᠤ ᠬᠢᠨ	гоыхон	2
+suffix-no-stem	goiihon	ᠭ ᠤ ᠬᠢᠨ	гоыхон	2
+lone-consonant	h	ᠬ	х	14321
+leading-format	ig	᠍ ᠢ	ыг	6120
+leading-format	iig	᠍ ᠢ	ыг	6120
+leading-format	iin	᠍ ᠤᠨ	ын	103194
+leading-format	in	᠍ ᠤᠨ	ын	103194
+lone-consonant	j	ᠵ	ж	11135
+lone-consonant	k	ᠺ	к	958
+suffix-no-stem	lduu	ᠯ ᠳᠦ ᠪᠡᠨ	лдөө	2
+lone-consonant	m	ᠮ	м	16201
+suffix-no-stem	mooj	ᠮ ᠠᠴᠤ	моож	2
+suffix-no-stem	moya	ᠮ ᠢᠶ᠎ᠠ	моя	14
+lone-consonant	n	ᠨ	н	37027
+suffix-no-stem	nadih	ᠨᠳ ᠤ ᠬᠢ	надых	2
+suffix-no-stem	nadiih	ᠨᠳ ᠤ ᠬᠢ	надых	2
+suffix-no-stem	ni	ᠨ ᠤ	ны	26291
+suffix-no-stem	nii	ᠨ ᠤ	ны	26291
+lone-consonant	p	ᠫ	п	5098
+lone-consonant	r	ᠷ	р	20625
+suffix-no-stem	ruu	ᠷ ᠢᠶᠡᠨ	рөө	33
+lone-consonant	s	ᠰ	с	23499
+suffix-no-stem	sd	ᠰ ᠲᠦ	сд	21
+lone-consonant	sh	ᠱ	ш	7970
+lone-consonant	t	ᠲ	т	19487
+suffix-no-stem	ti	ᠲ ᠤ	ты	14
+suffix-no-stem	tii	ᠲ ᠤ	ты	14
+lone-consonant	ts	ᠴ	ц	20888
+suffix-no-stem	ttted	ᠲᠲ᠋ᠲ ᠲᠦ	тттэд	2
+lone-consonant	v	ᠸ	в	4808
+lone-consonant	z	ᠽ	з	7858
