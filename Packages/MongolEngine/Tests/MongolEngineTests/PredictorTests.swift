@@ -2,9 +2,9 @@
 //  PredictorTests.swift
 //  MongolEngineTests
 //
-//  Next-word prediction from the bundled bigram table (news + lyrics
-//  corpora). The concrete expectations were checked against the generated
-//  bigrams.tsv when written.
+//  Next-word prediction from the bundled bigram table (Mongolian
+//  Wikipedia in the licence-clean build, #20). The concrete expectations
+//  were checked against the generated bigrams.tsv when written.
 //
 
 import XCTest
@@ -13,7 +13,9 @@ import XCTest
 final class PredictorTests: XCTestCase {
 
     func testBundledTableLoads() {
-        XCTAssertGreaterThan(Predictor.shared.count, 20_000, "bigrams.tsv missing or truncated")
+        // The licence-clean table has 10,397 rows (the legacy one 29,237);
+        // this guards against a missing or truncated file, not a size.
+        XCTAssertGreaterThan(Predictor.shared.count, 5_000, "bigrams.tsv missing or truncated")
     }
 
     func testSuccessorsComeMostFrequentFirst() {
@@ -27,8 +29,11 @@ final class PredictorTests: XCTestCase {
     }
 
     func testGreetingPredictsItsUsualContinuations() {
-        XCTAssertEqual(Predictor.shared.successors(of: "сайн").map(\.cyrillic),
-                       ["сайхан", "байна", "мэдэх"])
+        // Legacy news+lyrics: сайхан, байна, мэдэх. Wikipedia ranks ноён
+        // first (Сайн ноён хан, the historical aimag): a measured register
+        // loss of the licence-clean build (#20), kept visible here.
+        let after = Predictor.shared.successors(of: "сайн").map(\.cyrillic)
+        XCTAssertTrue(after.contains("сайхан"), "\(after)")
     }
 
     func testPredictionsCarryDictionarySpellings() {

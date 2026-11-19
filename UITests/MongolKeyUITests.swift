@@ -143,8 +143,12 @@ final class MongolKeyUITests: XCTestCase {
         // exposed as buttons only when the extension's elements reach the
         // test process (same condition as the keys themselves).
         let elementsExposed = key("a").exists
+        // Which words follow сайн depends on the bundled corpus (Wikipedia
+        // in the licence-clean build, #20, ranks ноён first); сайхан is the
+        // continuation every build offers, so tap that one.
         let prediction = app.descendants(matching: .any)
-            .matching(identifier: "mk.candidate.prediction").firstMatch
+            .matching(NSPredicate(format: "identifier == 'mk.candidate.prediction' AND label BEGINSWITH 'сайхан'"))
+            .firstMatch
         let predicted = prediction.waitForExistence(timeout: 4)
         log("next-word prediction shown after 'sain': \(predicted) (keys exposed as elements: \(elementsExposed))")
         snap("predictions")
@@ -196,10 +200,13 @@ final class MongolKeyUITests: XCTestCase {
         XCTAssertTrue(hasMongolian, "expected Mongolian script in the tester field, got: '\(value)'")
         XCTAssertTrue(value.contains("ᠮᠣᠩᠭᠣᠯ"), "mongol should commit the dictionary spelling")
         XCTAssertTrue(value.contains("ᠰᠠᠶᠢᠨ"), "sain should commit the dictionary spelling")
-        XCTAssertTrue(value.contains("ᠠᠪᠤ\u{202F}ᠳᠤ\u{202F}ᠪᠠᠨ"), "aavdaa should commit ᠠᠪᠤ ᠳᠤ ᠪᠠᠨ (corpus spelling)")
+        // The licence-clean data (#20) has no corpus-attested inflected forms:
+        // ᠠᠪᠤ ᠳᠤ ᠪᠠᠨ is generated from аав and offered for a tap, so Space keeps
+        // the typed input rather than committing a generated spelling.
+        XCTAssertTrue(value.contains("aavdaa "), "aavdaa is generated, so Space keeps the input")
         XCTAssertTrue(value.contains("ᠨᠣᠬᠠᠢ"), "nohoy (informal spelling of nohoi) should commit нохой's dictionary spelling")
         if predicted {
-            XCTAssertTrue(value.contains("ᠰᠠᠶᠢᠬᠠᠨ"), "tapping the first prediction after сайн should insert сайхан (ᠰᠠᠶᠢᠬᠠᠨ)")
+            XCTAssertTrue(value.contains("ᠰᠠᠶᠢᠬᠠᠨ"), "tapping the сайхан prediction after сайн should insert ᠰᠠᠶᠢᠬᠠᠨ")
         }
         typeOnMongolKey("zzz")
         tapMongolKey("space")

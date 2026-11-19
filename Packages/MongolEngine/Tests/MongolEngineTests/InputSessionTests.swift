@@ -36,7 +36,9 @@ final class InputSessionTests: XCTestCase {
         XCTAssertEqual(session.space(), [.insert("ᠰᠠᠶᠢᠨ"), .insert(" ")])
         XCTAssertFalse(session.isComposing)
         XCTAssertEqual(session.lastCommitted, "сайн")
-        XCTAssertEqual(session.candidates.map(\.cyrillic), ["сайхан", "байна", "мэдэх"])
+        // Which words follow depends on the bundled corpus (Wikipedia in the
+        // licence-clean build, #20); сайхан is the continuation every build has.
+        XCTAssertTrue(session.candidates.map(\.cyrillic).contains("сайхан"))
         XCTAssertTrue(session.candidates.allSatisfy { $0.source == .prediction })
         XCTAssertEqual(session.highlightedIndex, -1, "predictions are tap-only")
     }
@@ -44,7 +46,8 @@ final class InputSessionTests: XCTestCase {
     func testTappingAPredictionCommitsItWithASpaceAndMovesOn() {
         type("sain")
         _ = session.space()
-        XCTAssertEqual(session.selectCandidate(at: 0), [.insert("ᠰᠠᠶᠢᠬᠠᠨ ")])
+        let index = try! XCTUnwrap(session.candidates.firstIndex { $0.cyrillic == "сайхан" })
+        XCTAssertEqual(session.selectCandidate(at: index), [.insert("ᠰᠠᠶᠢᠬᠠᠨ ")])
         XCTAssertEqual(session.lastCommitted, "сайхан")
         XCTAssertFalse(session.candidates.isEmpty, "predictions continue from the tapped word")
         XCTAssertEqual(session.selectCandidate(at: 99), [], "out-of-range taps are ignored")
@@ -110,9 +113,16 @@ final class InputSessionTests: XCTestCase {
         XCTAssertTrue(session.candidates.isEmpty)
     }
 
-    func testInflectedWordCommitsTheSuffixedSpelling() {
+    func testInflectedWordIsGeneratedAndCommittedByTap() {
+        // The licence-clean data (#20) stores no corpus-attested inflected
+        // forms, so аавдаа is generated from the stem аав by SuffixEngine.
+        // Generated spellings are tap-only: Space keeps the typed input.
         type("aavdaa")
-        XCTAssertEqual(session.space(), [.insert("ᠠᠪᠤ\u{202F}ᠳᠤ\u{202F}ᠪᠠᠨ"), .insert(" ")])
+        let index = try! XCTUnwrap(session.candidates.firstIndex {
+            $0.mongolian == "ᠠᠪᠤ\u{202F}ᠳᠤ\u{202F}ᠪᠠᠨ"
+        })
+        XCTAssertEqual(session.candidates[index].source, .inflected)
+        XCTAssertEqual(session.selectCandidate(at: index), [.insert("ᠠᠪᠤ\u{202F}ᠳᠤ\u{202F}ᠪᠠᠨ ")])
     }
 
     func testUnknownWordPreservesInputAndPredictsNothing() {

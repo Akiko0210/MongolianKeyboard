@@ -1,5 +1,26 @@
 # Language data and font rights
 
+## Shipped build: licence-clean (issue #20, 2026-11-19)
+
+The bundled tables are now built by `python3 tools/generate_lexicon.py --licence-clean`
+and `python3 tools/learn_orthography.py --lexicon .lexicon-cache/clean-training.tsv`.
+Nothing in them derives from `tugstugi/mongolian-nlp`. `DATA_SOURCES.txt`, bundled in
+the app and the keyboard, records the build, the attributions and the MIT notice, and
+`tools/release_preflight.py --submission` fails any bundle not marked `licence-clean`.
+
+| Table | Built from | Licence and obligation |
+| --- | --- | --- |
+| `lexicon.tsv` words and spellings | `written-mongol-keyboard` 1.3.5 (sura0111) | MIT as declared in `package.json`. Notice reproduced in `DATA_SOURCES.txt`. Residual risk: the package carries no separate licence file for the data. |
+| `lexicon.tsv` additional words | `suragch/mongolian-datasets` mazaalai | CC0-1.0. No obligation; credited anyway. Frequency 0, so dictionary spellings rank first. |
+| `lexicon.tsv` frequencies, `bigrams.tsv` | Mongolian Wikipedia dump (`tools/build_wikipedia_corpus.py` input) | CC BY-SA 4.0. Attribution in `DATA_SOURCES.txt` and in the app's Reference tab (`ORTHOGRAPHY.md`). Only counts ship; the derived tables are shared under the same licence. |
+| `orthography.tsv` | Learned from the `written-mongol-keyboard` rows only | Inherits MIT. CC0 rows are left out of training because they made the rules worse on common words. |
+
+The legacy tables below can still be rebuilt with `tools/generate_lexicon.py` (no flag),
+which marks them `build: legacy`. They stay blocked until the licence request in
+`docs/licence-request-draft.md` is answered.
+
+## Legacy inventory (2026-09-19 audit)
+
 Audit date: 2026-09-19. This inventory describes what is present; it is not a
 legal clearance or a statement that every stored spelling is correct.
 

@@ -24,7 +24,8 @@ let package = Package(
             resources: [
                 .copy("Resources/lexicon.tsv"),
                 .copy("Resources/bigrams.tsv"),
-                .copy("Resources/orthography.tsv")
+                .copy("Resources/orthography.tsv"),
+                .copy("Resources/DATA_SOURCES.txt")
             ]
         ),
         .executableTarget(

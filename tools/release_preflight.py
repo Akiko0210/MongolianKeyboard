@@ -39,7 +39,7 @@ def main():
               f"{bundle.name}: missing private-preferences API reason")
         for resource in ["NotoSansMongolian-Regular.ttf", "ClassicalMongolianDashitseden.ttf", "OFL.txt", "LICENSES.md"]:
             check((bundle / resource).is_file(), f"{bundle.name}: missing {resource}")
-        for resource in ["lexicon.tsv", "bigrams.tsv", "orthography.tsv"]:
+        for resource in ["lexicon.tsv", "bigrams.tsv", "orthography.tsv", "DATA_SOURCES.txt"]:
             check(any(bundle.glob(f"*.bundle/{resource}")), f"{bundle.name}: missing {resource}")
 
     extension_spec = extension_info.get("NSExtension", {})
@@ -57,7 +57,18 @@ def main():
         sdk = app_info.get("DTSDKName", "")
         version = re.fullmatch(r"iphoneos(\d+)(?:\.\d+)*", sdk)
         check(version is not None and int(version[1]) >= 26, f"Submission requires iPhoneOS SDK 26+, found {sdk!r}")
-        errors.append("Language-data redistribution rights remain unresolved; see docs/DATA_PROVENANCE.md. Resolve and update this gate before submitting.")
+        # The generator records which data the bundle was built from
+        # (tools/licence_clean.py). Only the licence-clean build carries data
+        # with an explicit redistribution grant for every source.
+        for bundle in [app, extension]:
+            builds = {line.split(":", 1)[1].strip()
+                      for path in bundle.glob("*.bundle/DATA_SOURCES.txt")
+                      for line in path.read_text(encoding="utf-8").splitlines()
+                      if line.startswith("build:")}
+            check(builds == {"licence-clean"},
+                  f"{bundle.name}: language data is not the licence-clean build "
+                  f"(found {sorted(builds) or 'no DATA_SOURCES.txt'}); legacy data includes "
+                  "tugstugi/mongolian-nlp, which has no licence. See docs/DATA_PROVENANCE.md.")
 
     if errors:
         for error in errors:
