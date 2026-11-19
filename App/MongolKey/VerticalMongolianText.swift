@@ -12,6 +12,7 @@ struct VerticalMongolianText: UIViewRepresentable {
     let text: String
     var fontSize: CGFloat = 40
     var textColor: UIColor = .label
+    var face: MongolFont.Face = MongolFont.current
 
     func makeUIView(context: Context) -> VerticalMongolianView {
         let view = VerticalMongolianView(bundle: .main)
@@ -23,6 +24,7 @@ struct VerticalMongolianText: UIViewRepresentable {
     func updateUIView(_ view: VerticalMongolianView, context: Context) {
         view.fontSize = fontSize
         view.textColor = textColor
+        view.face = face
         view.text = text
     }
 }

@@ -17,6 +17,7 @@ struct PrivacyView: View {
         ("Does it access the pasteboard?", "No"),
         ("Does it share data with this app?", "No"),
         ("Does it collect analytics?", "No"),
+        ("What is saved?", "Only your typeface preference, separately in the app and keyboard"),
         ("Does it contain advertising?", "No"),
     ]
 
@@ -50,6 +51,10 @@ struct PrivacyView: View {
                         }
                         .padding(.vertical, 2)
                     }
+                }
+
+                Section("Support") {
+                    Link("Report a problem", destination: URL(string: "https://github.com/Akiko0210/MongolianKeyboard/issues")!)
                 }
 
                 Section {

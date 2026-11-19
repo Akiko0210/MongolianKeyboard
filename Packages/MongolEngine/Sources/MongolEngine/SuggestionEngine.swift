@@ -8,18 +8,26 @@
 //
 //  Candidate order (accuracy first):
 //    1. Exact lexicon matches — words whose pronunciation is exactly what was
-//       typed, most frequent first. These are dictionary-verified spellings,
-//       so the first one is the default that Space commits.
-//    2. The verbatim transliteration of the buffer — always available, so
-//       out-of-vocabulary words (names, dialect, old orthography) can still
-//       be typed letter by letter. Never silently dropped. When the word's
-//       only gendered vowels are o/u (udur), its harmony is ambiguous and
-//       both readings are offered, masculine first, then feminine
-//       (VowelHarmony.verbatimSpellings; Poppe §§32–34).
-//    3. Completions — lexicon words the buffer is a prefix of. Tappable
+//       typed, most frequent first (and, when the previous word is known,
+//       the words that usually follow it first). Stored spellings are not
+//       all independently verified; the first is the Space default.
+//    2. Dictionary stem + suffix (SuffixEngine / VerbEngine).
+//    3. Loose matches — ө typed as `o`, long vowels typed single — filling
+//       up to three dictionary-backed candidates.
+//    4. Rule-based spelling (OrthographyConverter) when nothing above
+//       matched: the best guess for a word the dictionary lacks.
+//    5. The verbatim letter-by-letter transliteration — always available, so
+//       anything can be typed exactly as intended. Never silently dropped.
+//       When the word's only gendered vowels are o/u (udur), its harmony is
+//       ambiguous and both readings are offered, masculine first, then
+//       feminine (VowelHarmony.verbatimSpellings; Poppe §§32–34).
+//    6. Completions — lexicon words the buffer is a prefix of. Tappable
 //       predictions only; they are never auto-committed by Space, because
 //       committing a word the user did not finish typing would trade
 //       accuracy for convenience.
+//
+//  With an empty buffer, `predictions(after:)` offers the words that most
+//  often follow the word just committed.
 //
 
 import Foundation
@@ -30,19 +38,29 @@ public struct Candidate: Equatable {
     public enum Source: Equatable {
         /// Dictionary word whose pronunciation exactly matches the buffer.
         case lexicon
+        /// Dictionary stem + a case/plural/possessive suffix (SuffixEngine).
+        case inflected
+        /// Dictionary word matching under the loose spelling (odor → өдөр).
+        case fuzzy
+        /// Spelled by the learned orthography rules (no dictionary claim).
+        case spelled
         /// Dictionary word that completes the buffer.
         case completion
         /// The buffer transliterated letter by letter (no dictionary claim).
         case verbatim
+        /// A likely next word, offered after a commit (empty buffer).
+        case prediction
+        /// Preserve unrecognized input instead of silently committing a guess.
+        case unchanged
     }
 
     /// The traditional-script text committed when this candidate is chosen.
     public let mongolian: String
     /// Cyrillic form, shown as a caption so the user can confirm the word.
-    /// `nil` for the verbatim candidate.
+    /// `nil` for the verbatim and rule-spelled candidates.
     public let cyrillic: String?
     /// The romanization this candidate answers (folded key, or the raw
-    /// buffer for the verbatim candidate).
+    /// buffer for the verbatim candidate; empty for predictions).
     public let latin: String
     public let source: Source
 
@@ -52,19 +70,41 @@ public struct Candidate: Equatable {
         self.latin = latin
         self.source = source
     }
+
+    public var sourceLabel: String {
+        switch source {
+        case .lexicon: return "Dictionary"
+        case .fuzzy: return "Loose match"
+        case .inflected, .spelled: return "Generated · check"
+        case .verbatim: return "Letter by letter"
+        case .completion: return "Completion"
+        case .prediction: return "Next word"
+        case .unchanged: return "Keep input"
+        }
+    }
 }
 
 public struct SuggestionEngine {
 
     private let lexicon: Lexicon
+    private let predictor: Predictor
+    private let converter: OrthographyConverter
 
     /// Upper bound on candidates returned (exact matches and the verbatim
     /// candidates are always included even if that exceeds the bound —
     /// completions are what get trimmed).
     public let maxCandidates: Int
 
-    public init(lexicon: Lexicon = .shared, maxCandidates: Int = 8) {
+    /// How many dictionary-backed candidates the loose tier may fill up to.
+    static let dictionaryTierSize = 3
+
+    public init(lexicon: Lexicon = .shared,
+                predictor: Predictor = .shared,
+                converter: OrthographyConverter = .shared,
+                maxCandidates: Int = 8) {
         self.lexicon = lexicon
+        self.predictor = predictor
+        self.converter = converter
         self.maxCandidates = maxCandidates
     }
 
@@ -75,45 +115,171 @@ public struct SuggestionEngine {
     ///     (the `TransliterationEngine`'s output, already harmonized). An
     ///     ambiguous o/u word also gets its feminine spelling as a second
     ///     verbatim candidate.
-    public func candidates(forLatin latin: String, verbatim: String) -> [Candidate] {
+    ///   - previous: Cyrillic form of the word committed just before, if
+    ///     known; words that usually follow it are ranked first.
+    public func candidates(forLatin latin: String,
+                           verbatim: String,
+                           previous: String? = nil) -> [Candidate] {
         guard !latin.isEmpty else { return [] }
+        // Bound expensive morphology/completion work for long pasted strings.
+        guard latin.count <= 64 else { return [unchanged(latin)] }
+        if CyrillicKey.containsCyrillic(latin) {
+            return candidates(forCyrillic: latin)
+        }
+        guard latin.allSatisfy({ $0.isLetter && ($0.isASCII || "öüÖÜ".contains($0)) }) else {
+            return [unchanged(latin)]
+        }
         let key = LatinKey.fold(latin)
+        let likelyNext = previous.map { predictor.successorSet(of: $0) } ?? []
+        var seen = Set<String>()
+        var result: [Candidate] = []
 
-        var result = lexicon.exactMatches(forKey: key)
-            .sorted(by: Self.exactRank)
-            .map { Candidate(mongolian: $0.traditional,
-                             cyrillic: $0.cyrillic,
-                             latin: $0.key,
-                             source: .lexicon) }
+        func add(_ c: Candidate) {
+            if seen.insert(c.mongolian).inserted { result.append(c) }
+        }
 
-        if !verbatim.isEmpty {
-            for spelling in VowelHarmony.verbatimSpellings(of: verbatim)
-            where !result.contains(where: { $0.mongolian == spelling }) {
-                result.append(Candidate(mongolian: spelling,
-                                        cyrillic: nil,
-                                        latin: latin,
-                                        source: .verbatim))
+        /// `base` ordering, with the words that usually follow `previous`
+        /// moved to the front.
+        func inContext(_ base: @escaping (Lexicon.Entry, Lexicon.Entry) -> Bool)
+            -> (Lexicon.Entry, Lexicon.Entry) -> Bool {
+            guard !likelyNext.isEmpty else { return base }
+            return { a, b in
+                let la = likelyNext.contains(a.cyrillic)
+                let lb = likelyNext.contains(b.cyrillic)
+                if la != lb { return la }
+                return base(a, b)
             }
         }
 
-        let room = maxCandidates - result.count
+        // 1. Exact dictionary matches.
+        for e in lexicon.exactMatches(forKey: key).sorted(by: inContext(Self.exactRank)) {
+            add(Candidate(mongolian: e.traditional, cyrillic: e.cyrillic, latin: e.key, source: .lexicon))
+        }
+
+        // 2. Dictionary stem + suffix (аавдаа → ᠠᠪᠤ ᠳᠤ ᠪᠠᠨ).
+        for inf in SuffixEngine.inflections(forKey: key, lexicon: lexicon, limit: 3) {
+            add(Candidate(mongolian: inf.mongolian, cyrillic: inf.cyrillic, latin: key, source: .inflected))
+        }
+        let hasDictionaryMatch = !result.isEmpty
+
+        // 3. Loose spelling (odor → өдөр, uchlaarai → уучлаарай), filling the
+        //    dictionary tier: `hol` shows хол first and хөл right after it.
+        //    A word that differs only in o/u (same length) is a closer match
+        //    than one that also differs in vowel length (hol → хоол).
+        //    A spelling seen a handful of times next to a common one
+        //    (уучларай beside уучлаарай in the lyrics) is a misspelling of
+        //    it and ranks last, whatever its closeness.
+        let room = Self.dictionaryTierSize - result.count
         if room > 0 {
-            result += lexicon.completions(forKeyPrefix: key)
-                .sorted(by: Self.completionRank)
-                .prefix(room)
-                .map { Candidate(mongolian: $0.traditional,
-                                 cyrillic: $0.cyrillic,
-                                 latin: $0.key,
-                                 source: .completion) }
+            let loose = lexicon.looseMatches(forKey: key)
+            let topFrequency = loose.map(\.frequency).max() ?? 0
+            let typedLength = key.count
+            let fuzzyRank: (Lexicon.Entry, Lexicon.Entry) -> Bool = { a, b in
+                let ra = a.frequency * 50 >= topFrequency
+                let rb = b.frequency * 50 >= topFrequency
+                if ra != rb { return ra }
+                let da = abs(a.key.count - typedLength)
+                let db = abs(b.key.count - typedLength)
+                if da != db { return da < db }
+                return Self.exactRank(a, b)
+            }
+            for e in Self.top(room, of: loose, by: inContext(fuzzyRank)) {
+                add(Candidate(mongolian: e.traditional, cyrillic: e.cyrillic, latin: e.key, source: .fuzzy))
+            }
+        }
+
+        // 4. Rule-based spelling for a word the dictionary lacks: a known
+        //    suffix is split off and attached by heuristic suffix
+        //    rules to the generated stem; otherwise the whole key is
+        //    spelled by the rules.
+        if !hasDictionaryMatch, !converter.isEmpty {
+            let spelled = SuffixEngine.ruleBased(forKey: key, spell: { converter.spell(key: $0) })
+                ?? converter.spell(key: key)
+            if let spelled {
+                add(Candidate(mongolian: spelled, cyrillic: nil, latin: latin, source: .spelled))
+            }
+        }
+
+        // 5. The verbatim transliteration — never dropped. An o/u-only word
+        //    is harmonically ambiguous, so both readings are offered,
+        //    masculine first (VowelHarmony.verbatimSpellings).
+        if !verbatim.isEmpty {
+            for spelling in VowelHarmony.verbatimSpellings(of: verbatim) {
+                add(Candidate(mongolian: spelling, cyrillic: nil, latin: latin, source: .verbatim))
+            }
+        }
+
+        if !result.contains(where: { $0.source == .lexicon || $0.source == .fuzzy }) {
+            result.append(unchanged(latin))
+        }
+
+        // 6. Completions (tap-only).
+        let completionRoom = maxCandidates - result.count
+        if completionRoom > 0 {
+            for e in Self.top(completionRoom, of: lexicon.completions(forKeyPrefix: key),
+                              by: inContext(Self.completionRank)) {
+                add(Candidate(mongolian: e.traditional, cyrillic: e.cyrillic, latin: e.key, source: .completion))
+            }
         }
         return result
     }
 
+    /// The words that most often follow `previous` (its Cyrillic form) —
+    /// shown while the buffer is empty, right after a commit. Tap-only.
+    public func predictions(after previous: String, limit: Int = 3) -> [Candidate] {
+        predictor.successors(of: previous, limit: limit).map {
+            Candidate(mongolian: $0.mongolian, cyrillic: $0.cyrillic, latin: "", source: .prediction)
+        }
+    }
+
+    /// Best `k` entries without sorting the whole list: a prefix like "a"
+    /// matches thousands of completions on every keystroke, and only a
+    /// handful are shown.
+    static func top(_ k: Int, of entries: [Lexicon.Entry],
+                    by better: (Lexicon.Entry, Lexicon.Entry) -> Bool) -> [Lexicon.Entry] {
+        guard k > 0 else { return [] }
+        var best: [Lexicon.Entry] = []
+        best.reserveCapacity(k + 1)
+        for e in entries {
+            if best.count == k, !better(e, best[k - 1]) { continue }
+            var i = best.count
+            best.append(e)
+            while i > 0 && better(best[i], best[i - 1]) {
+                best.swapAt(i, i - 1)
+                i -= 1
+            }
+            if best.count > k { best.removeLast() }
+        }
+        return best
+    }
+
     /// The candidate Space (or any other committing key) should insert, i.e.
-    /// the first exact dictionary match, falling back to the verbatim
-    /// transliteration. Completions are deliberately not eligible.
+    /// the first stored dictionary/loose match, else unchanged input.
+    /// Generated, literal, completion and prediction candidates are tap-only.
     public static func defaultCandidate(in candidates: [Candidate]) -> Candidate? {
-        candidates.first { $0.source != .completion }
+        candidates.first { $0.source == .lexicon || $0.source == .fuzzy }
+            ?? candidates.first { $0.source == .unchanged }
+    }
+
+    private func unchanged(_ text: String) -> Candidate {
+        Candidate(mongolian: text, cyrillic: nil, latin: text, source: .unchanged)
+    }
+
+    private func candidates(forCyrillic input: String) -> [Candidate] {
+        guard CyrillicKey.isWord(input) else { return [unchanged(input)] }
+        let word = CyrillicKey.normalize(input)
+        var result = lexicon.exactMatches(forCyrillic: word).sorted(by: Self.exactRank).map {
+            Candidate(mongolian: $0.traditional, cyrillic: $0.cyrillic, latin: input, source: .lexicon)
+        }
+        if result.isEmpty {
+            // A generated caption must match every Cyrillic letter typed. A
+            // homophone reached through the lossy key cannot replace the input.
+            result = SuffixEngine.inflections(forKey: CyrillicKey.foldedLatin(word), lexicon: lexicon)
+                .filter { CyrillicKey.normalize($0.cyrillic) == word }
+                .map { Candidate(mongolian: $0.mongolian, cyrillic: word, latin: input, source: .inflected) }
+            result.append(unchanged(input))
+        }
+        return result
     }
 
     // MARK: Ranking

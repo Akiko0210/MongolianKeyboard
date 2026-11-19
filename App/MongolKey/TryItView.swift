@@ -16,18 +16,27 @@ struct TryItView: View {
 
     @State private var romanInput: String = "mongol"
     @State private var keyboardInput: String = ""
+    /// The typeface, remembered across launches (the keyboard extension has
+    /// its own copy of this setting and its own font picker).
+    @AppStorage(MongolFont.defaultsKey) private var faceRaw: String = MongolFont.current.rawValue
+    private var face: MongolFont.Face {
+        get { MongolFont.Face(rawValue: faceRaw) ?? MongolFont.current }
+        nonmutating set { faceRaw = newValue.rawValue; MongolFont.current = newValue }
+    }
     @FocusState private var keyboardFieldFocused: Bool
 
-    private let transliterator = PhraseTransliterator(scheme: .v1)
+    /// Uses the same dictionary-or-unchanged default as the keyboard.
+    private let speller = PhraseSpeller()
 
     private var romanOutput: String {
-        transliterator.transliterate(romanInput)
+        speller.spell(romanInput)
     }
 
     var body: some View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: 24) {
+                    facePicker
                     romanizerCard
                     keyboardTesterCard
                 }
@@ -38,21 +47,43 @@ struct TryItView: View {
         }
     }
 
-    // MARK: Live romanizer (engine-powered, no keyboard needed)
+    // MARK: Face picker
+
+    private var facePicker: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("Typeface")
+                .font(.headline)
+            Picker("Typeface", selection: Binding(get: { face }, set: { face = $0 })) {
+                ForEach(MongolFont.Face.allCases, id: \.self) { face in
+                    Text(face.displayName).tag(face)
+                }
+            }
+            .pickerStyle(.segmented)
+            Text("Preview: \(face.familyName). Other apps choose the font for sent text.")
+                .font(.footnote)
+                .foregroundStyle(.secondary)
+        }
+        .padding()
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(RoundedRectangle(cornerRadius: 16).fill(Color(.secondarySystemBackground)))
+    }
+
+    // MARK: Latin / Cyrillic converter (engine-powered, no keyboard needed)
 
     private var romanizerCard: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Live romanizer")
+            Text("Latin / Cyrillic converter")
                 .font(.headline)
-            Text("Type romanized Mongolian. The script is composed instantly and shown vertically.")
+            Text("Type or paste Latin or Cyrillic Mongolian. Dictionary matches are converted. Unknown words stay unchanged; use the keyboard to review alternatives.")
                 .font(.footnote)
                 .foregroundStyle(.secondary)
 
-            TextField("e.g. gar, mori, sain", text: $romanInput, axis: .vertical)
+            TextField("e.g. sain or сайн", text: $romanInput, axis: .vertical)
                 .textInputAutocapitalization(.never)
                 .autocorrectionDisabled()
                 .textFieldStyle(.roundedBorder)
                 .font(.body.monospaced())
+                .accessibilityIdentifier("mk.converterInput")
 
             verticalOutput(text: romanOutput.trimmingCharacters(in: .whitespacesAndNewlines))
         }
@@ -67,14 +98,17 @@ struct TryItView: View {
         VStack(alignment: .leading, spacing: 12) {
             Text("Keyboard tester")
                 .font(.headline)
-            Text("Tap the field, switch to MongolKey with 🌐, and type. The box below mirrors your text in correct vertical layout.")
+            Text("Tap the field, hold 🌐 (bottom-left, below the keyboard) and choose MongolKey, then type. The box below mirrors your text in correct vertical layout.")
                 .font(.footnote)
                 .foregroundStyle(.secondary)
 
             TextField("Type here with MongolKey…", text: $keyboardInput, axis: .vertical)
                 .textFieldStyle(.roundedBorder)
                 .focused($keyboardFieldFocused)
-                .font(.custom(MongolFont.postScriptName, size: 22))
+                .font(.custom(face.postScriptName, size: 22))
+                .autocorrectionDisabled()
+                .textInputAutocapitalization(.never)
+                .accessibilityIdentifier("mk.testerInput")
 
             verticalOutput(text: keyboardInput)
 
@@ -103,10 +137,23 @@ struct TryItView: View {
                 Text("Vertical Mongolian appears here")
                     .font(.footnote)
                     .foregroundStyle(.tertiary)
-            } else {
-                VerticalMongolianText(text: text, fontSize: 34)
+            } else if text.unicodeScalars.contains(where: { (0x1800...0x18AF).contains($0.value) }) {
+                VerticalMongolianText(text: text, fontSize: 34, face: face)
                     .padding(.vertical, 12)
                     .clipped()
+            } else {
+                // Cyrillic or Latin came from another keyboard: vertical layout
+                // only applies to Mongolian script, so say so instead of
+                // rotating the wrong alphabet.
+                VStack(spacing: 8) {
+                    Text(text)
+                        .font(.title3)
+                    Text("Unrecognized words stay unchanged. Use MongolKey to review spelling candidates.")
+                        .font(.footnote)
+                        .foregroundStyle(.secondary)
+                        .multilineTextAlignment(.center)
+                }
+                .padding()
             }
         }
         .frame(height: 200)

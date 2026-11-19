@@ -30,7 +30,19 @@ targets:
     platform: iOS
     sources:
       - App/MongolKey
+      - path: docs/ORTHOGRAPHY.md
+        buildPhase: resources
       - Shared/Rendering
+      - path: Shared/PrivacyInfo.xcprivacy
+        buildPhase: resources
+      - path: Shared/Fonts/OFL.txt
+        buildPhase: resources
+      - path: Shared/Fonts/LICENSES.md
+        buildPhase: resources
+      - path: Shared/Fonts/NotoSansMongolian-Regular.ttf
+        buildPhase: resources
+      - path: Shared/Fonts/ClassicalMongolianDashitseden.ttf
+        buildPhase: resources
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.mongolkey.app
@@ -44,15 +56,31 @@ targets:
       path: App/MongolKey/Info.plist
       properties:
         CFBundleDisplayName: MongolKey
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
         UILaunchScreen: {}
+        ITSAppUsesNonExemptEncryption: false
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+        UISupportedInterfaceOrientations~ipad:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationPortraitUpsideDown
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
         UIAppFonts:
           - NotoSansMongolian-Regular.ttf
+          - ClassicalMongolianDashitseden.ttf
+        # mongolkey:// lets tooling (UI tests, `xcrun simctl openurl`) launch the
+        # app through the system instead of the test harness.
+        CFBundleURLTypes:
+          - CFBundleURLName: com.mongolkey.app
+            CFBundleURLSchemes:
+              - mongolkey
     dependencies:
       - package: MongolEngine
       - target: MongolKeyboard
-    resources:
-      - path: Shared/Fonts/NotoSansMongolian-Regular.ttf
-        buildPhase: resources
 
   # ─────────────────────────── Keyboard extension ────────────────────────────
   MongolKeyboard:
@@ -61,29 +89,40 @@ targets:
     sources:
       - Keyboard
       - Shared/Rendering
+      - path: Shared/PrivacyInfo.xcprivacy
+        buildPhase: resources
+      - path: Shared/Fonts/OFL.txt
+        buildPhase: resources
+      - path: Shared/Fonts/LICENSES.md
+        buildPhase: resources
+      - path: Shared/Fonts/NotoSansMongolian-Regular.ttf
+        buildPhase: resources
+      - path: Shared/Fonts/ClassicalMongolianDashitseden.ttf
+        buildPhase: resources
     settings:
       base:
+        APPLICATION_EXTENSION_API_ONLY: YES
         PRODUCT_BUNDLE_IDENTIFIER: com.mongolkey.app.keyboard
         INFOPLIST_KEY_CFBundleDisplayName: MongolKey
     info:
       path: Keyboard/Info.plist
       properties:
         CFBundleDisplayName: MongolKey
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
         UIAppFonts:
           - NotoSansMongolian-Regular.ttf
+          - ClassicalMongolianDashitseden.ttf
         NSExtension:
           NSExtensionPointIdentifier: com.apple.keyboard-service
           NSExtensionPrincipalClass: $(PRODUCT_MODULE_NAME).KeyboardViewController
           NSExtensionAttributes:
-            IsASCIICapable: true
+            IsASCIICapable: false
             PrefersRightToLeftLayoutDirection: false
             PrimaryLanguage: mn
             RequestsOpenAccess: false
     dependencies:
       - package: MongolEngine
-    resources:
-      - path: Shared/Fonts/NotoSansMongolian-Regular.ttf
-        buildPhase: resources
 
   # ───────────────────────────── Engine unit tests ───────────────────────────
   MongolEngineTests:
@@ -91,6 +130,14 @@ targets:
     platform: iOS
     sources:
       - Packages/MongolEngine/Tests/MongolEngineTests
+      - NativeTests
+      - path: Keyboard
+        excludes: [Info.plist]
+      - Shared/Rendering
+      - path: Shared/Fonts/NotoSansMongolian-Regular.ttf
+        buildPhase: resources
+      - path: Shared/Fonts/ClassicalMongolianDashitseden.ttf
+        buildPhase: resources
     dependencies:
       - package: MongolEngine
     settings:
@@ -98,14 +145,32 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: com.mongolkey.engine.tests
         GENERATE_INFOPLIST_FILE: YES
 
+  # ────────────────────────────── UI tests (simulator) ───────────────────────
+  # Drives the container app on a simulator and saves screenshots; used by
+  # .github/workflows/ios-simulator.yml and `tools/simulate.sh`. See docs/TESTING.md.
+  MongolKeyUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources:
+      - UITests
+    dependencies:
+      - target: MongolKey
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.mongolkey.app.uitests
+        GENERATE_INFOPLIST_FILE: YES
+        TEST_TARGET_NAME: MongolKey
+
 schemes:
   MongolKey:
     build:
       targets:
         MongolKey: all
         MongolKeyboard: all
+        MongolKeyUITests: [test]
     run:
       config: Debug
     test:
       targets:
         - MongolEngineTests
+        - MongolKeyUITests

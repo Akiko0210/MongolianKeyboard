@@ -1,0 +1,245 @@
+# Builds MongolKey for the iOS Simulator on a GitHub-hosted Mac, runs it on an
+# iPhone 13 Pro-sized simulator, and captures screenshots — so the app can be
+# checked from any laptop (Windows/Linux included). See docs/TESTING.md.
+name: iOS Simulator
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      device:
+        description: "Simulator device type (xcrun simctl list devicetypes)"
+        default: "iPhone 13 Pro"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ios-simulator-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  APPETIZE_API_TOKEN: ${{ secrets.APPETIZE_API_TOKEN }}
+  APPETIZE_PUBLIC_KEY: ${{ vars.APPETIZE_PUBLIC_KEY }}
+
+jobs:
+  simulator:
+    name: ${{ matrix.runner }} · ${{ github.event.inputs.device || 'iPhone 13 Pro' }}
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        # macos-26: Xcode 26 / iOS 26 simulator. macos-15: Xcode 16 / iOS 18
+        # simulator — what a Mac on macOS 15 (Sequoia) runs, so both are
+        # exercised on every push.
+        runner: [macos-26, macos-15]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Xcode version
+        run: |
+          xcodebuild -version
+          xcrun simctl list runtimes | grep iOS || true
+
+      - name: Install XcodeGen
+        run: brew install xcodegen
+
+      - name: Engine unit tests (SwiftPM, macOS host)
+        working-directory: Packages/MongolEngine
+        run: |
+          # Run the tests, keep the full log, show the interesting lines, and
+          # fail on the tests' own exit status (a `|| true` after a pipe would
+          # reset PIPESTATUS and hide failures — that is what the earlier
+          # version of this step did).
+          set +e
+          swift test > ../../build-swift-test.log 2>&1
+          status=$?
+          grep -E "error:|Test Suite|Executed|passed|failed" ../../build-swift-test.log || true
+          echo "swift test exit status: $status"
+          exit $status
+
+      - name: CoreText shaping probe (both faces, with rendered previews)
+        run: |
+          swift tools/ShapeProbe.swift Shared/Fonts build/shape-probe
+          # Keep the renderings with the screenshots: they are previewed at the
+          # end of the job (the end of the log is what stays readable).
+          mkdir -p build/screenshots/probe
+          cp build/shape-probe/*.png build/screenshots/probe/
+
+      - name: Build universal simulator app (arm64 + x86_64)
+        run: tools/simulate.sh --build-only --universal
+
+      - name: Validate packaged privacy manifests and resources
+        run: python3 tools/release_preflight.py --app "$APP_PATH"
+
+      - name: Zip .app for download / Appetize
+        run: |
+          mkdir -p build/dist
+          ditto -c -k --keepParent "$APP_PATH" build/dist/MongolKey.app.zip
+          ls -la build/dist
+
+      - name: Upload simulator .app
+        uses: actions/upload-artifact@v4
+        with:
+          name: MongolKey-iOS-Simulator-app-${{ matrix.runner }}
+          path: build/dist/MongolKey.app.zip
+          if-no-files-found: error
+
+      - name: Create and boot simulator
+        env:
+          DEVICE_NAME: ${{ github.event.inputs.device || 'iPhone 13 Pro' }}
+        run: tools/simulate.sh --prepare-sim
+
+      - name: UI tests + screenshots on the simulator
+        id: uitests
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          run_tests() {  # $1 = pass label, remaining args = xcodebuild test selectors
+            local label="$1"; shift
+            mkdir -p "build/screenshots/$label"
+            set +e
+            TEST_RUNNER_MK_SCREENSHOT_DIR="$PWD/build/screenshots/$label" \
+            xcodebuild test -project MongolKey.xcodeproj -scheme MongolKey \
+              -destination "id=$SIM_UDID" -derivedDataPath build/DerivedData -parallel-testing-enabled NO \
+              "$@" -resultBundlePath "build/UITests-$label.xcresult" \
+              CODE_SIGN_IDENTITY=- CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=YES \
+              2>&1 | tee "build/uitests-$label.log" | grep -E "MK:|Test (Case|Suite)|error|failed|passed|\*\*"
+            local test_exit_code="${PIPESTATUS[0]}"
+            set -e
+            return "$test_exit_code"
+          }
+          run_tests pass1
+
+      - name: Plain launch, the way tools/simulate.sh does it (install, simctl launch, still alive?)
+        if: always() && env.APP_PATH != '' && env.SIM_UDID != ''
+        run: |
+          set +e
+          xcrun simctl install "$SIM_UDID" "$APP_PATH"
+          xcrun simctl terminate "$SIM_UDID" com.mongolkey.app >/dev/null 2>&1
+          xcrun simctl launch "$SIM_UDID" com.mongolkey.app
+          sleep 4
+          running="$(xcrun simctl spawn "$SIM_UDID" launchctl list 2>/dev/null)"
+          echo "--- launchctl entries mentioning mongol ---"
+          grep -i mongol <<<"$running" || echo "(none)"
+          echo "--- crash reports ---"
+          ls -la ~/Library/Logs/DiagnosticReports/ 2>/dev/null | grep -i mongol || echo "(none)"
+          tools/crashlog.sh || true
+          xcrun simctl io "$SIM_UDID" screenshot build/screenshots/zz-plain-launch.png || true
+          if grep -q com.mongolkey.app <<<"$running"; then
+            echo "app is running 4 s after a plain simctl launch"
+          else
+            echo "::error::MongolKey is not running 4 s after a plain simctl launch"
+            exit 1
+          fi
+
+      - name: Extract screenshots from the result bundle (fallback)
+        if: always()
+        run: |
+          for r in build/UITests-*.xcresult; do
+            [ -d "$r" ] || continue
+            label=$(basename "$r" .xcresult | sed 's/UITests-//')
+            if [ -z "$(ls -A "build/screenshots/$label" 2>/dev/null)" ]; then
+              xcrun xcresulttool export attachments --path "$r" --output-path "build/screenshots/$label" 2>/dev/null || true
+            fi
+          done
+          # Always add one raw capture of whatever the simulator shows now.
+          xcrun simctl io "$SIM_UDID" screenshot build/screenshots/zz-simulator-final.png || true
+          ls -laR build/screenshots || true
+          echo "--- keyboard extensions registered with pluginkit in the simulator ---"
+          xcrun simctl spawn "$SIM_UDID" pluginkit -m -v -p com.apple.keyboard-service || true
+          echo "--- enabled keyboards (AppleKeyboards) ---"
+          xcrun simctl spawn "$SIM_UDID" defaults read -g AppleKeyboards || true
+
+      - name: Screenshot previews in the log (base64, downscaled)
+        if: always()
+        run: |
+          shopt -s nullglob
+          for f in build/screenshots/pass1/*settings-keyboards*.png \
+                   build/screenshots/pass1/*field-focused*.png \
+                   build/screenshots/pass1/*keyboard-picker*.png \
+                   build/screenshots/pass1/*after-picker*.png \
+                   build/screenshots/pass1/*after-globe-tap-0*.png \
+                   build/screenshots/pass1/*switched*.png \
+                   build/screenshots/pass1/*composing-mongol*.png \
+                   build/screenshots/pass1/*committed-mongol*.png \
+                   build/screenshots/pass1/*composing-nohoy*.png \
+                   build/screenshots/pass1/*predictions*.png \
+                   build/screenshots/pass1/*prediction-tapped*.png \
+                   build/screenshots/pass1/*face-*.png \
+                   build/screenshots/pass1/*numbers-layer*.png \
+                   build/screenshots/probe/*baina*.png \
+                   build/screenshots/probe/*baga*.png \
+                   build/screenshots/probe/*abu-du-ban*.png \
+                   build/screenshots/zz-plain-launch.png \
+                   build/screenshots/zz-simulator-final.png; do
+            sips -Z 420 "$f" --out build/preview.png >/dev/null 2>&1 || continue
+            echo "@@IMG $f"
+            base64 -b 120 -i build/preview.png
+            echo "@@END"
+          done
+
+      - name: Upload screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: screenshots-${{ env.SIM_DEVICE_NAME || 'simulator' }}-${{ matrix.runner }}
+          path: build/screenshots
+          if-no-files-found: warn
+
+      - name: Upload UI test log and result bundle
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: uitest-results-${{ matrix.runner }}
+          path: |
+            build/uitests-*.log
+            build/UITests-*.xcresult
+          if-no-files-found: ignore
+
+      - name: Upload to Appetize.io (browser iPhone 13 Pro)
+        if: env.APPETIZE_API_TOKEN != '' && matrix.runner == 'macos-26'
+        run: |
+          set -euo pipefail
+          URL="https://api.appetize.io/v1/apps"
+          if [ -n "${APPETIZE_PUBLIC_KEY:-}" ]; then URL="$URL/$APPETIZE_PUBLIC_KEY"; fi
+          RESPONSE=$(curl -sS -f -u "$APPETIZE_API_TOKEN:" -X POST "$URL" \
+            -F "file=@build/dist/MongolKey.app.zip" \
+            -F "platform=ios" \
+            -F "note=${GITHUB_REF_NAME} @ ${GITHUB_SHA::7}")
+          KEY=$(printf '%s' "$RESPONSE" | python3 -c 'import json,sys; print(json.load(sys.stdin)["publicKey"])')
+          APP_URL="https://appetize.io/app/$KEY?device=iphone13pro&osVersion=18.2&scale=75&autoplay=true"
+          echo "Appetize: $APP_URL"
+          {
+            echo "## Test in the browser (Appetize.io)"
+            echo
+            echo "[Open MongolKey on a virtual iPhone 13 Pro]($APP_URL)"
+            echo
+            echo "Enable the keyboard inside the session: Settings ▸ General ▸ Keyboard ▸ Keyboards ▸ Add New Keyboard… ▸ MongolKey."
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Summary
+        if: always()
+        run: |
+          {
+            echo "## iOS Simulator run"
+            echo
+            echo "- Device: **${SIM_DEVICE_NAME:-?}** (runtime ${SIM_RUNTIME##*.})"
+            echo "- UI tests: **${{ steps.uitests.outcome }}**"
+            echo "- Screenshots and the simulator .app are in this run's **Artifacts** (bottom of the run page)."
+            if [ -z "${APPETIZE_API_TOKEN:-}" ]; then
+              echo "- Appetize upload skipped: add an \`APPETIZE_API_TOKEN\` repository secret to get a browser-playable iPhone 13 Pro link here."
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Fail the job if the UI tests failed
+        if: steps.uitests.outcome == 'failure'
+        run: |
+          echo "::error::UI tests failed — see the 'UI tests + screenshots on the simulator' step and the uploaded screenshots"
+          exit 1
+
+      - name: Shut down simulator
+        if: always()
+        run: xcrun simctl shutdown "$SIM_UDID" || true

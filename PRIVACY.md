@@ -1,34 +1,35 @@
 # MongolKey Privacy Policy
 
-_Last updated: 2026-07-01_
+Last updated: 2026-09-19.
 
-MongolKey is designed so that **no data ever leaves your device**. It is a
-privacy feature, not just a promise — the keyboard is built to function without
-requesting **Full Access**, and iOS itself then prevents it from doing the
-things a privacy-invasive keyboard would.
+MongolKey performs conversion on your device. The keyboard does not request Full
+Access, make network requests, read the pasteboard, record typed text, or include
+analytics, advertising or tracking. The containing app also performs conversion
+offline. Opening a support link launches the external browser.
 
-## What MongolKey does **not** do
+## Local storage
 
-- It does **not** request Full Access.
-- It does **not** make any network requests.
-- It does **not** store, log, or transmit anything you type. The composing
-  buffer exists only in memory and is discarded as you type.
-- It does **not** access the system pasteboard.
-- It does **not** share data with the MongolKey app or any third party.
-- It does **not** contain analytics, tracking, or advertising.
+Only your chosen preview font is saved in private UserDefaults. The containing
+app and keyboard remember separate preferences; they do not share storage.
+Composition and prediction context are held in memory and cleared when the field
+changes or the keyboard disappears. Text in the containing app is not saved by
+MongolKey. Removing the app removes its local preferences.
 
-## Data collection
+## Text you send
 
-**None.** In App Store Connect terms: *No Data Collected*.
+When you commit a word, the keyboard inserts Unicode text into the app you are
+using. That receiving app may store or transmit it under its own privacy policy.
+MongolKey does not control how that app handles, styles or lays out the text.
 
-## Crash logs
+## Data collection and diagnostics
 
-If you have opted in to sharing diagnostics with Apple, standard iOS crash
-reports may be delivered to Apple through the operating system's normal crash
-reporter. These are handled by Apple under Apple's privacy policy; MongolKey has
-no access to them and receives no data from them.
+MongolKey itself collects no user data. The app includes no analytics service.
+iOS may generate diagnostic or crash reports according to your Apple diagnostics
+settings. Apple may make those reports available to the developer through its
+standard developer tools; MongolKey has no custom crash-reporting upload service.
 
 ## Contact
 
-Questions about this policy can be directed to the app's support contact listed
-on its App Store page.
+Use the [project support page](https://github.com/Akiko0210/MongolianKeyboard/issues)
+for privacy questions or problems. Information you choose to post there is handled
+by GitHub and may be public. Avoid posting private messages or sensitive typed text.
