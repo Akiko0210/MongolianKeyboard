@@ -425,5 +425,11 @@ def main():
 
 if __name__ == "__main__":
     main()
+    # Numeral/initial fragments and misaligned lyric tokens (ын -> U+180D ᠤᠨ).
+    from drop_stemless_rows import apply as drop_stemless
+    drop_stemless()
+    # Mongolia convention for ᠣ->ᠤ / ᠥ->ᠦ after the first syllable (issue #21).
+    from prefer_mongolia_spellings import apply as prefer_mongolia
+    prefer_mongolia()
     from apply_reviewed_spellings import apply
     apply()

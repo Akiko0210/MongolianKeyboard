@@ -247,12 +247,46 @@ public struct SuffixEngine {
         for suffix in suffixes where key.hasSuffix(suffix.typed) {
             let stemKey = String(key.dropLast(suffix.typed.count))
             guard stemKey.count >= 3, let stem = spell(stemKey) else { continue }
-            let gender = Self.gender(ofLatinKey: stemKey)
+            // A suffix agrees with the vowels of the stem as *written*
+            // (Poppe, Grammar of Written Mongolian, §§32–34), exactly as on
+            // the dictionary path. The Latin key cannot say: `huul` has no
+            // a/o, so it read as feminine and хуулийн came out ᠬᠤᠯ ᠦᠨ, a
+            // masculine stem with a feminine suffix. The key decides only
+            // when the written stem has no gendered vowel.
+            let gender = Self.gender(ofWritten: stem) ?? Self.gender(ofLatinKey: stemKey)
             if let required = suffix.gender, required != gender { continue }
             if suffix.vowelStemOnly, !Self.endsInVowel(stem) { continue }
             if let text = Self.nominal(suffix.parts, stem: stem, gender: gender) { return text }
         }
         return nil
+    }
+
+    /// The rule-generated spelling the keyboard may offer for a word the
+    /// dictionary lacks: a suffixed reading, else the letter rules, and
+    /// nothing when the result mixes vowel classes inside one written word
+    /// while the typed key does not.
+    ///
+    /// A native word keeps to one vowel class (Poppe, Grammar of Written
+    /// Mongolian, §§32–34). Harmony stops at a detached suffix (NNBSP), so
+    /// each NNBSP-separated part is checked on its own; ᠦᠭᠡᠢ after a
+    /// masculine stem is fine. A key that itself has both a/o and e (a
+    /// compound or loan such as ачгэрэл) may legitimately produce a mixed
+    /// word and is not filtered. Offering a spelling known to break the rule
+    /// is worse than offering none: the letter-by-letter candidate remains.
+    public static func ruleSpelling(forKey key: String, spell: (String) -> String?) -> String? {
+        guard let spelled = ruleBased(forKey: key, spell: spell) ?? spell(key) else { return nil }
+        let keyIsMixed = (key.contains("a") || key.contains("o")) && key.contains("e")
+        if !keyIsMixed, breaksWordHarmony(spelled) { return nil }
+        return spelled
+    }
+
+    /// True when some NNBSP-separated part of `spelling` has both masculine
+    /// (ᠠ ᠣ ᠤ) and feminine (ᠡ ᠥ ᠦ) vowels.
+    public static func breaksWordHarmony(_ spelling: String) -> Bool {
+        spelling.split(separator: Character(suffixSeparator)).contains {
+            if case .mixed = VowelHarmony.harmony(ofMongolian: String($0)) { return true }
+            return false
+        }
     }
 
     /// Vowel harmony as far as typed Latin reveals it: `a`/`o` only occur in
@@ -318,12 +352,18 @@ public struct SuffixEngine {
     /// or a blanket assumption that Cyrillic ю is always masculine. Neutral
     /// ᠢ does not decide the class; stop before detached suffixes.
     static func gender(ofTraditional text: String, fallbackCyrillic: String) -> Gender {
+        gender(ofWritten: text) ?? gender(ofCyrillic: fallbackCyrillic)
+    }
+
+    /// The class of the first gendered vowel of a written stem, nil when it
+    /// has none (only neutral ᠢ, or no vowel).
+    static func gender(ofWritten text: String) -> Gender? {
         for scalar in text.unicodeScalars {
             if scalar.value == 0x202F { break }
             if [0x1820, 0x1823, 0x1824].contains(scalar.value) { return .masculine }
             if [0x1821, 0x1825, 0x1826, 0x1827].contains(scalar.value) { return .feminine }
         }
-        return gender(ofCyrillic: fallbackCyrillic)
+        return nil
     }
 
     static let vowels: ClosedRange<UInt32> = 0x1820...0x1827

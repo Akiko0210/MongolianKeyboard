@@ -43,6 +43,22 @@ def norm_mazaalai(blob):
             yield cyr, uni
 
 
+def norm_eck(blob):
+    """suragch/mongolian-datasets eck: tab-separated Index, Cyrillic ("Khalka"),
+    traditional script ("Chakhar"), word-form and usage tags. "MCH" in the
+    script column marks a missing value. Multi-word, hyphenated and
+    punctuation rows are skipped, as for mazaalai."""
+    for line in blob.splitlines()[1:]:
+        cols = line.split("\t")
+        if len(cols) < 3:
+            continue
+        cyr, uni = cols[1].strip().lower(), cols[2].strip()
+        if not cyr or uni in ("", "MCH") or not all(c in CYRILLIC for c in cyr):
+            continue
+        if any(0x1820 <= ord(c) <= 0x1842 for c in uni):
+            yield cyr, uni
+
+
 SOURCES = {
     "mazaalai": {
         "url": "https://raw.githubusercontent.com/suragch/mongolian-datasets/HEAD/mazaalai/dataset.csv",
@@ -50,6 +66,15 @@ SOURCES = {
         "repo": "https://github.com/suragch/mongolian-datasets",
         "note": "Cyrillic/Menksoft/Unicode/Latin table. Includes many proper nouns.",
         "parse": norm_mazaalai,
+    },
+    # Independent of mazaalai: released by Greg Eck, not produced by the
+    # mazaalai converter app. Same repository and the same CC0 LICENSE file.
+    "eck": {
+        "url": "https://raw.githubusercontent.com/suragch/mongolian-datasets/HEAD/eck/cyrillic_mongol.csv",
+        "licence": "CC0-1.0 (public domain dedication)",
+        "repo": "https://github.com/suragch/mongolian-datasets",
+        "note": "Greg Eck's Cyrillic/traditional pairs with word-form and Bible tags.",
+        "parse": norm_eck,
     },
 }
 
@@ -99,8 +124,11 @@ def main():
                     status = "conflict"
             else:
                 status = "single-source"
-            best = Counter(by_source.values()).most_common(1)[0][0]
-            fh.write(f"{cyr}\t{best}\t{','.join(sorted(by_source))}\t{status}\n")
+            # One row per distinct spelling, naming who gives it. A conflict
+            # is two claims; keeping only one would decide it silently.
+            for spelling in sorted(spellings):
+                who = sorted(s for s, u in by_source.items() if u == spelling)
+                fh.write(f"{cyr}\t{spelling}\t{','.join(who)}\t{status}\n")
 
     print(f"wrote {args.out}")
     for name, n in stats.items():

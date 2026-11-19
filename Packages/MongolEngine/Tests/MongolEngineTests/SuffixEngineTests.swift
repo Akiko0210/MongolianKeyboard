@@ -46,7 +46,9 @@ final class SuffixEngineTests: XCTestCase {
     }
 
     func testHiddenNGenitiveRestoresTheN() {
-        XCTAssertEqual(first("modny")?.mongolian, "ᠮᠣᠳᠣᠨ\(sep)ᠤ")           // модны (28)
+        // мод ranks ᠮᠣᠳᠤ first under the Mongolia convention (tools/prefer_mongolia_spellings.py,
+        // issue #21); the corpus converter writes ᠮᠣᠳᠣ. The hidden-n rule is unchanged.
+        XCTAssertEqual(first("modny")?.mongolian, "ᠮᠣᠳᠤᠨ\(sep)ᠤ")           // модны
         XCTAssertEqual(first("usny")?.mongolian, "ᠤᠰᠤᠨ\(sep)ᠤ")             // усны (75)
     }
 
@@ -76,7 +78,7 @@ final class SuffixEngineTests: XCTestCase {
 
     func testHiddenNDativeRestoresTheN() {
         XCTAssertEqual(first("usand")?.mongolian, "ᠤᠰᠤᠨ\(sep)ᠳᠤ")           // усанд (52)
-        XCTAssertEqual(first("modond")?.mongolian, "ᠮᠣᠳᠣᠨ\(sep)ᠳᠤ")         // модонд (14)
+        XCTAssertEqual(first("modond")?.mongolian, "ᠮᠣᠳᠤᠨ\(sep)ᠳᠤ")         // модонд: stem ᠮᠣᠳᠤ, see modny
         XCTAssertEqual(first("modond")?.cyrillic, "модонд")
     }
 
@@ -252,5 +254,45 @@ final class SuffixEngineStemTests: XCTestCase {
         XCTAssertEqual(SuffixEngine.gender(ofLatinKey: "batbold"), .masculine)
         XCTAssertEqual(SuffixEngine.gender(ofLatinKey: "erdene"), .feminine)
         XCTAssertEqual(SuffixEngine.gender(ofLatinKey: "ug"), .feminine)
+    }
+
+    // MARK: Harmony on the rule path (Poppe, Grammar of Written Mongolian, §§32–34)
+
+    func testRuleBasedSuffixAgreesWithTheWrittenStem() {
+        // `huul` has no a/o, so the Latin key read as feminine and хуулийн
+        // came out ᠬᠤᠯ ᠦᠨ: masculine stem, feminine genitive. The suffix
+        // follows the written stem's vowels, as on the dictionary path.
+        // (The rules still miss the dictionary stem ᠬᠠᠤᠯᠢ; that word is
+        // in the lexicon, so the keyboard offers ᠬᠠᠤᠯᠢ ᠶᠢᠨ first.)
+        let masculine: (String) -> String? = { $0 == "huul" ? "ᠬᠤᠯ" : nil }
+        XCTAssertEqual(SuffixEngine.ruleBased(forKey: "huuliin", spell: masculine), "ᠬᠤᠯ\(sep)ᠤᠨ")
+        let feminine: (String) -> String? = { $0 == "tuvshin" ? "ᠲᠦᠪᠰᠢᠨ" : nil }
+        XCTAssertEqual(SuffixEngine.ruleBased(forKey: "tuvshinii", spell: feminine), "ᠲᠦᠪᠰᠢᠨ\(sep)ᠦ",
+                       "genitive after a stem in ᠨ is ᠤ/ᠦ, by the stem's class")
+        // A stem with only neutral ᠢ falls back to the key.
+        let neutral: (String) -> String? = { $0 == "bichig" ? "ᠪᠢᠴᠢᠭ" : nil }
+        XCTAssertEqual(SuffixEngine.ruleBased(forKey: "bichigiin", spell: neutral), "ᠪᠢᠴᠢᠭ\(sep)ᠦᠨ")
+    }
+
+    func testRuleSpellingNeverOffersAMixedWordForAHarmonicKey() {
+        // аавыгээ-style output: ᠠ and ᠡ inside one written word.
+        let mixed: (String) -> String? = { $0 == "tsagaan" ? "ᠴᠠᠭᠡᠨ" : nil }
+        XCTAssertNil(SuffixEngine.ruleSpelling(forKey: "tsagaan", spell: mixed))
+        let harmonic: (String) -> String? = { $0 == "tsagaan" ? "ᠴᠠᠭᠠᠨ" : nil }
+        XCTAssertEqual(SuffixEngine.ruleSpelling(forKey: "tsagaan", spell: harmonic), "ᠴᠠᠭᠠᠨ")
+    }
+
+    func testRuleSpellingAllowsMixedOutputForAMixedKey() {
+        // ачгэрэл is a compound name with both classes; a mixed spelling
+        // can be right, so it is not filtered.
+        let spell: (String) -> String? = { $0 == "achgerel" ? "ᠠᠴᠢᠭᠡᠷᠡᠯ" : nil }
+        XCTAssertEqual(SuffixEngine.ruleSpelling(forKey: "achgerel", spell: spell), "ᠠᠴᠢᠭᠡᠷᠡᠯ")
+    }
+
+    func testHarmonyStopsAtADetachedSuffix() {
+        // ᠦᠭᠡᠢ is written detached and does not harmonize with the stem.
+        XCTAssertFalse(SuffixEngine.breaksWordHarmony("ᠮᠣᠷᠢ\(sep)ᠦᠭᠡᠢ"))
+        XCTAssertTrue(SuffixEngine.breaksWordHarmony("ᠠᠭᠪᠢᠭᠡ"))
+        XCTAssertFalse(SuffixEngine.breaksWordHarmony("ᠪᠢᠴᠢᠭ"), "neutral ᠢ only")
     }
 }
