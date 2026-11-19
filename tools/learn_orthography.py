@@ -38,6 +38,7 @@ The decoder in OrthographyConverter.swift MUST mirror decode() here.
 Usage
 -----
     python3 tools/learn_orthography.py            # after generate_lexicon.py
+    python3 tools/learn_orthography.py --lexicon .lexicon-cache/clean-training.tsv
 """
 
 import collections
@@ -288,8 +289,15 @@ def evaluate(rules, aligned_test):
 
 
 def main():
+    import argparse
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--lexicon", default=LEXICON_PATH,
+                    help="training rows in lexicon.tsv format (default: the shipped "
+                         "lexicon); the licence-clean build passes its dictionary-only "
+                         "rows, see tools/licence_clean.py")
+    args = ap.parse_args()
     pairs = set()
-    with open(LEXICON_PATH, encoding="utf-8") as f:
+    with open(args.lexicon, encoding="utf-8") as f:
         for line in f:
             key, trad, cyr, _ = line.rstrip("\n").split("\t")
             # The lexicon indexes each word under every key people type for

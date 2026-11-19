@@ -62,7 +62,10 @@ bigrams.tsv — sorted by column 1, up to TOP_SUCCESSORS lines per head word:
 
 Usage
 -----
-    python3 tools/generate_lexicon.py [--cache-dir DIR]
+    python3 tools/generate_lexicon.py [--cache-dir DIR] [--licence-clean]
+
+--licence-clean builds every table without the unlicensed mongolian-nlp
+sources (issue #20); see tools/licence_clean.py.
 
 Downloads go to --cache-dir (default: .lexicon-cache/, git-ignored) and are
 reused on re-runs. The news corpus is 74 MB; its word counts are cached as
@@ -306,8 +309,16 @@ def main():
     parser.add_argument("--cache-dir", default=os.path.join(
         os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
         ".lexicon-cache"))
+    parser.add_argument("--licence-clean", action="store_true",
+                        help="build only from sources with an explicit licence "
+                             "(no mongolian-nlp); see tools/licence_clean.py")
     args = parser.parse_args()
     os.makedirs(args.cache_dir, exist_ok=True)
+
+    if args.licence_clean:
+        import licence_clean
+        licence_clean.main(args.cache_dir)
+        return
 
     print("Loading sources…")
     entries = load_dictionary(args.cache_dir)
@@ -421,6 +432,10 @@ def main():
             f.write(f"{a}\t{trad}\t{b}\t{n}\n")
     print(f"Wrote {len(bigram_rows)} next-word rows for "
           f"{len({r[0] for r in bigram_rows})} head words to {BIGRAMS_PATH}")
+    with open(os.path.join(OUT_DIR, "DATA_SOURCES.txt"), "w", encoding="utf-8", newline="\n") as f:
+        f.write("build: legacy\n")
+        f.write("includes: tugstugi/mongolian-nlp lyrics and Eduge news (no licence); "
+                "not cleared for distribution\n")
 
 
 if __name__ == "__main__":

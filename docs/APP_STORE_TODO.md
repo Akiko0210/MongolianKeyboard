@@ -18,7 +18,9 @@ orientations, matching version strings. **Two gates fail, and both are real.**
       first — archiving, device testing and validation all need it.
       *(Same blocker stops the `xcode@claude-plugins-official` plugin, whose
       source command `xcrun agent plugin path` does not exist in 16.4.)*
-- [ ] **Resolve language-data redistribution rights.** See §2 — this is the
+- [ ] **Resolve language-data redistribution rights.** See §2. The
+      licence-clean build (#20) clears this gate at a measured accuracy cost;
+      Path B would restore the legacy data. This is the
       one that can actually sink the submission, under
       [Guideline 5.2](https://developer.apple.com/app-store/review/guidelines/#intellectual-property).
 - [ ] Set a Developer Team on both the app and the keyboard target, then
@@ -76,10 +78,23 @@ Three of the four data sources have **no established redistribution grant**
       titled "Useful resources for Mongolian NLP". A licence grant costs its
       author nothing and is plausibly a yes. Draft ready at
       `docs/licence-request-draft.md` — send it before building anything else.
-- [ ] **Path C — fallback if the answer is no or never comes.** Keep the MIT
-      base dictionary and CC0 words, swap frequencies to Wikipedia, and
-      regenerate inflections with the suffix rules, accepting the measured
-      accuracy loss. Strictly worse than B, and only worth building if B fails.
+- [x] **Path C — built (#20).** `tools/generate_lexicon.py --licence-clean`
+      ships the MIT dictionary and CC0 words, Wikipedia frequencies and word
+      pairs, and suffix-rule inflections; the preflight data-rights gate passes
+      for it. Measured against the legacy data (which was trained on the
+      evaluation text, so its numbers are an upper bound):
+
+      | Measure | Legacy | Licence-clean |
+      | --- | --- | --- |
+      | Words in the lexicon | 60,077 | 43,384 |
+      | News running words covered (23.9M) | 79.0% | 58.5% |
+      | Top-200 news words missing | 2 | 37 |
+      | 5,000 commonest words: Space commits script | 74.3% | 48.2% |
+      | Same, agrees with CC0 authority (n=729) | 77.2% | 80.2% |
+      | News word pairs: prediction offered / next word in top 3 (16.4M) | 82.0% / 23.8% | 60.0% / 10.0% |
+      | Rule speller, authority-attested (n=5,724) | 340 | 350 |
+
+      If the licence request (Path B) succeeds, rebuild without the flag.
 
 ## 3. Physical-device testing
 

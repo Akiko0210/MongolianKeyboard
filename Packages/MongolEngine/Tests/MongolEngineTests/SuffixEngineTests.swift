@@ -153,13 +153,24 @@ final class SuffixEngineTests: XCTestCase {
         XCTAssertEqual(first("avna")?.mongolian, "ᠠᠪᠤᠨ\(mvs)ᠠ")                   // авна (60)
         XCTAssertEqual(first("avaad")?.mongolian, "ᠠᠪᠤᠭᠠᠳ")                       // аваад (145)
         XCTAssertEqual(first("avlaa")?.mongolian, "ᠠᠪᠤᠯ\(mvs)ᠠ")                  // авлаа (25)
-        XCTAssertTrue(all("olson").contains("ᠣᠯᠤᠭᠰᠠᠨ"))                      // олсон (97)
-        XCTAssertTrue(all("olno").contains("ᠣᠯᠤᠨ\(mvs)ᠠ"))                   // олно (42)
+        // олох's initial ᠣ/ᠤ is the dictionary's encoding choice (the MIT
+        // dictionary writes ᠤᠯᠬᠤ, the lyrics corpus ᠣᠯᠬᠤ; #20, #21). The rule
+        // under test is the connective vowel after the stem, whichever it is.
+        let ol = olStem()
+        XCTAssertTrue(all("olson").contains(ol + "ᠤᠭᠰᠠᠨ"))                    // олсон (97)
+        XCTAssertTrue(all("olno").contains(ol + "ᠤᠨ\(mvs)ᠠ"))                 // олно (42)
+    }
+
+    /// The stem of олох as the bundled dictionary spells it (олох minus ᠬᠤ).
+    private func olStem() -> String {
+        let oloh = Lexicon.shared.exactMatches(forCyrillic: "олох").map(\.traditional)
+        let spelling = oloh.first { $0.hasSuffix("ᠬᠤ") } ?? "ᠣᠯᠬᠤ"
+        return String(spelling.dropLast(2))
     }
 
     func testConverbVoicingDependsOnStemFinal() {
         XCTAssertEqual(first("avch")?.mongolian, "ᠠᠪᠴᠤ")                          // авч (120): ᠴ after ᠪ
-        XCTAssertTrue(all("olj").contains("ᠣᠯᠵᠤ"))                           // олж (161): ᠵ after ᠯ
+        XCTAssertTrue(all("olj").contains(olStem() + "ᠵᠤ"))                  // олж (161): ᠵ after ᠯ
         XCTAssertEqual(first("garch")?.mongolian, "ᠭᠠᠷᠴᠤ")                        // гарч: ᠴ after ᠷ
     }
 

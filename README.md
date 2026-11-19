@@ -30,9 +30,10 @@ The engine uses whole-word lookup, with generated morphology and letter rules
 available as explicitly selected alternatives. Direct Cyrillic lookup preserves
 у/ү/ө distinctions that Latin keys can lose.
 
-The lexicon contains 67,877 lookup rows: 52,284 legacy rows, including machine-converted
-corpus forms, and 15,593 rows imported from the CC0 `mazaalai` table. It is **not an
-entirely verified dictionary**. Sixteen examples were checked
+The lexicon is the licence-clean build (#20): 48,330 lookup rows for 43,384 words from
+the MIT `written-mongol-keyboard` dictionary and the CC0 `mazaalai` table, ranked by
+Mongolian Wikipedia counts (CC BY-SA 4.0). Inflected forms are generated from dictionary
+stems and need a tap. It is **not an entirely verified dictionary**. Sixteen examples were checked
 against a government-hosted teaching handbook, and three stored choices were
 aligned with that source. [The detailed specification](docs/ORTHOGRAPHY.md) explains
 every stage, character ordering, suffix tables, ranking, sources and limitations.
